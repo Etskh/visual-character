@@ -3,276 +3,90 @@
 var express = require('express')
 var nunjucks = require('nunjucks')
 var bodyParser = require('body-parser')
-
-
+var cookieParser = require('cookie-parser')
 
 var app = express()
 
+const userAuth = require('./server/user')
 
-//app.set('views', './templates')
-//app.set('view engine', 'nunjucks')
+
+
+const secret_key = 'asdf'
 
 nunjucks.configure('templates', {
-    autoescape: true,
-    express: app
+  autoescape: true,
+  express: app
 })
-
+app.use(cookieParser())
 app.use(bodyParser.json())
+
 // create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
 const logRequest = function(req, res, next) {
-  console.log(req.method + ' - ' + req.route.path + ': ')
-  next();
+  console.log([
+    new Date().toISOString(),
+    req.method,
+    req.route.path,
+    JSON.stringify(req.query)
+  ].join(' - '))
+  next()
 }
 
 const userAuthenticated = function( req, res, next ) {
 
-  next();
+  if( !req.cookies.user ) {
+    return res.render('login.html')
+  }
+
+  userAuth.getByName(req.cookies.user).then(function(user) {
+    res.locals.user = user
+    next()
+  }, function(error) {
+    // TODO: Make this an approchable error screen
+    return res.render('uhoh.html', { error: error })
+  })
 }
 
+
+app.post('/login', logRequest, urlencodedParser, function (req, res) {
+  userAuth.authenticate(
+    req.body.username,
+    req.body.password
+  ).then( function(user) {
+    res.cookie('user', user.name)
+    res.locals.user = user
+    return res.redirect('/')
+  }, function(error) {
+    console.log('uh oh: ' + error)
+    return res.render('uhoh.html')
+  })
+})
+
+app.get('/logout', logRequest, function(req, res) {
+  res.clearCookie('user')
+  return res.redirect('/')
+})
+
+
+
+
 app.get('/', logRequest, userAuthenticated, function (req, res) {
-  res.render('index.html')
+  const user = res.locals.user
+  user.getCharacters(
+    // empty
+  ).then(function(characters) {
+    res.render('index.html', {
+      characters: characters,
+    })
+  }, function(error){
+    return res.render('uhoh.html', { error: error })
+  })
 })
 
-app.post('/login', logRequest, userAuthenticated, urlencodedParser, function (req, res) {
 
-  console.log(req.body)
-
-  res.redirect('/')
-})
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
-
-
-
-//
-// Character
-//
-const character = {
-  'name': 'Pig',
-  'race': 'Goblin',
-  'classes': {
-    'Wizard': 4
-  },
-  'handedness': 'right',
-  'held': [ // an array where 0 is main and 1 is right, etc.
-    // empty hands
-  ],
-  'items': [],
-  'possessions': [],
-  'height': 2.9,
-  'weight': 40.0,
-  'stats': [ 9, 17, 12, 18, 13, 9 ],
-  'enchantments': [{
-    'name': 'Wisdom drain',
-    'since': 50,
-    'duration': 20,
-    'effects': {
-      'stats.wisdom': -3
-    }
-  }],
-
-}
-
-
-
-//
-// Race
-//
-const races = [{
-  'name': 'Goblin',
-  'size': 'small',
-  'hand_count': 2,
-  'sexes': ['male', 'female'],
-  'features': [
-    'eyes',
-    'ears',
-  ],
-}]
-//
-// Equipment prototype model
-//
-const equipmentPrototypes = [{
-  'name': 'hand axe',
-  'unit_weight': 3.0,
-  'cost': 300,
-  'hardness': 4,
-  'hitpoints': 4,
-  'materials': [ 'metal' ],
-  'preferred_container': [
-    'belt',
-    true,
-  ],
-  'attacks': [{
-    'range': 'melee',
-    'damage': {
-      'die': 6,
-      'count': 1,
-      'type': 'slashing',
-    }
-  }],
-}, {
-  'name': 'thick leather belt',
-  'type': 'container',
-  'sub_type': 'belt',
-  'unit_weight': 0.1,
-}]
-//
-// Classes
-//
-const classList = [{
-  'name': 'Wizard',
-}]
-
-
-
-
-
-
-
-const createSizeController = function(size_name) {
-  const sizes = {
-    'small': -1,
-    'medium': 0,
-    'large': 1,
-  }
-
-  const mod = sizes[size_name];
-
-  return {
-    stealth_bonus: function() {
-      return mod * -4;
-    },
-    ac_bonus: function() {
-      return mod * -1;
-    },
-  }
-}
-
-
-const costAsString = function(c) {
-  var output = [];
-
-  // Gold
-  if ( c > 99 ) {
-    let gp = parseInt(c/100);
-    c -= gp * 100;
-    output.push( gp + ' gp')
-  }
-
-  // Silver
-  if ( c > 9 ) {
-    let sp = parseInt(c/10);
-    c -= sp * 10
-    output.push( sp + ' sp')
-  }
-
-  // Copper
-  if ( c > 0 ) {
-    let cp = parseInt(c);
-    c -= cp;
-    output.push( cp + ' cp')
-  }
-
-  return output.join(', ')
-}
-
-
-
-//
-// Create the item from the equipment prototype
-//
-const createItemController = function(e) {
-
-  const item = {
-    count: 1,
-  }
-
-  return {
-    data: e,
-    weight: function() {
-      return e.unit_weight * item.count
-    }
-  }
-}
-
-
-/*
-
-# Pathfind
-
-## Base Models
-
-These models are going to be stored in either tables "in the cloud" or as JSON files locally, or from an API - they will be cached locally for speed, but might only do partial caching with the larger data-sets (equipment) (TBD)
-
-### Choice model
- - ?
-
-### Race model
- - has size
- - has description -> array of paragraphs or string
- - has modifiers
- - has hand_count
- - has features (eyes, ears)
-   This helps with status-effects and spells that target sight
-   (Color spray will not affect creatures without eyes)
- - can add choices
-
-### Class model
- - has name, description
- - base attack bonus rate
- - spells known rate
- - spells per day rate
-
-### Equipment model
- - has name, description
- - preferred container
- - unit weight
-
-
-## Account-Based Models
-
-These are created in relation to a unique user of the app - so all these models will be encapsulated by each other, and reference indirectly (by way of name or id) the Base Models.
-
-### Account model
- - has email
- - has password hash
- - has list of Characters
-
-### Character model
- - has name
- - has race
- - has sex
- - has height
- - has weight
- - has statblock
- - has enchantments (current status effects)
- - has items
-
-### Item model
- - adds enhancements to it
- - can be enchanted
- - can be 'masterwork'
- - can contain other items (by id)
- - can be stacked
- - has id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
