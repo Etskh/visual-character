@@ -5,8 +5,8 @@
   "main": "visual.js",
   "scripts": {
     "start": "node visual.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "./node_modules/.bin/eslint visual.js"
+    "test": "./node_modules/bin/mocha test",
+    "lint": "./node_modules/.bin/eslint *.js"
   },
   "author": "Etskh",
   "license": "MIT",
