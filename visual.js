@@ -10,7 +10,8 @@ const log = require('winston').log
 const app = express()
 
 app.locals.title = 'Visual Character'
-app.locals.port = 3000
+// Since Heroku randomly assigns a part on
+app.locals.port = process.env.PORT || 3000
 
 // Configure the template middleware
 nunjucks.configure('templates', {
