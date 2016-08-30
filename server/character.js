@@ -1,5 +1,8 @@
 'use strict'
 
+const equipment = require('./equipment')
+
+
 // TODO: Put in the character model
 const characters = [{
   'id': 1,
@@ -8,15 +11,27 @@ const characters = [{
   'classes': {
     'Wizard': 4
   },
-  'handedness': 'right',
-  'held': [ // an array where 0 is main and 1 is right, etc.
-    // empty hands
-  ],
-  'equipment': {
-    'owned': [],
-    'on_body': [],
-    'equipped': {},
+  'skill_ranks': {
+    'linguistics': 3,
+    'spellcraft': 4,
+    'knowledge': {
+      'arcana': 4,
+    },
   },
+  // Which is the dominant hand
+  'handedness': 'right',
+  // an array where 0 is main and 1 is right, etc.
+  'slots': {
+    // nothing equipped or held!
+  },
+  'equipment': [{
+    'prototype': 'dagger',
+    'count': 1,
+    'material': 'silver',
+    'properties': [
+      'masterwork',
+    ],
+  }],
   'height': 2.9,
   'weight': 40.0,
   'stats': [ 9, 17, 12, 18, 13, 9 ],
@@ -40,9 +55,16 @@ const getCharacterById = function(id) {
 }
 
 const createController = function(data) {
-  return {
-    name: data.name,
-  }
+  return new Promise( function(resolve, reject ) {
+    return equipment.createControllersForItems(
+      data.equipment
+    ).then(function(equipmentControllers) {
+      return resolve({
+        name: data.name,
+        equipment: equipmentControllers,
+      })
+    })
+  })
 }
 
 const getCharacterByIds = function(ids) {
