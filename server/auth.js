@@ -4,9 +4,14 @@
 const users = [{
   'username': 'user',
   'password': 'pass',
+  'characters': [
+    1
+  ],
 }]
 
+// TODO: Put in the character model
 const characters = [{
+  'id': 1,
   'name': 'Pig',
   'race': 'Goblin',
   'classes': {
@@ -46,7 +51,8 @@ const createController = function(data) {
     },
     // TODO: replace this with an array of character controllers
     getCharacters: function() {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
+        // TODO: replace this with an actual check, not just return all the characters
         return resolve(characters) // resolve
       }) // new promise
     }, // getCharacters
@@ -56,12 +62,9 @@ const createController = function(data) {
 
 
 const authenticate = function( username, password ) {
-  console.log('Authenticating ' + username + '...')
   return new Promise(function( resolve, reject ) {
-    return getByName(username).then(function(user){
-      console.log('Checking password for ' + username )
+    return getByName(username).then( function(user) {
       if ( user.checkPassword(password) ) {
-        console.log('User ' + user.name + ' logging in')
         return resolve( user )
       }
       reject('Incorrect password')
@@ -70,7 +73,6 @@ const authenticate = function( username, password ) {
 }
 
 const getByName = function( username ) {
-  console.log('Retriveing ' + username + ' from records')
   return new Promise(function(resolve, reject) {
     for( let i in users ) {
       if ( users[i].username === username ) {

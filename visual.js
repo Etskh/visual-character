@@ -1,45 +1,52 @@
 'use strict'
 
-var express = require('express')
-var nunjucks = require('nunjucks')
-var bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser')
-
-var app = express()
-
-const userAuth = require('./server/user')
+const express = require('express')
+const nunjucks = require('nunjucks')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const log = require('winston').log
 
 
+const app = express()
 
-const secret_key = 'asdf'
+app.locals.title = 'Visual Character'
+app.locals.port = 3000
 
+// Configure the template middleware
 nunjucks.configure('templates', {
   autoescape: true,
   express: app
 })
+
+
+// Use cookie parsing middleware
 app.use(cookieParser())
-app.use(bodyParser.json())
 
-// create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+// Use form parsing middleware
+app.use(bodyParser.urlencoded({ extended: false }))
 
+// Log extra commands on each go
+app.use(function(req, res, next) {
 
-const logRequest = function(req, res, next) {
-  console.log([
-    new Date().toISOString(),
-    req.method,
-    req.route.path,
-    JSON.stringify(req.query)
-  ].join(' - '))
+  log('info', 'request', {
+    time: new Date().toISOString(),
+    method: req.method,
+    path: req.route ? req.route.path : '/',
+    query: JSON.stringify(req.query),
+    body: req.body,
+  })
   next()
-}
+})
+
+
+
+
+const userAuth = require('./server/auth')
 
 const userAuthenticated = function( req, res, next ) {
-
   if( !req.cookies.user ) {
     return res.render('login.html')
   }
-
   userAuth.getByName(req.cookies.user).then(function(user) {
     res.locals.user = user
     next()
@@ -49,8 +56,8 @@ const userAuthenticated = function( req, res, next ) {
   })
 }
 
-
-app.post('/login', logRequest, urlencodedParser, function (req, res) {
+// No user-authentication needed
+app.post('/login', function (req, res) {
   userAuth.authenticate(
     req.body.username,
     req.body.password
@@ -59,34 +66,25 @@ app.post('/login', logRequest, urlencodedParser, function (req, res) {
     res.locals.user = user
     return res.redirect('/')
   }, function(error) {
-    console.log('uh oh: ' + error)
-    return res.render('uhoh.html')
-  })
-})
-
-app.get('/logout', logRequest, function(req, res) {
-  res.clearCookie('user')
-  return res.redirect('/')
-})
-
-
-
-
-app.get('/', logRequest, userAuthenticated, function (req, res) {
-  const user = res.locals.user
-  user.getCharacters(
-    // empty
-  ).then(function(characters) {
-    res.render('index.html', {
-      characters: characters,
-    })
-  }, function(error){
+    // TODO: Make this an approchable error screen
     return res.render('uhoh.html', { error: error })
   })
 })
 
+// No user-auth needed, but handy for stuff
+app.get('/logout', function(req, res) {
+  res.clearCookie('user')
+  return res.redirect('/')
+})
+
+// Need user-auth for all routes
+app.use('/', userAuthenticated, require('./server/routes'))
 
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+app.listen(app.locals.port, function () {
+  const os = require('os')
+  log('info', [
+    'Starting ',
+    app.locals.title, ' at ', os.hostname(), ':', app.locals.port
+  ].join(' '))
 })

@@ -3,9 +3,11 @@
 var assert = require('assert')
 var expect = require('expect')
 
-var auth = require('../server/user')
 
 describe('User', function() {
+
+  var auth = require('../server/auth')
+
   describe('Can retreive the test user', function() {
     it('should not fail when asking for user "user"', function(done) {
       auth.getByName('user').then(function(user) {
