@@ -8,4 +8,4 @@ node_js:
 deploy:
   provider: heroku
   api_key:
-    secure: $(HEROKU_API)
+    secure: $HEROKU_API
