@@ -9,6 +9,7 @@ router.get('/', function (req, res) {
   user.getCharacters(
     // empty
   ).then(function(characters) {
+    console.log(characters)
     res.render('index.html', {
       characters: characters,
     })
@@ -17,13 +18,13 @@ router.get('/', function (req, res) {
   })
 })
 
-router.get('/character', function (req, res) {
+router.get('/character/:id', function (req, res) {
   const user = res.locals.user
-  user.getCharacters(
-    // empty
-  ).then(function(characters) {
-    res.render('index.html', {
-      characters: characters,
+  user.hasPermissionToCharacter(
+    req.params.id
+  ).then(function(character) {
+    res.render('character.html', {
+      character: character,
     })
   }, function(error){
     return res.render('uhoh.html', { error: error })

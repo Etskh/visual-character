@@ -1,5 +1,7 @@
 'use strict'
 
+const characterController = require('./character')
+
 // TODO: Put in the user-model
 const users = [{
   'username': 'user',
@@ -9,32 +11,6 @@ const users = [{
   ],
 }]
 
-// TODO: Put in the character model
-const characters = [{
-  'id': 1,
-  'name': 'Pig',
-  'race': 'Goblin',
-  'classes': {
-    'Wizard': 4
-  },
-  'handedness': 'right',
-  'held': [ // an array where 0 is main and 1 is right, etc.
-    // empty hands
-  ],
-  'items': [],
-  'possessions': [],
-  'height': 2.9,
-  'weight': 40.0,
-  'stats': [ 9, 17, 12, 18, 13, 9 ],
-  'enchantments': [{
-    'name': 'Wisdom drain',
-    'since': 50,
-    'duration': 20,
-    'effects': {
-      'stats.wisdom': -3,
-    },
-  }], // enchantments
-}]
 
 
 
@@ -51,11 +27,22 @@ const createController = function(data) {
     },
     // TODO: replace this with an array of character controllers
     getCharacters: function() {
-      return new Promise(function(resolve) {
-        // TODO: replace this with an actual check, not just return all the characters
-        return resolve(characters) // resolve
+      return new Promise(function(resolve, reject) {
+        return resolve(characterController.getByIds(data.characters))
       }) // new promise
     }, // getCharacters
+    hasPermissionToCharacter: function(id) {
+      return new Promise(function(resolve, reject) {
+        for( let i in data.characters ) {
+          const character = characterController.getById(data.characters[i])
+          if ( character ) {
+            return resolve(character)
+          }
+          return reject('Character with id ' + id + ' doesnt exist')
+        }
+        reject('User doesnt have permission to characer ' + id )
+      })
+    }, // hasPermissionToCharacter
   }
 }
 
