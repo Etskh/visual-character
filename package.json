@@ -5,7 +5,7 @@
   "main": "visual.js",
   "scripts": {
     "start": "node visual.js",
-    "test": "./node_modules/mocha/bin/mocha test",
+    "test": "./node_modules/mocha/bin/mocha --recursive",
     "test-win": "mocha --recursive",
     "lint": "./node_modules/.bin/eslint server/ visual.js"
   },
