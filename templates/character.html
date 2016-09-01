@@ -1,6 +1,14 @@
 <html>
   <head>
     <title>Visual Character</title>
+    <style>
+    BODY {
+      color:#DDD;
+      text-shadow:#000 0px 0px 3px;
+      background-color: #333;
+      font-family: sans-serif;
+    }
+    </style>
   </head>
   <body>
     <div class="character">
@@ -10,8 +18,21 @@
         <div class="sub-section">
           <div class="title">Owned Items</div>
           {% for item in character.equipment %}
-            <div class="item">{{ item.name }}</div>
+            <div class="item">
+              <span>{{ item.name }}</span>
+              <span>{{ item.weight }}</span>
+            </div>
           {% endfor %}
+        </div>
+      </div>
+      <div class="section">
+        <div class="title">Stats</div>
+        <div class="sub-section">
+          <div class="title">Other</div>
+          <div class="graph">
+            <span>Carry weight</span>
+            <span>{{ character.carryWeight }}</span>
+          </div>
         </div>
       </div>
     </div>

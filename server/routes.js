@@ -1,15 +1,14 @@
 'use strict'
 
+// TODO: Move this to ./server/init
+
 const express = require('express')
 
 const router = express.Router()
 
 router.get('/', function (req, res) {
   const user = res.locals.user
-  user.getCharacters(
-    // empty
-  ).then(function(characters) {
-    console.log(characters)
+  user.getCharacters().then(function(characters) {
     res.render('index.html', {
       characters: characters,
     })

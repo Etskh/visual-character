@@ -1,10 +1,13 @@
 'use strict'
 
+// TODO: Move this to ./server/lib
+
+const _ = require('lodash')
+
 const equipment = require('./equipment')
 
-
 // TODO: Put in the character model
-const characters = [{
+const characterData = [{
   'id': 1,
   'name': 'Pig',
   'race': 'Goblin',
@@ -25,7 +28,7 @@ const characters = [{
     // nothing equipped or held!
   },
   'equipment': [{
-    'prototype': 'dagger',
+    'equipment': 'dagger',
     'count': 1,
     'material': 'silver',
     'properties': [
@@ -34,7 +37,14 @@ const characters = [{
   }],
   'height': 2.9,
   'weight': 40.0,
-  'stats': [ 9, 17, 12, 18, 13, 9 ],
+  'stats': {
+    'str': 9,
+    'dex': 17,
+    'con': 12,
+    'int': 18,
+    'wis': 13,
+    'cha': 9
+  },
   'enchantments': [{
     'name': 'Wisdom drain',
     'since': 50,
@@ -43,38 +53,72 @@ const characters = [{
       'stats.wisdom': -3,
     },
   }], // enchantments
+}, {
+  'id': 2,
+  'name': 'Kazrah',
+  'race': 'Half-orc',
+  'classes': {
+    'Ranger': 4
+  },
+  'skill_ranks': {
+  },
+  // Which is the dominant hand
+  'handedness': 'right',
+  // an array where 0 is main and 1 is right, etc.
+  'slots': {
+    // nothing equipped or held!
+  },
+  'equipment': [],
+  'height': 6.2,
+  'weight': 210.0,
+  'stats': {
+    'str': 16,
+    'dex': 15,
+    'con': 12,
+    'int': 10,
+    'wis': 14,
+    'cha': 12
+  },
+  'enchantments': [],
 }]
 
-const getCharacterById = function(id) {
-  for( let i in characters ) {
-    if ( id === characters[i].id ) {
-      return createController(characters[i])
+
+const getCharacterDataById = function( id ) {
+  return new Promise(function( resolve, reject ) {
+    const character = _.find(characterData, { 'id': parseInt(id) })
+    if ( !character ) {
+      return reject('Unknown character with id ' + id )
     }
-  }
-  return false
+    resolve(character)
+  })
 }
 
-const createController = function(data) {
-  return new Promise( function(resolve, reject ) {
+
+const getCharacterById = function( id ) {
+  // TODO: Extend this into a real controller
+  return getCharacterDataById(id).then(function(data) {
     return equipment.createControllersForItems(
       data.equipment
-    ).then(function(equipmentControllers) {
-      return resolve({
+    ).then(function(items) {
+      return {
+        id: data.id,
         name: data.name,
-        equipment: equipmentControllers,
-      })
+        equipment: items,
+        carryWeight: _.sumBy(items, 'weight'),
+      }
     })
   })
 }
 
+
 const getCharacterByIds = function(ids) {
-  return new Promise( function(resolve, reject ) {
-    var shortList = []
-    for( let i in ids ) {
-      shortList.push(getCharacterById(ids[i]))
-    }
-    resolve(shortList)
+  var shortList = []
+
+  _.forEach(ids, function(id) {
+    shortList.push(getCharacterById(id))
   })
+
+  return Promise.all(shortList)
 }
 
 module.exports.getById = getCharacterById

@@ -2,10 +2,11 @@
 
 const _ = require('lodash')
 
+// TODO: Move this to ./server/lib
 
-const equipment = [{
+const equipmentData = [{
   'name': 'dagger',
-  'weight': 1.0,
+  'weight': 1.1,
   'cost': 200,
   'handedness': 'light',
   'type': 'weapon',
@@ -16,7 +17,7 @@ const equipment = [{
       'count': 1,
       'type': [
         'piercing',
-        'slashing'
+        'slashing',
       ],
     },
     'range': false,
@@ -28,7 +29,7 @@ const equipment = [{
     'damage': {
       'die': 4,
       'count': 1,
-      'type': 'piercing'
+      'type': 'piercing',
     },
     'range': {
       'type': 'thrown',
@@ -41,24 +42,9 @@ const equipment = [{
   }],
 }]
 
-
-const createController = function( prototype, item ) {
-
-  const isMasterwork = (item.properties.indexOf('masterwork') !== -1)
-
-  return {
-    name: [
-      isMasterwork ? '+1' : '',
-      item.material ? item.material : '',
-      item.prototype,
-    ].join(' '),
-  }
-}
-
-
-const getByName = function(name) {
+const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {
-    const item = _.find(equipment, { 'name': name })
+    const item = _.find(equipmentData, { 'name': name })
     if ( !item ) {
       return reject('Unknown item named ' + name )
     }
@@ -66,14 +52,35 @@ const getByName = function(name) {
   })
 }
 
-const createControllersForItems = function(equipment) {
-  return new Promise( function( resolve, reject ) {
-    const controllers = []
-    _(equipment).forEach(function(e) {
-      controllers.push( createController( getByName(e.prototype), e ))
+const createEquipmentController = function( item ) {
+  return getEquipmentDataByName(item.equipment).then(function(equipment) {
+    return ({
+      name: [
+        _.includes(item.properties, 'masterwork') ? '+1' : '',
+        item.material ? item.material : '',
+        equipment.name,
+      ].join(' ').trim(),
+      weight: equipment.weight * item.count,
+      getAttacks: function() {
+        return equipment.attacks
+      }
     })
-    return resolve(controllers)
   })
 }
 
+
+const createControllersForItems = function(items) {
+
+  const controllers = []
+
+  _.forEach(items, function(item) {
+    controllers.push( createEquipmentController( item ))
+  })
+
+  return Promise.all(controllers)
+}
+
+
 module.exports.createControllersForItems = createControllersForItems
+module.exports.createEquipmentController = createEquipmentController
+module.exports.getEquipmentDataByName = getEquipmentDataByName

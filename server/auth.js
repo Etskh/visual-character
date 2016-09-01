@@ -2,12 +2,14 @@
 
 const characterController = require('./character')
 
+// TODO: Move this to ./server/lib
+
 // TODO: Put in the user-model
 const users = [{
   'username': 'user',
   'password': 'pass',
   'characters': [
-    1
+    1, 2
   ],
 }]
 
@@ -25,23 +27,11 @@ const createController = function(data) {
       }
       return false
     },
-    // TODO: replace this with an array of character controllers
     getCharacters: function() {
-      return new Promise(function(resolve, reject) {
-        return resolve(characterController.getByIds(data.characters))
-      }) // new promise
+      return characterController.getByIds(data.characters)
     }, // getCharacters
     hasPermissionToCharacter: function(id) {
-      return new Promise(function(resolve, reject) {
-        for( let i in data.characters ) {
-          const character = characterController.getById(data.characters[i])
-          if ( character ) {
-            return resolve(character)
-          }
-          return reject('Character with id ' + id + ' doesnt exist')
-        }
-        reject('User doesnt have permission to characer ' + id )
-      })
+      return characterController.getById(id)
     }, // hasPermissionToCharacter
   }
 }
