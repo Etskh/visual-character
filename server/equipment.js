@@ -6,7 +6,7 @@ const _ = require('lodash')
 
 const equipmentData = [{
   'name': 'dagger',
-  'weight': 1.1,
+  'weight': 1.0,
   'cost': 200,
   'handedness': 'light',
   'type': 'weapon',

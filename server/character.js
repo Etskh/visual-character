@@ -34,6 +34,9 @@ const characterData = [{
     'properties': [
       'masterwork',
     ],
+  }, {
+    'equipment': 'dagger',
+    'count': 2,
   }],
   'height': 2.9,
   'weight': 40.0,
@@ -93,6 +96,19 @@ const getCharacterDataById = function( id ) {
   })
 }
 
+const carry = {
+  lightMax: function(data) {
+    const str = data.stats.str
+    return Math.round( str * 2.5 + Math.pow(1.25, str))
+  },
+  mediumMax: function(data) {
+    return carry.lightMax(data) * 2.0
+  },
+  heavyMax: function(data) {
+    return Math.round((carry.lightMax(data) * 3.0) / 10) * 10
+  },
+}
+
 
 const getCharacterById = function( id ) {
   // TODO: Extend this into a real controller
@@ -100,11 +116,15 @@ const getCharacterById = function( id ) {
     return equipment.createControllersForItems(
       data.equipment
     ).then(function(items) {
+
       return {
         id: data.id,
         name: data.name,
         equipment: items,
         carryWeight: _.sumBy(items, 'weight'),
+        lightMax: carry.lightMax(data),
+        mediumMax: carry.mediumMax(data),
+        heavyMax: carry.heavyMax(data),
       }
     })
   })

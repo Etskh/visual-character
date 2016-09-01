@@ -1,12 +1,35 @@
 <html>
   <head>
     <title>Visual Character</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
     <style>
     BODY {
       color:#DDD;
       text-shadow:#000 0px 0px 3px;
       background-color: #333;
-      font-family: sans-serif;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-weight: 300;
+      width:400px;
+    }
+    .character {
+      padding: 8px;
+      box-shadow: #000 0px 0px 20px;
+    }
+    .character > .name {
+      font-size: 150%;
+    }
+    .section {
+      padding: 3px;
+      margin: 3px;
+      border: 1px solid rgba(100,100,100,0.3);
+    }
+    .section > .title {
+      background-color: rgba(100,100,150,0.3);
+    }
+    .sub-section > .title {
+      font-size: 120%;
+      background-color: rgba(0,0,20,0.1);
+      padding:6px;
     }
     </style>
   </head>
@@ -32,6 +55,18 @@
           <div class="graph">
             <span>Carry weight</span>
             <span>{{ character.carryWeight }}</span>
+          </div>
+          <div class="stat">
+            <span>Light load</span>
+            <span>{{ character.lightMax }} lbs or less</span>
+          </div>
+          <div class="stat">
+            <span>Medium load</span>
+            <span>{{ character.lightMax + 1 }}-{{ character.mediumMax }} lbs</span>
+          </div>
+          <div class="stat">
+            <span>Heavy load</span>
+            <span>{{ character.mediumMax + 1 }}-{{ character.heavyMax }} lbs</span>
           </div>
         </div>
       </div>
