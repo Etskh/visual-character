@@ -25,6 +25,7 @@ const createEquipmentController = function( item ) {
         equipment.name,
       ].join(' ').trim(),
       weight: equipment.weight * item.count,
+      count: item.count,
     })
   })
 }

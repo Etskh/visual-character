@@ -102,13 +102,19 @@ const getCharacterById = function( id ) {
       const carryWeight = _.sumBy(items, 'weight')
 
       return {
+        // Basic data
         id: data.id,
         name: data.name,
+        race: race,
+
+        // Stats
         stats: data.stats,
         mods: function(stat) {
           return Math.floor((data.stats[stat] / 2) - 5)
         },
-        race: race,
+        status_effects: [],
+
+        // Equipment
         equipment: items,
         carry_weight: carryWeight,
         current_load: carry.getLoadName(carryWeight, data, race.size),

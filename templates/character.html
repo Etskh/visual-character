@@ -75,6 +75,7 @@
       width:20%;
     }
     .stat {
+      color:#FFF;
       text-shadow: #000 0px 0px 3px;
       margin-top: 4px;
       text-align:center;
@@ -83,7 +84,9 @@
       width: 24px;
       height: 24px;
       background-color: rgb(140, 217, 166);
-      /*background-color: rgb(159, 140, 217);*/
+    }
+    .stat.conditional {
+      background-color: rgb(159, 140, 217);
     }
     .stat-modifier {
       width:10%;
@@ -96,25 +99,64 @@
   <body>
     <div class="character">
       <div class="name">{{ character.name }}</div>
+
       <div class="section">
+
+        <div class="title">Main</div>
+
+        {% if character.status_effect.length > 0 %}
+        <div class="sub-section">
+          <div class="title">Status Effects</div>
+          {% for effect in character.status_effect %}
+          <div class="status-effect">
+            <div class="name">{{ effect.name }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+
+
+      <div class="section">
+
         <div class="title">Equipment</div>
+
+        <div class="sub-section">
+          <div class="title">Carry Capacity</div>
+          <div class="graph">
+            <span>Carry weight: </span>
+            <span>{{ character.carry_weight }} lbs </span>
+            <span>({{ character.current_load }} load)</span>
+          </div>
+          <div class="graph" id="load-bar">
+            <div class="graph-section" id="light-load">
+            </div>|<div class="graph-section" id="medium-load">
+            </div>|<div class="graph-section" id="heavy-load"></div>
+            <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator" style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
+          </div>
+        </div>
+
         <div class="sub-section">
           <div class="title">Owned Items</div>
           {% for item in character.equipment %}
             <div class="item">
+              <span>{{ item.count }}</span>
               <span>{{ item.name }}</span>
               <span>{{ item.weight }}</span>
             </div>
           {% endfor %}
         </div>
       </div>
+
+
       <div class="section">
         <div class="title">Stats</div>
         <div class="sub-section">
           <div class="title">Primary Statistics</div>
           <div class="stat-line">
             <div class="stat-name">Strength</div>
-            <div class="stat">{{ character.stats.str }}</div>
+            <div class="stat conditional">{{ character.stats.str }}</div>
             <div class="stat-modifier">{{ character.mods("str") }}</div>
           </div>
           <div class="stat-line">
@@ -144,18 +186,7 @@
           </div>
         </div>
         <div class="sub-section">
-          <div class="title">Carry Capacity</div>
-          <div class="graph">
-            <span>Carry weight: </span>
-            <span>{{ character.carry_weight }} lbs </span>
-            <span>({{ character.current_load }} load)</span>
-          </div>
-          <div class="graph" id="load-bar">
-            <div class="graph-section" id="light-load">
-            </div>|<div class="graph-section" id="medium-load">
-            </div>|<div class="graph-section" id="heavy-load"></div>
-            <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator" style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
-          </div>
+
 
           <div>
             <span>Light load</span>
