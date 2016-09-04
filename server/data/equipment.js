@@ -138,7 +138,18 @@ module.exports = [{
   'cost': 1,
   'max_weight': 1,
 }, {
+  'name': 'spellbook',
+  'weight': 1,
+  'cost': 75,
+  'spellbook': {
+    'pages': 100,
+  }
+}, {
   'name': 'rope (hemp)',
   'weight': 5,
   'cost': 1000,
+}, {
+  'name': 'bag of holding',
+  'weight': 25,
+  'cost': 10000,
 }]

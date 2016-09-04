@@ -4,6 +4,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
+
+
+
+
     BODY {
       color:#DDD;
       text-shadow:#000 0px 0px 3px;
@@ -40,6 +44,7 @@
       width: 100%;
       height: 16px;
       position: relative;
+      padding-top: -6px;
       background: linear-gradient(
         to right,
         rgb(140, 217, 166),
@@ -54,9 +59,15 @@
       margin: 0px;
     }
     #indicator {
-      margin-top: -13px;
       color:#FFF;
+      position:absolute;
+      margin-top:6px;
     }
+
+
+
+
+
     </style>
   </head>
   <body>
@@ -77,19 +88,19 @@
       <div class="section">
         <div class="title">Stats</div>
         <div class="sub-section">
-          <div class="title">Other</div>
+          <div class="title">Carry Capacity</div>
+          <div class="graph">
+            <span>Carry weight: </span>
+            <span>{{ character.carry_weight }} lbs </span>
+            <span>({{ character.current_load }} load)</span>
+          </div>
           <div class="graph" id="load-bar">
             <div class="graph-section" id="light-load">
-            </div><div class="graph-section" id="medium-load">
-            </div><div class="graph-section" id="heavy-load"></div>
-            <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator"
-              style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
+            </div>|<div class="graph-section" id="medium-load">
+            </div>|<div class="graph-section" id="heavy-load"></div>
+            <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator" style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
           </div>
-          <div class="graph">
-            <span>Carry weight</span>
-            <span>{{ character.carry_weight }} lbs</span>
-            <span>{{ character.current_load }}</span>
-          </div>
+
           <div class="stat">
             <span>Light load</span>
             <span>{{ character.light_max }} lbs or less</span>
