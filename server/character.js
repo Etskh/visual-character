@@ -7,72 +7,10 @@ const _ = require('lodash')
 const equipment = require('./equipment')
 const race = require('./race')
 const effect = require('./effect')
+const stat = require('./stat')
+const carry = require('./util/carry')
 
 const characterData = require('./data/characters')
-
-
-const carry = {
-  getLoadName: function(load, data, size) {
-    if( load < carry.lightMax(data, size) ) {
-      return 'light'
-    }
-    if( load < carry.mediumMax(data, size) ) {
-      return 'medium'
-    }
-    if( load < carry.heavyMax(data, size) ) {
-      return 'heavy'
-    }
-
-    return 'staggering'
-  },
-  lightMax: function(data, sizeController) {
-    const str = data.stats.str
-    return Math.round((
-        str * 2.5 +
-        Math.pow(1.25, str)
-      ) * sizeController.carrycap_multiplier
-    )
-  },
-  mediumMax: function(data, sizeController) {
-    return carry.lightMax(data, sizeController) * 2.0
-  },
-  heavyMax: function(data, sizeController) {
-    return Math.round((
-      carry.lightMax(data, sizeController) * 3.0
-    ) / 10) * 10
-  },
-  effects: {
-    medium: {
-      name: 'Medium Load',
-      type: 'encumbrance',
-      dismissible: false,
-      stats: {
-        'check_penalty': -3,
-        'max_dex': 3,
-      }
-    },
-    heavy: {
-      name: 'Heavy Load',
-      type: 'encumbrance',
-      dismissible: false,
-      effects: {
-        'check_penalty': -6,
-        'max_dex': 1,
-      }
-    },
-    staggering: {
-      name: 'Staggering Load',
-      type: 'encumbrance',
-      dismissible: false,
-      effects: {
-        'check_penalty': -10,
-        'max_dex': 0,
-      }
-    }
-  }
-}
-
-
 
 
 const getCharacterDataById = function( id ) {
@@ -99,13 +37,25 @@ const getCharacterById = function( id ) {
       const race = values[1]
 
       const statusEffects = []
+      const stats = {}
 
       const carryWeight = _.sumBy(items, 'weight')
       const currentLoad = carry.getLoadName(carryWeight, data, race.size)
 
-      if ( currentLoad === 'medium' ) {
-        statusEffects.push(effect.createFromData(carry.effects.medium))
+      // If the current load isn't a light load
+      if ( currentLoad !== 'light') {
+        statusEffects.push(effect.createFromData(carry.effects[currentLoad]))
       }
+
+
+      // Now create the primary stats
+      _.forEach( data.stats, function(base, name) {
+        stats[name] = stat.createFromData({
+          name: name,
+          base_value: base,
+        }, statusEffects)
+      })
+
 
       return {
         // Basic data
@@ -114,9 +64,9 @@ const getCharacterById = function( id ) {
         race: race,
 
         // Stats
-        stats: data.stats,
+        stats: stats,
         mods: function(stat) {
-          const mod = Math.floor((data.stats[stat] / 2) - 5)
+          const mod = Math.floor((stat / 2) - 5)
           return (mod > 0 ? '+' : '') + mod
         },
         status_effects: statusEffects,
