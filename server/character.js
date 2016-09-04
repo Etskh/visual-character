@@ -104,6 +104,10 @@ const getCharacterById = function( id ) {
       return {
         id: data.id,
         name: data.name,
+        stats: data.stats,
+        mods: function(stat) {
+          return Math.floor((data.stats[stat] / 2) - 5)
+        },
         race: race,
         equipment: items,
         carry_weight: carryWeight,

@@ -38,19 +38,16 @@ module.exports = [{
     'count': 1,
   }, {
     'equipment': 'bolt',
-    'count': 10
+    'count': 10,
   }, {
     'equipment': 'rope (hemp)',
-    'count': 1
+    'count': 1,
   }, {
     'equipment': 'spellbook',
     'count': 1,
-    'spells': {
-
-    }
   }, {
    'equipment': 'bag of holding',
-   'count': 1
+   'count': 1,
   }],
   'height': 2.9,
   'weight': 40.0,

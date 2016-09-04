@@ -10,7 +10,7 @@
 
     BODY {
       color:#DDD;
-      text-shadow:#000 0px 0px 3px;
+      text-shadow:#000 0px 0px 5px;
       background-color: #333;
       font-family: 'Roboto Condensed', sans-serif;
       font-weight: 300;
@@ -65,7 +65,30 @@
     }
 
 
-
+    /* Stats */
+    .stat-line > div {
+      display:inline-block;
+      vertical-align: middle;
+      margin-left: 32px;
+    }
+    .stat-name {
+      width:20%;
+    }
+    .stat {
+      text-shadow: #000 0px 0px 3px;
+      margin-top: 4px;
+      text-align:center;
+      border-radius: 12px;
+      font-size: 115%;
+      width: 24px;
+      height: 24px;
+      background-color: rgb(140, 217, 166);
+      /*background-color: rgb(159, 140, 217);*/
+    }
+    .stat-modifier {
+      width:10%;
+      text-align: center;
+    }
 
 
     </style>
@@ -88,6 +111,39 @@
       <div class="section">
         <div class="title">Stats</div>
         <div class="sub-section">
+          <div class="title">Primary Statistics</div>
+          <div class="stat-line">
+            <div class="stat-name">Strength</div>
+            <div class="stat">{{ character.stats.str }}</div>
+            <div class="stat-modifier">{{ character.mods("str") }}</div>
+          </div>
+          <div class="stat-line">
+            <div class="stat-name">Dexterity</div>
+            <div class="stat">{{ character.stats.dex }}</div>
+            <div class="stat-modifier">{{ character.mods("dex") }}</div>
+          </div>
+          <div class="stat-line">
+            <div class="stat-name">Constitution</div>
+            <div class="stat">{{ character.stats.con }}</div>
+            <div class="stat-modifier">{{ character.mods("con") }}</div>
+          </div>
+          <div class="stat-line">
+            <div class="stat-name">Intelligence</div>
+            <div class="stat">{{ character.stats.int }}</div>
+            <div class="stat-modifier">{{ character.mods("int") }}</div>
+          </div>
+          <div class="stat-line">
+            <div class="stat-name">Wisdom</div>
+            <div class="stat">{{ character.stats.wis }}</div>
+            <div class="stat-modifier">{{ character.mods("wis") }}</div>
+          </div>
+          <div class="stat-line">
+            <div class="stat-name">Charisma</div>
+            <div class="stat">{{ character.stats.cha }}</div>
+            <div class="stat-modifier">{{ character.mods("cha") }}</div>
+          </div>
+        </div>
+        <div class="sub-section">
           <div class="title">Carry Capacity</div>
           <div class="graph">
             <span>Carry weight: </span>
@@ -101,15 +157,15 @@
             <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator" style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
           </div>
 
-          <div class="stat">
+          <div>
             <span>Light load</span>
             <span>{{ character.light_max }} lbs or less</span>
           </div>
-          <div class="stat">
+          <div>
             <span>Medium load</span>
             <span>{{ character.light_max + 1 }}-{{ character.medium_max }} lbs</span>
           </div>
-          <div class="stat">
+          <div>
             <span>Heavy load</span>
             <span>{{ character.medium_max + 1 }}-{{ character.heavy_max }} lbs</span>
           </div>
