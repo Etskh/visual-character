@@ -16,7 +16,6 @@ module.exports = [{
   },
   // Which is the dominant hand
   'handedness': 'right',
-  // an array where 0 is main and 1 is right, etc.
   'slots': {
     // nothing equipped or held!
   },
@@ -78,11 +77,43 @@ module.exports = [{
   },
   // Which is the dominant hand
   'handedness': 'right',
-  // an array where 0 is main and 1 is right, etc.
   'slots': {
     // nothing equipped or held!
   },
-  'equipment': [],
+  'equipment': [{
+    'equipment': 'chain shirt',
+    'count': 1,
+  }, {
+    'equipment': 'longsword',
+    'count': 1,
+  }, {
+    'equipment': 'short sword',
+    'count': 1,
+    'properties': [
+      'masterwork',
+    ],
+  }, {
+    'equipment': 'dagger',
+    'count': 1,
+  }, {
+    'equipment': 'arrow',
+    'count': 20,
+  }, {
+    'equipment': 'longbow',
+    'count': 1,
+  }, {
+    'equipment': 'quiver',
+    'count': 1,
+  }, {
+    'equipment': 'copper piece',
+    'count': 35,
+  }, {
+    'equipment': 'silver piece',
+    'count': 95,
+  }, {
+    'equipment': 'gold piece',
+    'count': 120,
+  }],
   'height': 6.2,
   'weight': 210.0,
   'stats': {

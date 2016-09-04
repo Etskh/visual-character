@@ -94,6 +94,28 @@
     }
 
 
+
+
+
+    /* Effects */
+    .status-effect {
+      padding: 8px;
+      background-color: rgba(204, 153, 255, 0.2);
+    }
+    .status-effect > .name {
+      display:inline-block;
+    }
+    .status-effect > .type {
+      background-color:#666;
+      color:#FFF;
+      border-radius: 8px;
+      padding: 3px;
+      float: right;
+    }
+
+
+
+
     </style>
   </head>
   <body>
@@ -104,12 +126,13 @@
 
         <div class="title">Main</div>
 
-        {% if character.status_effect.length > 0 %}
+        {% if character.status_effects.length > 0 %}
         <div class="sub-section">
           <div class="title">Status Effects</div>
-          {% for effect in character.status_effect %}
+          {% for effect in character.status_effects %}
           <div class="status-effect">
             <div class="name">{{ effect.name }}</div>
+            <div class="type">{{ effect.type }}</div>
           </div>
           {% endfor %}
         </div>

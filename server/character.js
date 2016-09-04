@@ -6,6 +6,7 @@ const _ = require('lodash')
 
 const equipment = require('./equipment')
 const race = require('./race')
+const effect = require('./effect')
 
 const characterData = require('./data/characters')
 
@@ -40,37 +41,35 @@ const carry = {
       carry.lightMax(data, sizeController) * 3.0
     ) / 10) * 10
   },
-  /*reduceSpeed: function(movespeed, load_data) {
-    const speeds = [
-
-    ]
-  },
   effects: {
-    'light_load': {
-      'max_dex': null,
-      'check_penalty': 0,
-      'speed': 0,
-      'run_multiplier': 4,
+    medium: {
+      name: 'Medium Load',
+      type: 'encumbrance',
+      dismissible: false,
+      stats: {
+        'check_penalty': -3,
+        'max_dex': 3,
+      }
     },
-    'medium_load': {
-      'max_dex': 3,
-      'check_penalty': -3,
-      'speed': 'reduced 1',
-      'run_multiplier': 4,
+    heavy: {
+      name: 'Heavy Load',
+      type: 'encumbrance',
+      dismissible: false,
+      effects: {
+        'check_penalty': -6,
+        'max_dex': 1,
+      }
     },
-    'heavy_load': {
-      'max_dex': 1,
-      'check_penalty': -6,
-      'speed': 'reduced 1',
-      'run_multiplier': 3,
-    },
-    'staggering_load': {
-      'max_dex': 0,
-      'check_penalty': -10,
-      'speed': 5,
-      'run_multiplier': 0,
+    staggering: {
+      name: 'Staggering Load',
+      type: 'encumbrance',
+      dismissible: false,
+      effects: {
+        'check_penalty': -10,
+        'max_dex': 0,
+      }
     }
-  }*/
+  }
 }
 
 
@@ -99,7 +98,14 @@ const getCharacterById = function( id ) {
       const items = values[0]
       const race = values[1]
 
+      const statusEffects = []
+
       const carryWeight = _.sumBy(items, 'weight')
+      const currentLoad = carry.getLoadName(carryWeight, data, race.size)
+
+      if ( currentLoad === 'medium' ) {
+        statusEffects.push(effect.createFromData(carry.effects.medium))
+      }
 
       return {
         // Basic data
@@ -110,14 +116,15 @@ const getCharacterById = function( id ) {
         // Stats
         stats: data.stats,
         mods: function(stat) {
-          return Math.floor((data.stats[stat] / 2) - 5)
+          const mod = Math.floor((data.stats[stat] / 2) - 5)
+          return (mod > 0 ? '+' : '') + mod
         },
-        status_effects: [],
+        status_effects: statusEffects,
 
         // Equipment
         equipment: items,
         carry_weight: carryWeight,
-        current_load: carry.getLoadName(carryWeight, data, race.size),
+        current_load: currentLoad,
         light_max: carry.lightMax(data, race.size),
         medium_max: carry.mediumMax(data, race.size),
         heavy_max: carry.heavyMax(data, race.size),

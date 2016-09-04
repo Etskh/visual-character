@@ -24,7 +24,7 @@ const createEquipmentController = function( item ) {
         item.material ? item.material : '',
         equipment.name,
       ].join(' ').trim(),
-      weight: equipment.weight * item.count,
+      weight: Math.round(equipment.weight * item.count * 100) / 100,
       count: item.count,
     })
   })
