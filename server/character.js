@@ -24,8 +24,17 @@ const getCharacterDataById = function( id ) {
 }
 
 
+const getCharacterByIds = function(ids) {
+  var shortList = []
+
+  _.forEach(ids, function(id) {
+    shortList.push(getCharacterById(id))
+  })
+
+  return Promise.all(shortList)
+}
+
 const getCharacterById = function( id ) {
-  // TODO: Extend this into a real controller
   return getCharacterDataById(id).then(function(data) {
 
     return Promise.all([
@@ -39,10 +48,10 @@ const getCharacterById = function( id ) {
       const statusEffects = []
       const stats = {}
 
-      const carryWeight = _.sumBy(items, 'weight')
-      const currentLoad = carry.getLoadName(carryWeight, data, race.size)
 
       // If the current load isn't a light load
+      const carryWeight = _.sumBy(items, 'weight')
+      const currentLoad = carry.getLoadName(carryWeight, data, race.size)
       if ( currentLoad !== 'light') {
         statusEffects.push(effect.createFromData(carry.effects[currentLoad]))
       }
@@ -75,6 +84,10 @@ const getCharacterById = function( id ) {
         equipment: items,
         carry_weight: carryWeight,
         current_load: currentLoad,
+        current_load_percentage: _.clamp(
+          carryWeight / carry.heavyMax(data, race.size),
+          0,
+          1 ) * 100,
         light_max: carry.lightMax(data, race.size),
         medium_max: carry.mediumMax(data, race.size),
         heavy_max: carry.heavyMax(data, race.size),
@@ -84,15 +97,6 @@ const getCharacterById = function( id ) {
 }
 
 
-const getCharacterByIds = function(ids) {
-  var shortList = []
-
-  _.forEach(ids, function(id) {
-    shortList.push(getCharacterById(id))
-  })
-
-  return Promise.all(shortList)
-}
 
 module.exports.getById = getCharacterById
 module.exports.getByIds = getCharacterByIds

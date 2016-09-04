@@ -47,6 +47,15 @@ module.exports = [{
   }, {
    'equipment': 'bag of holding',
    'count': 1,
+  }, {
+    'equipment': 'copper piece',
+    'count': 235,
+  }, {
+    'equipment': 'silver piece',
+    'count': 905,
+  }, {
+    'equipment': 'gold piece',
+    'count': 1200,
   }],
   'height': 2.9,
   'weight': 40.0,
@@ -63,7 +72,7 @@ module.exports = [{
     'since': 50,
     'duration': 20,
     'effects': {
-      'stats.wisdom': -3,
+      'wis': -3,
     },
   }], // enchantments
 }, {
@@ -94,7 +103,7 @@ module.exports = [{
     ],
   }, {
     'equipment': 'dagger',
-    'count': 1,
+    'count': 30,
   }, {
     'equipment': 'arrow',
     'count': 20,
@@ -109,10 +118,10 @@ module.exports = [{
     'count': 35,
   }, {
     'equipment': 'silver piece',
-    'count': 95,
+    'count': 125,
   }, {
     'equipment': 'gold piece',
-    'count': 120,
+    'count': 500,
   }],
   'height': 6.2,
   'weight': 210.0,
