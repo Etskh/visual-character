@@ -4,43 +4,7 @@ const _ = require('lodash')
 
 // TODO: Move this to ./server/lib
 
-const equipmentData = [{
-  'name': 'dagger',
-  'weight': 1.0,
-  'cost': 200,
-  'handedness': 'light',
-  'type': 'weapon',
-  'sub_type': 'simple',
-  'attacks': [{
-    'damage': {
-      'die': 4,
-      'count': 1,
-      'type': [
-        'piercing',
-        'slashing',
-      ],
-    },
-    'range': false,
-    'critical': {
-      'range': 2,
-      'multiplier': 2,
-    },
-  },{
-    'damage': {
-      'die': 4,
-      'count': 1,
-      'type': 'piercing',
-    },
-    'range': {
-      'type': 'thrown',
-      'increment': 10,
-    },
-    'critical': {
-      'range': 2,
-      'multiplier': 2,
-    },
-  }],
-}]
+const equipmentData = require('./data/equipment')
 
 const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {
