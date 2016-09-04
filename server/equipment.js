@@ -25,22 +25,16 @@ const createEquipmentController = function( item ) {
         equipment.name,
       ].join(' ').trim(),
       weight: equipment.weight * item.count,
-      getAttacks: function() {
-        return equipment.attacks
-      }
     })
   })
 }
 
 
 const createControllersForItems = function(items) {
-
   const controllers = []
-
   _.forEach(items, function(item) {
     controllers.push( createEquipmentController( item ))
   })
-
   return Promise.all(controllers)
 }
 

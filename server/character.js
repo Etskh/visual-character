@@ -5,8 +5,62 @@
 const _ = require('lodash')
 
 const equipment = require('./equipment')
+const race = require('./race')
 
 const characterData = require('./data/characters')
+
+
+const carry = {
+  lightMax: function(data, sizeController) {
+    const str = data.stats.str
+    return Math.round((
+        str * 2.5 +
+        Math.pow(1.25, str)
+      ) * sizeController.carrycap_multiplier
+    )
+  },
+  mediumMax: function(data, sizeController) {
+    return carry.lightMax(data, sizeController) * 2.0
+  },
+  heavyMax: function(data, sizeController) {
+    return Math.round((
+      carry.lightMax(data, sizeController) * 3.0
+    ) / 10) * 10
+  },
+  /*reduceSpeed: function(movespeed, load_data) {
+    const speeds = [
+
+    ]
+  },
+  effects: {
+    'light_load': {
+      'max_dex': null,
+      'check_penalty': 0,
+      'speed': 0,
+      'run_multiplier': 4,
+    },
+    'medium_load': {
+      'max_dex': 3,
+      'check_penalty': -3,
+      'speed': 'reduced 1',
+      'run_multiplier': 4,
+    },
+    'heavy_load': {
+      'max_dex': 1,
+      'check_penalty': -6,
+      'speed': 'reduced 1',
+      'run_multiplier': 3,
+    },
+    'staggering_load': {
+      'max_dex': 0,
+      'check_penalty': -10,
+      'speed': 5,
+      'run_multiplier': 0,
+    }
+  }*/
+}
+
+
 
 
 const getCharacterDataById = function( id ) {
@@ -19,19 +73,6 @@ const getCharacterDataById = function( id ) {
   })
 }
 
-const carry = {
-  lightMax: function(data) {
-    const str = data.stats.str
-    return Math.round( str * 2.5 + Math.pow(1.25, str))
-  },
-  mediumMax: function(data) {
-    return carry.lightMax(data) * 2.0
-  },
-  heavyMax: function(data) {
-    return Math.round((carry.lightMax(data) * 3.0) / 10) * 10
-  },
-}
-
 
 const getCharacterById = function( id ) {
   // TODO: Extend this into a real controller
@@ -39,19 +80,21 @@ const getCharacterById = function( id ) {
 
     return Promise.all([
       equipment.createControllersForItems(data.equipment),
-      races.getByName(data.race),
+      race.getByName(data.race),
     ]).then( function(values) {
 
       const items = values[0]
+      const race = values[1]
 
       return {
         id: data.id,
         name: data.name,
+        race: race,
         equipment: items,
-        carryWeight: _.sumBy(items, 'weight'),
-        lightMax: carry.lightMax(data, data.race),
-        mediumMax: carry.mediumMax(data),
-        heavyMax: carry.heavyMax(data),
+        carry_weight: _.sumBy(items, 'weight'),
+        light_max: carry.lightMax(data, race.size),
+        medium_max: carry.mediumMax(data, race.size),
+        heavy_max: carry.heavyMax(data, race.size),
       }
     })
   })
