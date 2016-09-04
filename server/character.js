@@ -11,6 +11,19 @@ const characterData = require('./data/characters')
 
 
 const carry = {
+  getLoadName: function(load, data, size) {
+    if( load < carry.lightMax(data, size) ) {
+      return 'light'
+    }
+    if( load < carry.mediumMax(data, size) ) {
+      return 'medium'
+    }
+    if( load < carry.heavyMax(data, size) ) {
+      return 'heavy'
+    }
+
+    return 'staggering'
+  },
   lightMax: function(data, sizeController) {
     const str = data.stats.str
     return Math.round((
@@ -86,12 +99,15 @@ const getCharacterById = function( id ) {
       const items = values[0]
       const race = values[1]
 
+      const carryWeight = _.sumBy(items, 'weight')
+
       return {
         id: data.id,
         name: data.name,
         race: race,
         equipment: items,
-        carry_weight: _.sumBy(items, 'weight'),
+        carry_weight: carryWeight,
+        current_load: carry.getLoadName(carryWeight, data, race.size),
         light_max: carry.lightMax(data, race.size),
         medium_max: carry.mediumMax(data, race.size),
         heavy_max: carry.heavyMax(data, race.size),

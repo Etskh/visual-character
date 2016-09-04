@@ -2,6 +2,7 @@
   <head>
     <title>Visual Character</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
     BODY {
       color:#DDD;
@@ -31,6 +32,31 @@
       background-color: rgba(0,0,20,0.1);
       padding:6px;
     }
+
+
+
+    /* Carry capacity */
+    #load-bar {
+      width: 100%;
+      height: 16px;
+      position: relative;
+      background: linear-gradient(
+        to right,
+        rgb(140, 217, 166),
+        rgb(217, 217, 140),
+        rgb(217, 159, 140)
+        );
+    }
+    #load-bar .graph-section {
+      width: 33.3%;
+      height: 100%;
+      display: inline-block;
+      margin: 0px;
+    }
+    #indicator {
+      margin-top: -13px;
+      color:#FFF;
+    }
     </style>
   </head>
   <body>
@@ -52,21 +78,29 @@
         <div class="title">Stats</div>
         <div class="sub-section">
           <div class="title">Other</div>
+          <div class="graph" id="load-bar">
+            <div class="graph-section" id="light-load">
+            </div><div class="graph-section" id="medium-load">
+            </div><div class="graph-section" id="heavy-load"></div>
+            <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator"
+              style="left:{{ 100 * character.carry_weight / character.heavy_max }}%"></div>
+          </div>
           <div class="graph">
             <span>Carry weight</span>
-            <span>{{ character.carryWeight }}</span>
+            <span>{{ character.carry_weight }} lbs</span>
+            <span>{{ character.current_load }}</span>
           </div>
           <div class="stat">
             <span>Light load</span>
-            <span>{{ character.lightMax }} lbs or less</span>
+            <span>{{ character.light_max }} lbs or less</span>
           </div>
           <div class="stat">
             <span>Medium load</span>
-            <span>{{ character.lightMax + 1 }}-{{ character.mediumMax }} lbs</span>
+            <span>{{ character.light_max + 1 }}-{{ character.medium_max }} lbs</span>
           </div>
           <div class="stat">
             <span>Heavy load</span>
-            <span>{{ character.mediumMax + 1 }}-{{ character.heavyMax }} lbs</span>
+            <span>{{ character.medium_max + 1 }}-{{ character.heavy_max }} lbs</span>
           </div>
         </div>
       </div>

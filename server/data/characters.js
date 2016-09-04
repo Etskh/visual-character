@@ -39,6 +39,9 @@ module.exports = [{
   }, {
     'equipment': 'bolt',
     'count': 10
+  }, {
+    'equipment': 'rope (hemp)',
+    'count': 1
   }],
   'height': 2.9,
   'weight': 40.0,

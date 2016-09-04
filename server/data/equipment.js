@@ -137,4 +137,8 @@ module.exports = [{
   'weight': 0.1,
   'cost': 1,
   'max_weight': 1,
+}, {
+  'name': 'rope (hemp)',
+  'weight': 5,
+  'cost': 1000,
 }]
