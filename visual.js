@@ -20,6 +20,9 @@ nunjucks.configure('templates', {
 })
 
 
+// Use the public directory
+app.use(express.static('public'))
+
 // Use cookie parsing middleware
 app.use(cookieParser())
 
