@@ -4,9 +4,9 @@ const _ = require('lodash')
 
 // TODO: Move this to ./server/lib
 
-const raceData = require('./data/races')
+const raceData = require('../data/races')
 
-const size = require('./size')
+const size = require('../util/size')
 
 const getRaceByName = function( name ) {
   const data = _.find(raceData, { 'name': name.toLowerCase() })

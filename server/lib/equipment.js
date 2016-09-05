@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 // TODO: Move this to ./server/lib
 
-const equipmentData = require('./data/equipment')
+const equipmentData = require('../data/equipment')
 
 const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {

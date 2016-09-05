@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
 
 
 
-const userAuth = require('./server/auth')
+const userAuth = require('./server/lib/user')
 
 const userAuthenticated = function( req, res, next ) {
   if( !req.cookies.user ) {
@@ -79,7 +79,7 @@ app.get('/logout', function(req, res) {
 })
 
 // Need user-auth for all routes
-app.use('/', userAuthenticated, require('./server/routes'))
+app.use('/', userAuthenticated, require('./server/init/routes'))
 
 
 app.listen(app.locals.port, function () {

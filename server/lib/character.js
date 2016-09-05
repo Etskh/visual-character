@@ -6,11 +6,12 @@ const _ = require('lodash')
 
 const equipment = require('./equipment')
 const race = require('./race')
-const effect = require('./effect')
-const stat = require('./stat')
-const carry = require('./util/carry')
 
-const characterData = require('./data/characters')
+const effect = require('../util/effect')
+const stat = require('../util/stat')
+const carry = require('../util/carry')
+
+const characterData = require('../data/characters')
 
 
 const getCharacterDataById = function( id ) {
