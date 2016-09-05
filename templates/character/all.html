@@ -1,0 +1,16 @@
+{% extends 'default.html' %}
+
+{% block content %}
+    <div class="character">
+      <div class="name">{{ character.name }}</div>
+
+      {% include "character/main.html" %}
+
+      {% include "character/equipment.html" %}
+
+      {% include "character/stats.html" %}
+
+      {% include "character/debug.html" %}
+
+    </div> <!-- end Character -->
+{% endblock %}

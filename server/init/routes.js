@@ -22,7 +22,7 @@ router.get('/character/:id', function (req, res) {
   user.hasPermissionToCharacter(
     req.params.id
   ).then(function(character) {
-    res.render('character.html', {
+    res.render('character/all.html', {
       character: character,
     })
   }, function(error){
