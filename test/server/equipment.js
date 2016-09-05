@@ -6,7 +6,7 @@ var expect = require('expect')
 
 describe('Equipment', function() {
 
-  var equip = require('../../server/equipment')
+  var equip = require('../../server/lib/equipment')
 
   let itemList = [{
     'equipment': 'dagger',
