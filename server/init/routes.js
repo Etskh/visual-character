@@ -22,6 +22,9 @@ router.get('/character/:id', function (req, res) {
   user.hasPermissionToCharacter(
     req.params.id
   ).then(function(character) {
+
+    user.saveActiveCharacter(req.params.id);
+
     res.render('character/all.html', {
       character: character,
     })
@@ -30,6 +33,25 @@ router.get('/character/:id', function (req, res) {
   })
 })
 
+router.get('/action', function (req, res) {
+  const user = res.locals.user
+
+  user.getActiveCharacter().then(function(character) {
+
+    //character.dropItem(req.params.itemId)
+    character.save()
+
+    return res.json({
+      'success': true,
+      'current_load_percentage': character.current_load_percentage,
+    })
+  }, function(error){
+    return res.json({
+      'success': false,
+      'error': error,
+    })
+  })
+})
 
 
 module.exports = router

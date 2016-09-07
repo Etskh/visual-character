@@ -2,6 +2,7 @@
 
 // TODO: Move this to ./server/lib
 
+const fs = require('fs')
 const _ = require('lodash')
 
 const equipment = require('./equipment')
@@ -11,11 +12,15 @@ const effect = require('../util/effect')
 const stat = require('../util/stat')
 const carry = require('../util/carry')
 
-const characterData = require('../data/characters')
+
+
+
+const dataPath = 'server/data/characters.json'
 
 
 const getCharacterDataById = function( id ) {
   return new Promise(function( resolve, reject ) {
+    const characterData = require( '../data/characters.js')
     const character = _.find(characterData, { 'id': parseInt(id) })
     if ( !character ) {
       return reject('Unknown character with id ' + id )
@@ -23,6 +28,36 @@ const getCharacterDataById = function( id ) {
     resolve(character)
   })
 }
+
+
+const saveCharacter = function(character) {
+  let allCharacterData = require(dataPath)
+
+  // Remove the character, and readd
+  _.remove(allCharacterData, { 'id': parseInt(character.id) })
+  allCharacterData.push(character.data)
+
+  console.log(dataPath)
+
+  fs.writeFile(
+    dataPath,
+    JSON.stringify(allCharacterData, null, 2),
+    function( err ) {
+      if ( err ) {
+        throw err
+      }
+      console.log(err)
+    }
+  )
+}
+
+
+const dropItem = function(character, id) {
+  _.remove(character.data.equipment, {'id': id})
+  saveCharacter(character)
+}
+
+
 
 
 const getCharacterByIds = function(ids) {
@@ -65,10 +100,19 @@ const getCharacterById = function( id ) {
           base_value: base,
         }, statusEffects)
       })
+      stats['check_penalty'] = stat.createFromData({
+        name: 'check_penalty',
+        base_value: 0,
+      }, statusEffects)
+      stats['ac'] = stat.createFromData({
+        name: 'ac',
+        base_value: 10,
+      }, statusEffects)
 
 
-      return {
+      const characterController = {
         // Basic data
+        data: data,
         id: data.id,
         name: data.name,
         race: race,
@@ -93,6 +137,17 @@ const getCharacterById = function( id ) {
         medium_max: carry.mediumMax(data, race.size),
         heavy_max: carry.heavyMax(data, race.size),
       }
+
+      characterController.save = function() {
+        return saveCharacter(characterController)
+      }
+
+      characterController.dropItem = function(id) {
+        return dropItem(characterController, id)
+      }
+
+
+      return characterController
     })
   })
 }

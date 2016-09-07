@@ -20,6 +20,7 @@ module.exports = [{
     // nothing equipped or held!
   },
   'equipment': [{
+    'id': 1,
     'equipment': 'dagger',
     'count': 1,
     'material': 'silver',
@@ -27,33 +28,43 @@ module.exports = [{
       'masterwork',
     ],
   }, {
+    'id': 2,
     'equipment': 'dagger',
     'count': 2,
   }, {
+    'id': 3,
     'equipment': 'light crossbow',
     'count': 1,
   }, {
+    'id': 4,
     'equipment': 'quiver',
     'count': 1,
   }, {
+    'id': 5,
     'equipment': 'bolt',
     'count': 10,
   }, {
+    'id': 6,
     'equipment': 'rope (hemp)',
     'count': 1,
   }, {
+    'id': 7,
     'equipment': 'spellbook',
     'count': 1,
   }, {
-   'equipment': 'bag of holding',
-   'count': 1,
+    'id': 8,
+    'equipment': 'bag of holding',
+    'count': 1,
   }, {
+    'id': 9,
     'equipment': 'copper piece',
     'count': 235,
   }, {
+    'id': 10,
     'equipment': 'silver piece',
     'count': 905,
   }, {
+    'id': 11,
     'equipment': 'gold piece',
     'count': 1200,
   }],
@@ -92,34 +103,44 @@ module.exports = [{
   'equipment': [{
     'equipment': 'chain shirt',
     'count': 1,
+    'id': 1,
   }, {
+    'id': 2,
     'equipment': 'longsword',
     'count': 1,
   }, {
+    'id': 3,
     'equipment': 'short sword',
     'count': 1,
     'properties': [
       'masterwork',
     ],
   }, {
+    'id': 4,
     'equipment': 'dagger',
     'count': 30,
   }, {
+    'id': 5,
     'equipment': 'arrow',
     'count': 20,
   }, {
+    'id': 6,
     'equipment': 'longbow',
     'count': 1,
   }, {
+    'id': 7,
     'equipment': 'quiver',
     'count': 1,
   }, {
+    'id': 8,
     'equipment': 'copper piece',
     'count': 35,
   }, {
+    'id': 9,
     'equipment': 'silver piece',
     'count': 125,
   }, {
+    'id': 10,
     'equipment': 'gold piece',
     'count': 500,
   }],

@@ -19,6 +19,7 @@ const getEquipmentDataByName = function( name ) {
 const createEquipmentController = function( item ) {
   return getEquipmentDataByName(item.equipment).then(function(equipment) {
     return ({
+      id: item.id,
       name: [
         _.includes(item.properties, 'masterwork') ? '+1' : '',
         item.material ? item.material : '',

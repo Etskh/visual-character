@@ -1,5 +1,7 @@
 'use strict'
 
+const _ = require('lodash')
+
 const characterController = require('./character')
 
 // TODO: Move this to ./server/lib
@@ -8,6 +10,7 @@ const characterController = require('./character')
 const users = [{
   'username': 'user',
   'password': 'pass',
+  'active_character': null,
   'characters': [
     1, 2
   ],
@@ -33,6 +36,13 @@ const createController = function(data) {
     hasPermissionToCharacter: function(id) {
       return characterController.getById(id)
     }, // hasPermissionToCharacter
+    saveActiveCharacter: function(id) {
+      const user = _.find(users, {'username': data.username})
+      user.active_character = id
+    }, // saveActiveCharacter
+    getActiveCharacter: function() {
+      return characterController.getById(data.active_character)
+    }, // getActiveCharacter
   }
 }
 
