@@ -1,7 +1,7 @@
 'use strict'
 
 
-const createEffectFromData = function( data, character ) {
+const createEffectFromData = function( data ) {
   return {
     name: data.name,
     type: data.type,

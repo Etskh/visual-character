@@ -25,7 +25,7 @@ const getCharacterDataById = function( id ) {
       }
 
       try {
-        var characterData = JSON.parse(contents);
+        var characterData = JSON.parse(contents)
       }
       catch (error) {
         return reject(error)
