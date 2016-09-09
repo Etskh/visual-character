@@ -25,7 +25,7 @@ router.get('/character/:id', function (req, res) {
     req.params.id
   ).then(function(character) {
 
-    user.saveActiveCharacter(req.params.id);
+    user.saveActiveCharacter(req.params.id)
 
     res.render('character/all.html', {
       character: character,
@@ -38,9 +38,6 @@ router.get('/character/:id', function (req, res) {
 router.post('/action', require('body-parser').json(), function (req, res) {
   const user = res.locals.user
 
-  console.log(req.body)
-
-
   user.getActiveCharacter(
     // empty
   ).then(function(character) {
@@ -49,7 +46,7 @@ router.post('/action', require('body-parser').json(), function (req, res) {
     var args = req.body['args[]']
     var func = character[req.body.action]
 
-    if( typeof args !== 'array' ) {
+    if( !args.length ) {
       args = [args]
     }
 

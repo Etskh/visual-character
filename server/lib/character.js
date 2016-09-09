@@ -17,6 +17,37 @@ const carry = require('../util/carry')
 const dataPath = './server/data/characters.json'
 
 
+const saveCharacter = function(character) {
+  return new Promise( function(resolve, reject ) {
+    fs.readFile(dataPath, function(error, contents) {
+      if(error) {
+        return reject(error)
+      }
+      try {
+        var allCharacterData = JSON.parse(contents)
+      }
+      catch (error) {
+        return reject(error)
+      }
+
+      _.remove(allCharacterData, { 'id': parseInt(character.id) })
+      allCharacterData.push(character.data)
+
+      fs.writeFile(
+        dataPath, JSON.stringify(allCharacterData, null, 2),
+        function( error ) {
+          if ( error ) {
+            return reject(error)
+          }
+          // Reload the character with saved data
+          return resolve(character.reload())
+        }
+      )
+    })
+  })
+}
+
+
 const getCharacterDataById = function( id ) {
   return new Promise(function( resolve, reject ) {
     fs.readFile(dataPath, function(error, contents) {
@@ -96,6 +127,7 @@ const getCharacterById = function( id ) {
           return getCharacterById(data.id)
         },
 
+
         // Basic data
         data: data,
         id: data.id,
@@ -121,6 +153,10 @@ const getCharacterById = function( id ) {
         light_max: carry.lightMax(data, race.size),
         medium_max: carry.mediumMax(data, race.size),
         heavy_max: carry.heavyMax(data, race.size),
+      }
+
+      characterController.save = function() {
+        return saveCharacter(characterController)
       }
 
       require('./character-methods').add(characterController)
