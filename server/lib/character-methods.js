@@ -4,9 +4,7 @@ const _ = require('lodash')
 
 
 const dropItem = function(character, id) {
-  console.log('Dropping item')
   _.remove(character.data.equipment, {'id': parseInt(id) })
-  console.log('Saving character')
   return character.save()
 }
 
