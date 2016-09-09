@@ -13,51 +13,32 @@ const stat = require('../util/stat')
 const carry = require('../util/carry')
 
 
-
-
-const dataPath = 'server/data/characters.json'
+// Datafile
+const dataPath = './server/data/characters.json'
 
 
 const getCharacterDataById = function( id ) {
   return new Promise(function( resolve, reject ) {
-    const characterData = require( '../data/characters.js')
-    const character = _.find(characterData, { 'id': parseInt(id) })
-    if ( !character ) {
-      return reject('Unknown character with id ' + id )
-    }
-    resolve(character)
+    fs.readFile(dataPath, function(error, contents) {
+      if(error) {
+        return reject(error)
+      }
+
+      try {
+        var characterData = JSON.parse(contents);
+      }
+      catch (error) {
+        return reject(error)
+      }
+
+      const character = _.find(characterData, { 'id': parseInt(id) })
+      if ( !character ) {
+        return reject('Unknown character with id ' + id )
+      }
+      resolve(character)
+    })
   })
 }
-
-
-const saveCharacter = function(character) {
-  let allCharacterData = require(dataPath)
-
-  // Remove the character, and readd
-  _.remove(allCharacterData, { 'id': parseInt(character.id) })
-  allCharacterData.push(character.data)
-
-  console.log(dataPath)
-
-  fs.writeFile(
-    dataPath,
-    JSON.stringify(allCharacterData, null, 2),
-    function( err ) {
-      if ( err ) {
-        throw err
-      }
-      console.log(err)
-    }
-  )
-}
-
-
-const dropItem = function(character, id) {
-  _.remove(character.data.equipment, {'id': id})
-  saveCharacter(character)
-}
-
-
 
 
 const getCharacterByIds = function(ids) {
@@ -111,6 +92,10 @@ const getCharacterById = function( id ) {
 
 
       const characterController = {
+        reload: function() {
+          return getCharacterById(data.id)
+        },
+
         // Basic data
         data: data,
         id: data.id,
@@ -138,14 +123,7 @@ const getCharacterById = function( id ) {
         heavy_max: carry.heavyMax(data, race.size),
       }
 
-      characterController.save = function() {
-        return saveCharacter(characterController)
-      }
-
-      characterController.dropItem = function(id) {
-        return dropItem(characterController, id)
-      }
-
+      require('./character-methods').add(characterController)
 
       return characterController
     })

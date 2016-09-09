@@ -6,6 +6,8 @@ const express = require('express')
 
 const router = express.Router()
 
+
+
 router.get('/', function (req, res) {
   const user = res.locals.user
   user.getCharacters().then(function(characters) {
@@ -33,17 +35,43 @@ router.get('/character/:id', function (req, res) {
   })
 })
 
-router.get('/action', function (req, res) {
+router.post('/action', require('body-parser').json(), function (req, res) {
   const user = res.locals.user
 
-  user.getActiveCharacter().then(function(character) {
+  console.log(req.body)
 
-    //character.dropItem(req.params.itemId)
-    character.save()
+
+  user.getActiveCharacter(
+    // empty
+  ).then(function(character) {
+    // Allow execution of arbitrary code (lol)
+
+    var args = req.body['args[]']
+    var func = character[req.body.action]
+
+    if( typeof args !== 'array' ) {
+      args = [args]
+    }
+
+    return func.apply(character, args)
+
+  }).then(function(character) {
+
+    switch(req.body.return) {
+    case 'equipment':
+      return res.json({
+        'success': true,
+        'stats': {
+          'current_load': character.current_load,
+          'current_load_percentage': character.current_load_percentage,
+          'equipment': character.equipment,
+          'carry_weight': character.carry_weight,
+        },
+      })
+    }
 
     return res.json({
-      'success': true,
-      'current_load_percentage': character.current_load_percentage,
+      'success': true
     })
   }, function(error){
     return res.json({
