@@ -46,12 +46,18 @@ router.post('/action', require('body-parser').json(), function (req, res) {
     var args = req.body['args[]']
     var func = character[req.body.action]
 
-    if( !args.length ) {
-      args = [args]
+    if( !func ) {
+      return res.json({
+        'success': false,
+        'error': + req.body.action + ' is not a function',
+      })
     }
 
-    return func.apply(character, args)
+    if( typeof args !== 'object' ) {
+      args = [ args ]
+    }
 
+    return func.call(this, args)
   }).then(function(character) {
 
     switch(req.body.return) {
