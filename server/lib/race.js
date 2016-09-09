@@ -9,15 +9,17 @@ const raceData = require('../data/races')
 const size = require('../util/size')
 
 const getRaceByName = function( name ) {
-  const data = _.find(raceData, { 'name': name.toLowerCase() })
-  if ( !data ) {
-    return reject('Unknown race: ' + name )
-  }
-  return size.getByName(data.size).then(function(size) {
-    return {
-      'name': data.name,
-      'size': size,
+  return new Promise( function(resolve, reject) {
+    const data = _.find(raceData, { 'name': name.toLowerCase() })
+    if ( !data ) {
+      return reject('Unknown race: ' + name )
     }
+    return size.getByName(data.size).then(function(size) {
+      return resolve({
+        'name': data.name,
+        'size': size,
+      })
+    })
   })
 }
 
