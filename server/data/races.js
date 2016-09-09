@@ -6,4 +6,7 @@ module.exports = [{
 }, {
   'name': 'half-orc',
   'size': 'medium',
+}, {
+  'name': 'dwarf',
+  'size': 'medium',
 }]

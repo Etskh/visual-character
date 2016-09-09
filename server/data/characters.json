@@ -1,5 +1,22 @@
 [
   {
+    "id": 3,
+    "name": "Ruglia",
+    "race": "Dwarf",
+    "classes": {
+      "Druid": 4
+    },
+    "equipment": [],
+    "stats": {
+      "str": 13,
+      "dex": 14,
+      "con": 13,
+      "int": 12,
+      "wis": 16,
+      "cha": 12
+    },
+  },
+  {
     "id": 2,
     "name": "Kazrah",
     "race": "Half-orc",
