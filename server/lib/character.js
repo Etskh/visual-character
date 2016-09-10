@@ -144,7 +144,7 @@ const getCharacterById = function( id ) {
 
         // Equipment
         equipment: items,
-        carry_weight: carryWeight,
+        carry_weight: Math.round(carryWeight),
         current_load: currentLoad,
         current_load_percentage: _.clamp(
           carryWeight / carry.heavyMax(data, race.size),

@@ -4,14 +4,14 @@
     <div class="title">Carry Capacity</div>
     <div class="graph">
       <span>Carry weight: </span>
-      <span class="stat-carry_weight">{{ character.carry_weight }}</span>
-      <span class="stat-current_load">{{ character.current_load }}</span>
+      <span>~<span class="stat-carry_weight">{{ character.carry_weight }}</span> lbs</span>
+      <span>(<span class="stat-current_load">{{ character.current_load }}</span> load)</span>
     </div>
     <div class="graph" id="load-bar">
       <div class="graph-section" id="light-load">
       </div>|<div class="graph-section" id="medium-load">
       </div>|<div class="graph-section" id="heavy-load"></div>
-      <div class="graph-indicator glyphicon glyphicon-triangle-top" id="indicator" style="left:{{ character.current_load_percentage }}%"></div>
+      <div class="graph-indicator" id="indicator" style="left:{{ character.current_load_percentage }}%">v</div>
     </div>
   </div>
 
@@ -23,7 +23,6 @@
         <div class="name">{{ item.name }}</div>
         <div class="weight">{{ item.weight }} lbs</div>
         <div class="button drop">Drop</div>
-        <div class="button">Give</div>
       </div>
     {% endfor %}
   </div>

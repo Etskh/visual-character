@@ -73,10 +73,12 @@ BODY {
 #indicator {
   color:#FFF;
   position:absolute;
-  margin-top:6px;
+  top:0px;
   margin-left:-8px;
-}
 
+  /* Animate shit */
+  transition-duration: 1s;
+}
 
 
 

@@ -16,11 +16,10 @@ $(document).ready(function(){
       if( reply.success ) {
 
         for( stat in reply.stats) {
-          console.log(stat);
           $('.stat-' + stat ).text(reply.stats[stat]);
         }
 
-        $('#load-bar #indicator').css('left', reply.current_load_percentage+'%');
+        $('#load-bar #indicator').css('left', reply.stats.current_load_percentage+'%');
         $(event.target.parentNode).hide('fast');
       }
     });
