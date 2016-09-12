@@ -19,6 +19,7 @@ router.get('/', function (req, res) {
   })
 })
 
+
 router.get('/character/:id', function (req, res) {
   const user = res.locals.user
   user.hasPermissionToCharacter(
@@ -27,13 +28,43 @@ router.get('/character/:id', function (req, res) {
 
     user.saveActiveCharacter(req.params.id)
 
-    res.render('character/all.html', {
+    res.render('character/index.html', {
       character: character,
     })
   }, function(error){
     return res.render('uhoh.html', { error: error })
   })
 })
+
+
+
+
+function characterPageHandler( page ) {
+  return function (req, res) {
+    const user = res.locals.user
+    user.hasPermissionToCharacter(
+      req.params.id
+    ).then(function(character) {
+      res.render('character/' + page + '.html', {
+        character: character,
+      })
+    }, function(error){
+      return res.render('uhoh.html', { error: error })
+    })
+  }
+}
+
+
+
+
+router.get('/character/:id/overworld', characterPageHandler('main') )
+router.get('/character/:id/combat', characterPageHandler('combat') )
+router.get('/character/:id/magic', characterPageHandler('magic') )
+router.get('/character/:id/equipment', characterPageHandler('equipment') )
+router.get('/character/:id/statistics', characterPageHandler('statistics') )
+router.get('/character/:id/debug', characterPageHandler('debug') )
+
+
 
 router.post('/action', require('body-parser').json(), function (req, res) {
   const user = res.locals.user

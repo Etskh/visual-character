@@ -4,7 +4,7 @@
   Hello {{ user.name }}
   {% for char in characters %}
     <div>
-      <a href="/character/{{ char.id }}">{{ char.name }}</a>
+      <a class="button" href="/character/{{ char.id }}">{{ char.name }}</a>
     </div>
   {% endfor %}
 {% endblock %}
