@@ -1,0 +1,15 @@
+{% extends '../overlay.html' %}
+
+{% block title %}Equipment List{% endblock%}
+
+{% block content %}
+
+  {% for equipment in equipmentTypes %}
+    <div class="add-equipment">{{ equipment.name }}</div>
+  {% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/all-equipment.js"></script>
+{% endblock %}

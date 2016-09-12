@@ -53,16 +53,29 @@ BODY {
   background-color: rgba(0, 0, 0, 0.65);
   width:100%;
   height:100%;
+  display:none;
 }
 #overlay #window {
   width:80%;
+  position:relative;
   box-shadow: #000 0px 0px 20px;
-  margin: 10%;
+  margin-left: 10%;
+  margin-top: 10%;
   padding:0px;
+  height: 70%;
   background-color: rgb(80, 103, 149);
 }
-
-
+#overlay #title {
+  height:10%;
+}
+#overlay #content {
+  height:90%;
+  overflow-y: scroll;
+}
+#overlay #close {
+  width:20%;
+  margin: 10px auto;
+}
 
 
 

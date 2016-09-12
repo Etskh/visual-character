@@ -54,15 +54,30 @@ function characterPageHandler( page ) {
   }
 }
 
-
-
-
 router.get('/character/:id/overworld', characterPageHandler('main') )
 router.get('/character/:id/combat', characterPageHandler('combat') )
 router.get('/character/:id/magic', characterPageHandler('magic') )
 router.get('/character/:id/equipment', characterPageHandler('equipment') )
 router.get('/character/:id/statistics', characterPageHandler('statistics') )
 router.get('/character/:id/debug', characterPageHandler('debug') )
+
+
+
+const equipment = require('../lib/equipment')
+
+router.get('/equipment', function(req, res) {
+
+  equipment.getAllEquipmentData(
+    // empty
+  ).then(function(equipmentTypes) {
+    return res.render('equipment/index.html', {
+      equipmentTypes: equipmentTypes
+    })
+  })
+})
+
+
+
 
 
 

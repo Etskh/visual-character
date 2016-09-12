@@ -18,8 +18,8 @@ var Overlay = {
     });
   },
   Hide: function() {
-    $('#overlay').click(function() {
-      $(this).fadeOut(100);
+    $('#overlay #close').click(function() {
+      $('#overlay').fadeOut(100);
     });
   }
 };

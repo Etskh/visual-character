@@ -6,6 +6,12 @@ const _ = require('lodash')
 
 const equipmentData = require('../data/equipment')
 
+const getAllEquipmentData = function() {
+  return new Promise(function(resolve, reject) {
+    return resolve(equipmentData)
+  })
+}
+
 const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {
     const item = _.find(equipmentData, { 'name': name })
@@ -44,3 +50,4 @@ const createControllersForItems = function(items) {
 module.exports.createControllersForItems = createControllersForItems
 module.exports.createEquipmentController = createEquipmentController
 module.exports.getEquipmentDataByName = getEquipmentDataByName
+module.exports.getAllEquipmentData = getAllEquipmentData
