@@ -26,6 +26,47 @@ BODY {
   background-color:rgba(0, 0, 0, 0.6);
 }
 
+.add-button {
+  color:#FFF;
+  text-shadow: #000 0px 0px 3px;
+  text-align:center;
+  border-radius: 42px;
+  font-size: 110%;
+  width: 42px;
+  height: 42px;
+  background-color: rgb(140, 217, 166);
+  cursor: pointer;
+  float:right;
+}
+.add-button:hover {
+  background-color: rgb(160, 237, 186);
+}
+.add-button:active {
+  background-color: rgb(110, 187, 136);
+}
+
+
+#overlay {
+  position:absolute;
+  top:0px;
+  left:0px;
+  background-color: rgba(0, 0, 0, 0.65);
+  width:100%;
+  height:100%;
+}
+#overlay #window {
+  width:80%;
+  box-shadow: #000 0px 0px 20px;
+  margin: 10%;
+  padding:0px;
+  background-color: rgb(80, 103, 149);
+}
+
+
+
+
+
+
 
 
 
@@ -139,6 +180,11 @@ BODY {
 
 
 
+
+
+
+
+
 /* Stats */
 .stat-line > div {
   display:inline-block;
@@ -159,8 +205,16 @@ BODY {
   width: 42px;
   height: 42px;
   background-color: rgb(140, 217, 166);
+  cursor: pointer;
 }
-.stat.condintional {
+.stat:hover {
+  background-color: rgb(150, 227, 176);
+}
+.stat:active {
+  background-color: rgba(150, 227, 176, 0.5);
+}
+
+.stat.conditional {
   background-color: rgb(159, 140, 217);
 }
 .stat.lowered {
@@ -170,6 +224,11 @@ BODY {
   width:10%;
   text-align: center;
 }
+
+
+
+
+
 
 
 
@@ -190,6 +249,9 @@ BODY {
   padding: 3px;
   float: right;
 }
+
+
+
 
 
 

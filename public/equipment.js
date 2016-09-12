@@ -23,5 +23,14 @@ $(document).ready(function(){
         $(event.target.parentNode).hide('fast');
       }
     });
-  })
+  });
+
+
+
+
+  $('#add-item').click(function(){
+    Overlay.Show('/equipment');
+  });
+
+
 });
