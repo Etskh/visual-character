@@ -36,19 +36,31 @@ BODY {
 }
 #nav > div {
   display: table-cell;
-  height:32px;
+  height:86px;
   text-align: center;
 
   cursor:pointer;
   color:#FFF;
   background-color: rgb(80, 103, 149);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 #nav > div:hover {
   background-color: rgb(122, 143, 184);
 }
 #nav > div.active {
-  background-color: rgba(80, 103, 149, 0.5);
+  /*background-color: rgba(80, 103, 149, 0.5);*/
+  background-color: transparent;
+  box-shadow: inset rgba(0,0,0, 0.5) 0px 20px 20px;
 }
+
+#nav > #overworld { background-image: url('icons/overworld.png'); }
+#nav > #combat { background-image: url('icons/combat.png'); }
+#nav > #magic { background-image: url('icons/magic.png'); }
+#nav > #equipment { background-image: url('icons/equipment.png'); }
+#nav > #statistics { background-image: url('icons/statistics.png'); }
+#nav > #debug { background-image: url('icons/debug.png'); }
+
 
 #header {
   width:100%;
