@@ -44,6 +44,7 @@ BODY {
   background-color: rgb(80, 103, 149);
   background-repeat: no-repeat;
   background-position: 50% 50%;
+  transition-duration: 0.5s;
 }
 #nav > div:hover {
   background-color: rgb(122, 143, 184);
@@ -66,6 +67,7 @@ BODY {
   width:100%;
   font-size:90%;
   text-align:center;
+  padding: 16px;
 }
 
 
@@ -121,6 +123,7 @@ BODY {
   height: 100%;
   display: inline-block;
   margin: 0px;
+  border-right: solid 1px #FFF;
 }
 #indicator {
   color:#FFF;

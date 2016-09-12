@@ -15,7 +15,7 @@ $(document).ready(function(){
       $('#nav div').removeClass('active');
       $.get(url, {}, function(reply) {
         $('#content').html(reply);
-        $('#header').text(page);
+        $('#header').text(page[0].toUpperCase() + page.substring(1));
         $('#nav #' + page).addClass('active');
       });
     };
@@ -24,4 +24,7 @@ $(document).ready(function(){
   for( var i=0; i<pages.length; ++i) {
     $('#nav #' + pages[i]).click( pageHandler(pages[i]));
   }
+
+
+  $('#nav #overworld').click();
 });
