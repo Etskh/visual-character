@@ -89,6 +89,7 @@ router.post('/action', require('body-parser').json(), function (req, res) {
   ).then(function(character) {
     // Allow execution of arbitrary code (lol)
 
+    // TODO: Pull this out
     var args = req.body['args[]']
     var func = character[req.body.action]
 
@@ -106,22 +107,42 @@ router.post('/action', require('body-parser').json(), function (req, res) {
     return func.call(this, args)
   }).then(function(character) {
 
+    const json = {
+      'success': true,
+    }
+
     switch(req.body.return) {
     case 'equipment':
-      return res.json({
-        'success': true,
-        'stats': {
-          'current_load': character.current_load,
-          'current_load_percentage': character.current_load_percentage,
-          'equipment': character.equipment,
-          'carry_weight': character.carry_weight,
-        },
+      json.stats = {
+        'current_load': character.current_load,
+        'current_load_percentage': character.current_load_percentage,
+        'equipment': character.equipment,
+        'carry_weight': character.carry_weight,
+      }
+    }
+
+    // TODO: Make this actually flexible
+    if( req.body.partial ) {
+      var item = {
+        name: 'item_X',
+        id: 1,
+        count: 1,
+        weight: 1,
+      }
+      return res.render('equipment/item.partial.html', {
+        item: item
+      }, function( err, html ) {
+        if(err) {
+          json.success = false
+          return res.json(json)
+        }
+
+        json.partial = html
+        return res.json(json)
       })
     }
 
-    return res.json({
-      'success': true
-    })
+    return res.json(json)
   }, function(error){
     return res.json({
       'success': false,

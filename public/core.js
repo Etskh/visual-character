@@ -18,13 +18,32 @@ var Overlay = {
     });
   },
   Hide: function() {
-    $('#overlay #close').click(function() {
-      $('#overlay').fadeOut(100);
-    });
+    $('#overlay #close').click();
   }
 };
 
 
 $(document).ready(function(){
+  $('#overlay #close').click(function() {
+    $('#overlay').fadeOut(100);
+  });
+
   Overlay.Hide();
 });
+
+var doAction = function( payload, callback) {
+  var url = '/action';
+
+  $.post(url, payload, function(reply) {
+    if( reply.success ) {
+
+      for( stat in reply.stats) {
+        $('.stat-' + stat ).text(reply.stats[stat]);
+      }
+
+      return callback(reply);
+    }
+
+    console.log('Error happened');
+  });
+}

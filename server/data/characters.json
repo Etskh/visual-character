@@ -133,11 +133,6 @@
         "id": 5,
         "equipment": "bolt",
         "count": 10
-      },
-      {
-        "id": 7,
-        "equipment": "spellbook",
-        "count": 1
       }
     ],
     "height": 2.9,
