@@ -48,6 +48,11 @@ var doAction = function( payload, callback) {
         ].join(' '));
         $('.stat-' + stat ).text(reply.stats[stat]);
       }
+      
+      // Now remove the flash after a bit
+      setTimeout(function() {
+        $('.flash').removeClass('flash');
+      }, 500);
 
       return callback(reply);
     }
