@@ -4,7 +4,8 @@ $(document).ready(function(){
     var data = event.target.dataset;
     var payload = {
       return: 'equipment',
-      partial: 'item-partial',
+      partial: 'newest-item',
+      flash: true,
       action: 'addItem',
       args: [
         data.name
@@ -13,10 +14,10 @@ $(document).ready(function(){
 
     doAction( payload, function(reply) {
       $('#item-list').append(reply.partial);
-      $('#item-list:last-child').addClass('flash');
+      // Now remove the flash after a bit
       setTimeout(function() {
-        $('#item-list:last-child').removeClass('flash');
-      }, 2000);
+        $('.flash').removeClass('flash');
+      }, 500);
       Overlay.Hide();
     });
   })

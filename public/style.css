@@ -46,11 +46,6 @@ BODY {
 }
 
 
-.flash {
-  background-color: rgba(255,255,150, 0.8);
-  transition-duration: 0.5s;
-}
-
 
 
 
@@ -298,4 +293,10 @@ BODY {
   font-size: 90%;
   width: 64px;
   text-align:center;
+}
+
+
+.flash {
+  background-color: rgba(255,255,150, 0.8) !important;
+  transition-duration: 0.25s;
 }

@@ -3,7 +3,7 @@
 // TODO: Move this to ./server/init
 
 const express = require('express')
-
+const _ = require('lodash')
 const router = express.Router()
 
 
@@ -104,7 +104,7 @@ router.post('/action', require('body-parser').json(), function (req, res) {
       args = [ args ]
     }
 
-    return func.call(this, args)
+    return func.apply(this, args)
   }).then(function(character) {
 
     const json = {
@@ -116,21 +116,19 @@ router.post('/action', require('body-parser').json(), function (req, res) {
       json.stats = {
         'current_load': character.current_load,
         'current_load_percentage': character.current_load_percentage,
-        'equipment': character.equipment,
+        //'equipment': character.equipment,
         'carry_weight': character.carry_weight,
       }
     }
 
     // TODO: Make this actually flexible
-    if( req.body.partial ) {
-      var item = {
-        name: 'item_X',
-        id: 1,
-        count: 1,
-        weight: 1,
-      }
+    if( req.body.partial === 'newest-item' ) {
+
+      const newestItem = _.maxBy(character.equipment, 'id')
+
       return res.render('equipment/item.partial.html', {
-        item: item
+        item: newestItem,
+        flash: req.body.flash,
       }, function( err, html ) {
         if(err) {
           json.success = false

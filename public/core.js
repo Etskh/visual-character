@@ -38,6 +38,14 @@ var doAction = function( payload, callback) {
     if( reply.success ) {
 
       for( stat in reply.stats) {
+        console.log([
+          'changing stat',
+          stat,
+          'from',
+          $('.stat-' + stat ).text(),
+          'to',
+          reply.stats[stat]
+        ].join(' '));
         $('.stat-' + stat ).text(reply.stats[stat]);
       }
 
@@ -45,5 +53,6 @@ var doAction = function( payload, callback) {
     }
 
     console.log('Error happened');
+    console.log(reply);
   });
 }
