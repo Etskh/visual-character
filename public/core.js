@@ -11,9 +11,10 @@ String.prototype.toCamelCase = function() {
 
 
 var Overlay = {
-  Show: function(url) {
+  Show: function(url, callback) {
     $.get(url, {}, function(reply) {
       $('#overlay #window').html(reply);
+      callback();
       $('#overlay').fadeIn(100);
     });
   },
@@ -48,7 +49,7 @@ var doAction = function( payload, callback) {
         ].join(' '));
         $('.stat-' + stat ).text(reply.stats[stat]);
       }
-      
+
       // Now remove the flash after a bit
       setTimeout(function() {
         $('.flash').removeClass('flash');

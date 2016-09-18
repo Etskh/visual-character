@@ -5,26 +5,27 @@ $(document).ready(function(){
 
   $('.owned-item .button.drop').click(function(event){
     var data = event.target.parentNode.dataset;
-    Equipment.dropItem( data.id );
+    Equipment.dropItem( data.id, function(){
+      $(event.target.parentNode).hide('fast');
+    });
   });
-
-
-  $('.add-equipment').click(function(event){
-    var data = event.target.dataset;
-    Equipment.addItem( data.name );
-  })
 
   $('#add-item').click(function(){
-    Overlay.Show('/equipment');
+    Overlay.Show('/equipment', function(){
+      $('.add-equipment').click(function(event){
+        var data = event.target.dataset;
+        Equipment.addItem( data.name );
+      });
+    });
   });
 
-  var Equipment = {
 
+  var Equipment = {
     setInterface: function (reply) {
       $('#load-bar #indicator').css('left', reply.stats.current_load_percentage+'%');
-    }
+    },
 
-    dropItem: function ( id ) {
+    dropItem: function ( id, callback) {
       var payload = {
         return: 'equipment',
         action: 'dropItem',
@@ -35,7 +36,7 @@ $(document).ready(function(){
 
       doAction( payload, function(reply) {
         Equipment.setInterface(reply);
-        $(event.target.parentNode).hide('fast');
+        callback();
       });
     },
 
