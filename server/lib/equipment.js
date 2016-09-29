@@ -7,7 +7,7 @@ const _ = require('lodash')
 const equipmentData = require('../data/equipment')
 
 const getAllEquipmentData = function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     return resolve(equipmentData)
   })
 }

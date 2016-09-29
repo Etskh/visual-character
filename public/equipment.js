@@ -4,17 +4,22 @@
 $(document).ready(function(){
 
   $('.owned-item .button.drop').click(function(event){
-    var data = event.target.parentNode.dataset;
-    Equipment.dropItem( data.id, function(){
-      $(event.target.parentNode).hide('fast');
+    var item = this.parentNode;
+    Equipment.dropItem( item.dataset.id, function(){
+      $(item.parentNode).hide('fast');
     });
   });
 
   $('#add-item').click(function(){
     Overlay.Show('/equipment', function(){
       $('.add-equipment').click(function(event){
-        var data = event.target.dataset;
-        Equipment.addItem( data.name );
+        var name = this.parentNode.dataset.name;
+        Equipment.addItem( name );
+      });
+      $('.info-equipment').click(function(event){
+        var name = this.parentNode.dataset.name
+        Overlay.Show('/equipment/' + name, function(){
+        });
       });
     });
   });
@@ -38,6 +43,12 @@ $(document).ready(function(){
         Equipment.setInterface(reply);
         callback();
       });
+    },
+
+    showItem: function( itemName ) {
+      var payload = {
+
+      };
     },
 
     addItem: function ( itemName ) {

@@ -1,7 +1,6 @@
 'use strict'
 
 const _ = require('lodash')
-const equipment = require('./equipment')
 
 const dropItem = function(character, id) {
   _.remove(character.data.equipment, {'id': parseInt(id) })
@@ -12,7 +11,7 @@ const addItem = function(character, name) {
 
   const heighestIdItem = _.maxBy(character.data.equipment, function(o){
     return parseInt(o.id)
-  });
+  })
 
   // Create the item data for the player
   const item = {

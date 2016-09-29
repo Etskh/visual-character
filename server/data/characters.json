@@ -126,11 +126,6 @@
         "count": 10
       },
       {
-        "id": 66,
-        "equipment": "spellbook",
-        "count": 1
-      },
-      {
         "id": 67,
         "equipment": "light crossbow",
         "count": 1
@@ -138,6 +133,16 @@
       {
         "id": 68,
         "equipment": "spellbook",
+        "count": 1
+      },
+      {
+        "id": 71,
+        "equipment": "rope (hemp)",
+        "count": 1
+      },
+      {
+        "id": 72,
+        "equipment": "dagger",
         "count": 1
       }
     ],

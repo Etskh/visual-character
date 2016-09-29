@@ -4,8 +4,18 @@
 
 {% block content %}
 
+  <div class="item-list">
   {% for equipment in equipmentTypes %}
-    <a href="#" data-name="{{ equipment.name }}" class="add-equipment">{{ equipment.name }}</a><br/>
+    <div class="item">
+      <div class="name">{{ equipment.name }}</div>
+      <div class="cost">{{ equipment.cost }}</div>
+      <div class="actions"
+        data-name="{{ equipment.name}}">
+        <div class="add-equipment add-button">+</div>
+        <div class="info-equipment info-button">&gt;</div>
+      </div>
+    </div>
   {% endfor %}
+  </div>
 
 {% endblock %}

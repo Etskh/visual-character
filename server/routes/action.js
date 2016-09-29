@@ -1,7 +1,6 @@
 'use strict'
 
 
-const equipment = require('../lib/equipment')
 const _ = require('lodash')
 
 

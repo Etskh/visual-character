@@ -1,8 +1,19 @@
 'use strict'
 
-
 const equipment = require('../lib/equipment')
-const _ = require('lodash')
+
+//const express = require('express')
+//const router = express.Router()
+
+/*
+router.get('/:id', function (req, res) {
+  const user = res.locals.user
+  user.hasPermissionToCharacter(
+    req.params.id
+  ).then(function(character) {
+  });
+});
+*/
 
 const handler = function (req, res) {
 

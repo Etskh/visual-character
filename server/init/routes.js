@@ -2,7 +2,6 @@
 
 // TODO: Move this to ./server/init
 
-const _ = require('lodash')
 const express = require('express')
 const router = express.Router()
 

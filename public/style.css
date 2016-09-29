@@ -12,18 +12,19 @@ BODY {
   font-weight: 300;
 }
 .button {
-  background-color:rgba(200, 200, 200, 0.3);
+  background-color:rgb(60, 60, 60);
   padding: 4px;
+  margin: 4px;
   border-radius: 4px;
   cursor: pointer;
   min-width: 48px;
   text-align: center;
 }
 .button:hover {
-  background-color:rgba(200, 200, 200, 0.6);
+  background-color:rgb(120, 120, 130);
 }
 .button:active {
-  background-color:rgba(0, 0, 0, 0.6);
+  background-color:rgb(35, 35, 30);
 }
 
 .add-button {
@@ -36,7 +37,6 @@ BODY {
   height: 42px;
   background-color: rgb(140, 217, 166);
   cursor: pointer;
-  float:right;
 }
 .add-button:hover {
   background-color: rgb(160, 237, 186);
@@ -44,7 +44,17 @@ BODY {
 .add-button:active {
   background-color: rgb(110, 187, 136);
 }
-
+.info-button {
+  color:#FFF;
+  text-shadow: #000 0px 0px 3px;
+  text-align:center;
+  border-radius: 42px;
+  font-size: 110%;
+  width: 42px;
+  height: 42px;
+  background-color: rgb(140, 166, 217);
+  cursor: pointer;
+}
 
 
 
@@ -70,9 +80,13 @@ BODY {
 }
 #overlay #title {
   height:10%;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  font-size: 110%;
 }
 #overlay #content {
   height:90%;
+  width: 100%;
   overflow-y: scroll;
 }
 #overlay #close {
@@ -152,6 +166,11 @@ BODY {
 .section > .title {
   background-color: rgba(100,100,150,0.3);
 }
+.title .add-button {
+  float:right;
+}
+
+
 .sub-section > .title {
   font-size: 120%;
   background-color: rgba(0,0,20,0.1);
@@ -272,30 +291,63 @@ BODY {
 
 
 /* Items */
+#item-list {
+  display:table;
+  width:100%;
+}
 .owned-item {
+  display: table-row;
   margin: 2px;
   padding:2px;
   background-color: rgba(100, 100, 100, 0.3);
   border-radius: 6px;
 }
 .owned-item > div {
-  display: inline-block;
+  display: table-cell;
 }
 .owned-item .count {
-  width: 32px;
   text-align:center;
 }
 .owned-item .name {
   font-size: 110%;
-  width: 40%;
 }
 .owned-item .weight {
   font-size: 90%;
-  width: 64px;
-  text-align:center;
+  text-align: right;
 }
 
 
+
+
+
+/* Equipment dialog */
+#overlay .item .actions > div {
+  width: 32px;
+  height:32px;
+  display:inline-block;
+}
+#overlay .item-list {
+  display:table;
+  width: 100%;
+}
+#overlay .item {
+  display:table-row;
+  margin: 4px;
+  width: 100%;
+}
+#overlay .item > div {
+  display:table-cell;
+  padding:8px;
+  padding-bottom:0px;
+}
+#overlay .item .actions {
+  text-align: right;
+}
+
+
+
+
+/* Important */
 .flash {
   background-color: rgba(255,255,150, 0.8) !important;
   transition-duration: 0.25s;
