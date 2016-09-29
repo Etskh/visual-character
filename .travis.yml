@@ -2,6 +2,13 @@ language: node_js
 node_js:
   - "6"
 
+script:
+ - npm run coverage
+
+after_script:
+  - npm install coveralls
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
 deploy:
   provider: heroku
   api_key:
