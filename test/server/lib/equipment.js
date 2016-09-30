@@ -1,21 +1,40 @@
 'use strict'
 
-var assert = require('assert')
-var expect = require('expect')
+const fs = require('fs')
+const assert = require('assert')
+const expect = require('expect')
+const nock = require('nock')
 
 
 describe('Equipment', function() {
 
-  var equip = require('../../../server/lib/equipment')
+  const equip = require('../../../server/lib/equipment')
 
   let itemList = [{
     'equipment': 'dagger',
     'count': 1
   }]
 
+  // nock the request from the google drive
+  console.log(equip.equipmentUrl.protocol + '//' + equip.equipmentUrl.host)
+  nock(equip.equipmentUrl.protocol + '//' + equip.equipmentUrl.host)
+    .get(equip.equipmentUrl.path)
+    .reply( 200, fs.readFileSync('test/fixtures/equipment.csv'))
+
+  // 
   describe('All functions will good data will return', function() {
     it('returns an equipment data by name', function(done) {
       equip.getEquipmentDataByName('dagger').then( function(equipment) {
+        done()
+      })
+    })
+
+    it('doesnt return an item if not given a good thing', function(done) {
+      equip.getEquipmentDataByName(
+        'def-not-an-item'
+      ).then( function(equipment) {
+        // empty
+      }, function(error) {
         done()
       })
     })

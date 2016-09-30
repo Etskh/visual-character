@@ -22,7 +22,7 @@ router.get('/', function (req, res) {
 router.use('/character', require('../routes/character'))
 
 
-router.get('/equipment', require('../routes/equipment'))
+router.use('/equipment', require('../routes/equipment'))
 router.post('/action', require('body-parser').json(), require('../routes/action'))
 
 

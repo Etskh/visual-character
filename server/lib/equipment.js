@@ -2,16 +2,14 @@
 
 const _ = require('lodash')
 const request = require('request')
+const url = require('url')
 const csvParse = require('csv-parse')
 
-
-const equipmentUrl = 'https://docs.google.com/spreadsheets/d/1F6K60YeuSyXYIURuwweCLy1c3wtwIeo9S9mpECdztlc/pub?output=csv'
+const equipmentUrl = url.parse('https://docs.google.com/spreadsheets/d/1F6K60YeuSyXYIURuwweCLy1c3wtwIeo9S9mpECdztlc/pub?output=csv')
 
 const equipmentData = new Promise(function(resolve, reject) {
 
-  request(equipmentUrl, function (error, response, body) {
-    console.log('Downloaded equipment list from google drive')
-
+  request(equipmentUrl.href, function (error, response, body) {
     if ( error ) {
       return reject(error)
     }
@@ -73,6 +71,7 @@ const createControllersForItems = function(items) {
 }
 
 
+module.exports.equipmentUrl = equipmentUrl
 module.exports.createControllersForItems = createControllersForItems
 module.exports.createEquipmentController = createEquipmentController
 module.exports.getEquipmentDataByName = getEquipmentDataByName

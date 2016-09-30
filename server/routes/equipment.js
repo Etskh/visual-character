@@ -1,22 +1,10 @@
 'use strict'
 
+const express = require('express')
 const equipment = require('../lib/equipment')
+const router = express.Router()
 
-//const express = require('express')
-//const router = express.Router()
-
-/*
-router.get('/:id', function (req, res) {
-  const user = res.locals.user
-  user.hasPermissionToCharacter(
-    req.params.id
-  ).then(function(character) {
-  });
-});
-*/
-
-const handler = function (req, res) {
-
+router.get('/', function (req, res) {
   equipment.getAllEquipmentData(
     // empty
   ).then(function(equipmentTypes) {
@@ -24,6 +12,7 @@ const handler = function (req, res) {
       equipmentTypes: equipmentTypes
     })
   })
-}
+})
 
-module.exports = handler
+
+module.exports = router
