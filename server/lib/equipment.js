@@ -1,24 +1,50 @@
 'use strict'
 
 const _ = require('lodash')
+const request = require('request')
+const csvParse = require('csv-parse')
 
-// TODO: Move this to ./server/lib
 
-const equipmentData = require('../data/equipment')
+const equipmentUrl = 'https://docs.google.com/spreadsheets/d/1F6K60YeuSyXYIURuwweCLy1c3wtwIeo9S9mpECdztlc/pub?output=csv'
+
+const equipmentData = new Promise(function(resolve, reject) {
+
+  request(equipmentUrl, function (error, response, body) {
+    console.log('Downloaded equipment list from google drive')
+
+    if ( error ) {
+      return reject(error)
+    }
+
+    var items = []
+    csvParse(body, function(error, lines){
+      var titles = lines[0]
+      for ( var i=1; i<lines.length; ++i ) {
+        var item = {}
+        for ( var f=0; f<titles.length; ++f ) {
+          item[titles[f]] = lines[i][f]
+        }
+        items.push(item)
+      }
+
+      return resolve(items)
+    })
+  })
+})
 
 const getAllEquipmentData = function() {
-  return new Promise(function(resolve) {
-    return resolve(equipmentData)
-  })
+  return equipmentData
 }
 
 const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {
-    const item = _.find(equipmentData, { 'name': name })
-    if ( !item ) {
-      return reject('Unknown item named ' + name )
-    }
-    resolve(item)
+    getAllEquipmentData().then(function(equipmentData) {
+      const item = _.find(equipmentData, { 'name': name })
+      if ( !item ) {
+        return reject('Unknown item named ' + name )
+      }
+      resolve(item)
+    })
   })
 }
 
