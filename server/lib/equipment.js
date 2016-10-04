@@ -22,6 +22,10 @@ const equipmentData = new Promise(function(resolve, reject) {
         for ( var f=0; f<titles.length; ++f ) {
           item[titles[f]] = lines[i][f]
         }
+
+        // Add a title object to each
+        items.title = items.name.split(' ').join('-')
+
         items.push(item)
       }
 

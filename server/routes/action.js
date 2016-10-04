@@ -68,7 +68,7 @@ const handler = function (req, res) {
   }, function(error){
     return res.json({
       'success': false,
-      'error': error,
+      'error': JSON.stringify(error),
     })
   })
 }

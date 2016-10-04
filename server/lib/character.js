@@ -101,7 +101,9 @@ const getCharacterById = function( id ) {
       const carryWeight = _.sumBy(items, 'weight')
       const currentLoad = carry.getLoadName(carryWeight, data, race.size)
       if ( currentLoad !== 'light') {
-        statusEffects.push(effect.createFromData(carry.effects[currentLoad]))
+        statusEffects.concat(Promise.all([
+          effect.createFromData(carry.effects[currentLoad])
+        ]))
       }
 
 

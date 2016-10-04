@@ -16,12 +16,11 @@ describe('Equipment', function() {
   }]
 
   // nock the request from the google drive
-  console.log(equip.equipmentUrl.protocol + '//' + equip.equipmentUrl.host)
   nock(equip.equipmentUrl.protocol + '//' + equip.equipmentUrl.host)
     .get(equip.equipmentUrl.path)
     .reply( 200, fs.readFileSync('test/fixtures/equipment.csv'))
 
-  // 
+  //
   describe('All functions will good data will return', function() {
     it('returns an equipment data by name', function(done) {
       equip.getEquipmentDataByName('dagger').then( function(equipment) {

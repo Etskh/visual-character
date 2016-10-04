@@ -2,12 +2,14 @@
 
 
 const createEffectFromData = function( data ) {
-  return {
-    name: data.name,
-    type: data.type,
-    dismissible: data.dismissible,
-    stats: data.stats,
-  }
+  return new Promise( function(resolve ) {
+    return resolve({
+      name: data.name,
+      type: data.type,
+      dismissible: data.dismissible,
+      stats: data.stats,
+    })
+  })
 }
 
 module.exports.createFromData = createEffectFromData
