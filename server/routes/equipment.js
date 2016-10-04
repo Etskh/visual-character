@@ -14,5 +14,13 @@ router.get('/', function (req, res) {
   })
 })
 
+router.get('/:title', function (req, res) {
+  equipment.getEquipmentDataByName(
+    req.params.name
+  ).then(function(equipment) {
+    return res.reply('Wow!')
+  })
+})
+
 
 module.exports = router

@@ -24,7 +24,7 @@ const equipmentData = new Promise(function(resolve, reject) {
         }
 
         // Add a title object to each
-        items.title = items.name.split(' ').join('-')
+        item.title = item.name.split(' ').join('-')
 
         items.push(item)
       }

@@ -17,8 +17,9 @@ $(document).ready(function(){
         Equipment.addItem( name );
       });
       $('.info-equipment').click(function(event){
-        var name = this.parentNode.dataset.name
-        Overlay.Show('/equipment/' + name, function(){
+        var href = this.parentNode.dataset.title
+        Overlay.Show('/equipment/' + href, function(){
+          // empty
         });
       });
     });
