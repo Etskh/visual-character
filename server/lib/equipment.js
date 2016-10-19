@@ -50,6 +50,20 @@ const getEquipmentDataByName = function( name ) {
   })
 }
 
+
+const getEquipmentDataByTitle = function( title ) {
+  return new Promise(function( resolve, reject ) {
+    getAllEquipmentData().then(function(equipmentData) {
+      const item = _.find(equipmentData, { 'title': title })
+      if ( !item ) {
+        return reject('Unknown item with title ' + title )
+      }
+      resolve(item)
+    })
+  })
+}
+
+
 const createEquipmentController = function( item ) {
   return getEquipmentDataByName(item.equipment).then(function(equipment) {
     return ({
@@ -79,4 +93,5 @@ module.exports.equipmentUrl = equipmentUrl
 module.exports.createControllersForItems = createControllersForItems
 module.exports.createEquipmentController = createEquipmentController
 module.exports.getEquipmentDataByName = getEquipmentDataByName
+module.exports.getEquipmentDataByTitle = getEquipmentDataByTitle
 module.exports.getAllEquipmentData = getAllEquipmentData

@@ -1,0 +1,21 @@
+{% extends '../overlay.html' %}
+
+{% block title %}{{ item.name }}{% endblock%}
+
+{% block content %}
+
+  <div class="attacks"></div>
+  <div class="description">{{ item.description }}</div>
+  <div class="cost">{{ item.cost }}</div>
+  <div class="actions">
+    <div class="button">Add</div>
+    <div class="button">Buy</div>
+  </div>
+
+<script>
+  $('.actions #add').click(function() {
+    // do the add
+  });
+</script>
+
+{% endblock %}

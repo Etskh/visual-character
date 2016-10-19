@@ -139,6 +139,11 @@
         "id": 72,
         "equipment": "dagger",
         "count": 1
+      },
+      {
+        "id": 73,
+        "equipment": "longsword",
+        "count": 1
       }
     ],
     "height": 2.9,
