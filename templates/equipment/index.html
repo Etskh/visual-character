@@ -8,7 +8,7 @@
   {% for equipment in equipmentTypes %}
     <div class="item">
       <div class="name">{{ equipment.name }}</div>
-      <div class="cost">{{ equipment.cost }}</div>
+      <div class="cost">{{ equipment.converted_cost }}</div>
       <div class="type">{{ equipment.type }}</div>
       <div class="actions"
         data-name="{{ equipment.name }}"

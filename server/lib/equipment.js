@@ -4,6 +4,7 @@ const _ = require('lodash')
 const request = require('request')
 const url = require('url')
 const csvParse = require('csv-parse')
+const cost = require('../util/cost')
 
 const equipmentUrl = url.parse('https://docs.google.com/spreadsheets/d/1F6K60YeuSyXYIURuwweCLy1c3wtwIeo9S9mpECdztlc/pub?output=csv')
 
@@ -25,6 +26,7 @@ const equipmentData = new Promise(function(resolve, reject) {
 
         // Add a title object to each
         item.title = item.name.split(' ').join('-')
+        item.converted_cost = cost.toSmallestDenomination(item.cost)
 
         items.push(item)
       }
