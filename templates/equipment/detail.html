@@ -3,19 +3,23 @@
 {% block title %}{{ item.name }}{% endblock%}
 
 {% block content %}
-
   <div class="attacks"></div>
-  <div class="description">{{ item.description }}</div>
+  <div class="description">
+    {% if item.description %}
+      {{ item.description }}
+    {% else %}
+      <span class="error">No description</span>
+    {% endif %}
+  </div>
   <div class="cost">{{ item.cost }}</div>
   <div class="actions">
-    <div class="button">Add</div>
-    <div class="button">Buy</div>
+    {% if owned %}
+      <div class="button">Drop</div>
+      <div class="button">Give</div>
+    {% else %}
+      <div class="button">Add</div>
+      <div class="button">Buy</div>
+      <div class="button">Customize</div>
+    {% endif %}
   </div>
-
-<script>
-  $('.actions #add').click(function() {
-    // do the add
-  });
-</script>
-
 {% endblock %}

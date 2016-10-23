@@ -126,23 +126,23 @@
         "count": 10
       },
       {
-        "id": 68,
-        "equipment": "spellbook",
-        "count": 1
-      },
-      {
         "id": 71,
         "equipment": "hemp rope",
         "count": 1
       },
       {
-        "id": 72,
+        "id": 73,
+        "equipment": "longsword",
+        "count": 1
+      },
+      {
+        "id": 74,
         "equipment": "dagger",
         "count": 1
       },
       {
-        "id": 73,
-        "equipment": "longsword",
+        "id": 75,
+        "equipment": "heavy crossbow",
         "count": 1
       }
     ],

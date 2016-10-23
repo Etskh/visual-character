@@ -4,9 +4,9 @@
 $(document).ready(function(){
 
   $('.owned-item .button.drop').click(function(event){
-    var item = this.parentNode;
+    var item = this.parentNode.parentNode;
     Equipment.dropItem( item.dataset.id, function(){
-      $(item.parentNode).hide('fast');
+      $(item).hide('fast');
     });
   });
 
@@ -22,6 +22,14 @@ $(document).ready(function(){
           // empty
         });
       });
+    });
+  });
+
+  $('.owned-item .name').click(function() {
+    console.log(this.parentNode);
+    var item = this.parentNode.dataset;
+    Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
+      // TODO: this
     });
   });
 

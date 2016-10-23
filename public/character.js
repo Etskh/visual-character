@@ -26,5 +26,5 @@ $(document).ready(function(){
   }
 
 
-  $('#nav #overworld').click();
+  $('#nav #equipment').click();
 });

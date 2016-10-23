@@ -9,7 +9,7 @@ router.get('/', function (req, res) {
     // empty
   ).then(function(equipmentTypes) {
     return res.render('equipment/index.html', {
-      equipmentTypes: equipmentTypes
+      equipmentTypes: equipmentTypes,
     })
   })
 })
@@ -19,7 +19,8 @@ router.get('/:title', function (req, res) {
     req.params.title
   ).then(function(item) {
     return res.render('equipment/detail.html', {
-      item: item
+      item: item,
+      owned: req.query.owned,
     })
   }, function(error) {
     return res.end(JSON.stringify(error))
