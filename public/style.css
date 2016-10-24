@@ -318,6 +318,10 @@ BODY {
 }
 .owned-item .name {
   font-size: 110%;
+  cursor: pointer;
+}
+.owned-item .name:hover {
+  background-color: rgba(255,255,255, 0.1);
 }
 .owned-item .weight {
   font-size: 90%;
