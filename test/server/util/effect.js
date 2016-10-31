@@ -1,11 +1,23 @@
+'use strict'
 
 var assert = require('assert')
 var expect = require('expect')
 
 
-describe('Util / Effect', function() {
+describe('Effect', function() {
 
-  var effects = require('../../../server/util/effect')
+  var effect = require('../../../server/lib/util/effect')
 
-  it(' (todo) creates an effect controller from data')
+  const effectData = {
+    name: 'data.name',
+    type: 'data.type',
+    dismissible: 'data.dismissible',
+    stats: 'data.stats',
+  }
+
+  it('creates an effect controller from data', function(done) {
+    effect.createFromData(effectData).then( function(effectController) {
+      done()
+    })
+  })
 })

@@ -5,7 +5,7 @@ var expect = require('expect')
 
 describe('Util / Stat', function() {
 
-  var stat = require('../../../server/util/stat')
+  var stat = require('../../../server/lib/util/stat')
 
   const statusEffects = []
 

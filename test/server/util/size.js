@@ -5,7 +5,7 @@ const expect = require('expect')
 
 describe('Util / Size', function() {
 
-  const size = require('../../../server/util/size')
+  const size = require('../../../server/lib/util/size')
 
   it('Gets a size from the standard list', function(done) {
     size.getByName('small')

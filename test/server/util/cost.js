@@ -5,7 +5,7 @@ const expect = require('expect')
 
 describe('Util / Cost', function() {
 
-  const cost = require('../../../server/util/cost')
+  const cost = require('../../../server/lib/util/cost')
 
   it('Correctly creates a standardized cost string', function(done) {
 
