@@ -4,7 +4,6 @@ const _ = require('lodash')
 
 const characterController = require('./character')
 
-// TODO: Move this to ./server/lib
 
 // TODO: Put in the user-model
 const users = [{

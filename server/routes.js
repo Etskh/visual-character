@@ -19,11 +19,11 @@ router.get('/', function (req, res) {
 })
 
 
-router.use('/character', require('../routes/character'))
+router.use('/character', require('./routes/character'))
 
 
-router.use('/equipment', require('../routes/equipment'))
-router.post('/action', require('body-parser').json(), require('../routes/action'))
+router.use('/equipment', require('./routes/equipment'))
+router.post('/action', require('body-parser').json(), require('./routes/action'))
 
 
 module.exports = router

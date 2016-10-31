@@ -14,7 +14,7 @@ app.locals.title = 'Visual Character'
 app.locals.port = process.env.PORT || 3000
 
 // Configure the template middleware
-nunjucks.configure('templates', {
+nunjucks.configure('server/templates', {
   autoescape: true,
   express: app
 })
@@ -82,7 +82,7 @@ app.get('/logout', function(req, res) {
 })
 
 // Need user-auth for all routes
-app.use('/', userAuthenticated, require('./server/init/routes'))
+app.use('/', userAuthenticated, require('./server/routes'))
 
 
 app.listen(app.locals.port, function () {

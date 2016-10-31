@@ -6,7 +6,7 @@ const _ = require('lodash')
 
 const raceData = require('../data/races')
 
-const size = require('../util/size')
+const size = require('./util/size')
 
 const getRaceByName = function( name ) {
   return new Promise( function(resolve, reject) {

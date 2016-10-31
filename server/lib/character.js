@@ -8,9 +8,9 @@ const _ = require('lodash')
 const equipment = require('./equipment')
 const race = require('./race')
 
-const effect = require('../util/effect')
-const stat = require('../util/stat')
-const carry = require('../util/carry')
+const effect = require('./util/effect')
+const stat = require('./util/stat')
+const carry = require('./util/carry')
 
 
 // Datafile
