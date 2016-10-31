@@ -7,7 +7,7 @@ const dropItem = function(character, id) {
   return character.save()
 }
 
-const addItem = function(character, name) {
+const addItem = function(character, itemTitle) {
 
   const heighestIdItem = _.maxBy(character.data.equipment, function(o){
     return parseInt(o.id)
@@ -17,7 +17,7 @@ const addItem = function(character, name) {
   const item = {
     // get the highest id and augment!
     'id': parseInt(heighestIdItem.id) + 1,
-    'equipment': name,
+    'equipment': itemTitle,
     'count': 1,
   }
 
@@ -26,13 +26,37 @@ const addItem = function(character, name) {
   return character.save()
 }
 
+const getWealthAsItems = function( character, wealth ) {
+
+  let copper = _.find(character.equipment, {title: 'copper-piece'})
+  console.log(copper)
+
+}
+
+const buyItem = function( character, itemTitle, cost ) {
+
+  // subtract cost gold from inventory
+  // get as many copper pieces as we can
+
+  getWealthAsItems(character, 100)
+
+  return true
+
+  // add item to inventory
+  //return character.addItem(name)
+}
+
 
 module.exports.add = function( characterController ) {
   characterController.dropItem = function(id) {
     return dropItem(characterController, id)
   }
 
-  characterController.addItem = function(name) {
-    return addItem(characterController, name)
+  characterController.addItem = function(itemTitle) {
+    return addItem(characterController, itemTitle)
+  }
+
+  characterController.buyItem = function(itemTitle, cost) {
+    return addItem(characterController, itemTitle, cost)
   }
 }

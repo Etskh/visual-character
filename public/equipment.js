@@ -25,14 +25,34 @@ var Equipment = {
   },
 
   // Add an item to the character's inventory by name
-  addItem: function ( itemName ) {
+  addItem: function ( itemTitle ) {
     var payload = {
       return: 'equipment',
       partial: 'newest-item',
       flash: true,
       action: 'addItem',
       args: [
-        itemName
+        itemTitle
+      ]
+    };
+
+    doAction( payload, function(reply) {
+      $('#item-list').append(reply.partial);
+      Overlay.Hide();
+
+      Equipment.setPartialActions($('#item-list > div').last());
+    });
+  },
+
+  // Add an item to the character's inventory by name
+  buyItem: function ( itemTitle ) {
+    var payload = {
+      return: 'equipment',
+      partial: 'newest-item',
+      flash: true,
+      action: 'addItem',
+      args: [
+        itemTitle
       ]
     };
 
@@ -62,9 +82,15 @@ var Equipment = {
   // Sets the actions for items in the details box
   setDetailActions: function () {
     $('.add-equipment').click(function(event){
-      var name = this.parentNode.dataset.name;
-      Equipment.addItem( name );
+      var title = this.parentNode.dataset.title;
+      Equipment.addItem( title );
     });
+
+    $('.buy-equipment').click(function(event){
+      var title = this.parentNode.dataset.title;
+      Equipment.buyItem( title );
+    });
+
     $('.drop-item').click(function(){
       var id = parseInt(this.parentNode.dataset.id);
       Equipment.dropItem(id, function() {

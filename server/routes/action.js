@@ -40,7 +40,6 @@ const handler = function (req, res) {
       json.stats = {
         'current_load': character.current_load,
         'current_load_percentage': character.current_load_percentage,
-        //'equipment': character.equipment,
         'carry_weight': character.carry_weight,
       }
     }

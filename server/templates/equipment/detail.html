@@ -14,13 +14,13 @@
   <div class="cost">{{ item.converted_cost }}</div>
   <div class="actions"
     data-id="{{ item.id }}"
-    data-name="{{ item.name }}">
+    data-title="{{ item.title }}">
     {% if owned %}
       <div class="button drop-item">Drop</div>
       <!-- <div class="button">Give</div> -->
     {% else %}
       <div class="button add-equipment">Add</div>
-      <!-- <div class="button">Buy</div> -->
+      <div class="button buy-equipment">Buy</div>
       <!-- <div class="button">Customize</div> -->
     {% endif %}
   </div>

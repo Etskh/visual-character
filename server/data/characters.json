@@ -111,6 +111,21 @@
     "slots": {},
     "equipment": [
       {
+        "id": 8,
+        "equipment": "copper piece",
+        "count": 35
+      },
+      {
+        "id": 9,
+        "equipment": "silver piece",
+        "count": 125
+      },
+      {
+        "id": 10,
+        "equipment": "gold piece",
+        "count": 500
+      },
+      {
         "id": 3,
         "equipment": "light crossbow",
         "count": 1
