@@ -84,6 +84,7 @@ const createEquipmentController = function( item ) {
     return ({
       id: item.id,
       title: equipment.title,
+      description: equipment.description,
       name: [
         _.includes(item.properties, 'masterwork') ? '+1' : '',
         item.material ? item.material : '',
@@ -91,6 +92,7 @@ const createEquipmentController = function( item ) {
       ].join(' ').trim(),
       weight: Math.round(equipment.weight * item.count * 100) / 100,
       count: item.count,
+      converted_cost: equipment.converted_cost,
     })
   })
 }
@@ -103,6 +105,7 @@ const createControllersForItems = function(items) {
   })
   return Promise.all(controllers)
 }
+
 
 
 module.exports.equipmentUrl = equipmentUrl

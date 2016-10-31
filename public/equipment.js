@@ -1,15 +1,85 @@
 
+var Equipment = {
 
+  // Drops an inventory item by id
+  dropItem: function ( id, callback) {
+    var payload = {
+      return: 'equipment',
+      action: 'dropItem',
+      args: [
+        id
+      ]
+    };
+
+    doAction( payload, function(reply) {
+      $('#load-bar #indicator').css('left', reply.stats.current_load_percentage+'%');
+      callback();
+    });
+  },
+
+  // Opens a window with item info
+  showItem: function( item ) {
+    Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
+      // TODO: this
+    });
+  },
+
+  // Add an item to the character's inventory by name
+  addItem: function ( itemName ) {
+    var payload = {
+      return: 'equipment',
+      partial: 'newest-item',
+      flash: true,
+      action: 'addItem',
+      args: [
+        itemName
+      ]
+    };
+
+    doAction( payload, function(reply) {
+      $('#item-list').append(reply.partial);
+      Overlay.Hide();
+
+      Equipment.setPartialActions($('#item-list > div').last());
+    });
+  },
+
+  // Sets the actions for items in the player's inventory
+  setPartialActions: function ( $elem ) {
+
+    if( !$elem ) {
+      $elem = $('.owned-item');
+    }
+
+    $elem.find('.name').click(function() {
+      var item = this.parentNode.dataset;
+      Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
+        Equipment.setDetailActions();
+      });
+    });
+  },
+
+  // Sets the actions for items in the details box
+  setDetailActions: function () {
+    $('.add-equipment').click(function(event){
+      var name = this.parentNode.dataset.name;
+      Equipment.addItem( name );
+    });
+    $('.drop-item').click(function(){
+      var id = parseInt(this.parentNode.dataset.id);
+      Equipment.dropItem(id, function() {
+        Overlay.Hide();
+        $('.owned-item').filter(function () {
+          return $(this).data('id') === id;
+        }).hide();
+      })
+    });
+  },
+}
 
 $(document).ready(function(){
 
-  $('.owned-item .button.drop').click(function(event){
-    var item = this.parentNode.parentNode;
-    Equipment.dropItem( item.dataset.id, function(){
-      $(item).hide('fast');
-    });
-  });
-
+  // The (+) at the top of the inventory window
   $('#add-item').click(function(){
     Overlay.Show('/equipment', function(){
       $('.add-equipment').click(function(event){
@@ -19,63 +89,12 @@ $(document).ready(function(){
       $('.info-equipment').click(function(event){
         var href = this.parentNode.dataset.title
         Overlay.Show('/equipment/' + href, function(){
-          // empty
+          Equipment.setDetailActions();
         });
       });
     });
   });
 
-  $('.owned-item .name').click(function() {
-    console.log(this.parentNode);
-    var item = this.parentNode.dataset;
-    Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
-      // TODO: this
-    });
-  });
+  Equipment.setPartialActions();
 
-
-  var Equipment = {
-    setInterface: function (reply) {
-      $('#load-bar #indicator').css('left', reply.stats.current_load_percentage+'%');
-    },
-
-    dropItem: function ( id, callback) {
-      var payload = {
-        return: 'equipment',
-        action: 'dropItem',
-        args: [
-          id
-        ]
-      };
-
-      doAction( payload, function(reply) {
-        Equipment.setInterface(reply);
-        callback();
-      });
-    },
-
-    showItem: function( itemName ) {
-      var payload = {
-
-      };
-    },
-
-    addItem: function ( itemName ) {
-      var payload = {
-        return: 'equipment',
-        partial: 'newest-item',
-        flash: true,
-        action: 'addItem',
-        args: [
-          itemName
-        ]
-      };
-
-      doAction( payload, function(reply) {
-        Equipment.setInterface(reply);
-        $('#item-list').append(reply.partial);
-        Overlay.Hide();
-      });
-    }
-  }
 });

@@ -1,6 +1,8 @@
 'use strict'
 
 const express = require('express')
+const _ = require('lodash')
+
 const equipment = require('../lib/equipment')
 const router = express.Router()
 
@@ -15,9 +17,22 @@ router.get('/', function (req, res) {
 })
 
 router.get('/:title', function (req, res) {
-  equipment.getEquipmentDataByTitle(
-    req.params.title
-  ).then(function(item) {
+
+  let itemGetter = null;
+  if ( req.query.owned ) {
+    const user = res.locals.user
+    itemGetter = new Promise(function(resolve, reject) {
+      return user.getActiveCharacter().then(function(character) {
+        var i = _.find(character.equipment, { 'id': parseInt(req.query.owned) })
+        resolve(i)
+      }, reject )
+    })
+  }
+  else {
+    itemGetter = equipment.getEquipmentDataByTitle(req.params.title);
+  }
+
+  itemGetter.then(function(item) {
     return res.render('equipment/detail.html', {
       item: item,
       owned: req.query.owned,
