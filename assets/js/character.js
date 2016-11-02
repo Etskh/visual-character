@@ -18,7 +18,6 @@ $(document).ready(function(){
         $('#header').text(page[0].toUpperCase() + page.substring(1));
         $('#nav #' + page).addClass('active');
 
-        console.log(window[page]);
         if ( window[page] ) {
           window[page].init();
         }

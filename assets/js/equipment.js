@@ -46,7 +46,11 @@ var Equipment = {
 
   // Opens a window with item info
   showItem: function( item, callback ) {
-    Overlay.Show('/equipment/detail/' + item.title + '?owned=' + item.id, function() {
+    var url = '/equipment/detail/' + item.title;
+    if( item.id ) {
+      url += '?owned=' + item.id;
+    }
+    Overlay.Show(url, function() {
       Equipment.setDetailActions();
       if ( callback ) {
         callback();
