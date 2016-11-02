@@ -98,7 +98,11 @@ const getEquipmentDataByTitle = function( title ) {
 }
 
 const getEquipmentByCategory = function ( category ) {
-
+  return new Promise(function( resolve, reject ) {
+    getAllEquipmentData().then(function(equipmentData) {
+      resolve(_.filter(equipmentData, { 'type': category }))
+    })
+  })
 }
 
 
