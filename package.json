@@ -4,13 +4,11 @@
   "description": "It's a great thing!",
   "main": "visual.js",
   "scripts": {
-    "postinstall": "npm run less",
-    "prestart": "npm run ./node_modules/gulp/bin/gulp scripts",
+    "postinstall": "npm run ./node_modules/gulp/bin/gulp",
     "start": "node visual.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "coverage": "./node_modules/.bin/istanbul cover --print both _mocha -- --recursive",
     "lint": "./node_modules/.bin/eslint server/ visual.js",
-    "less": "./node_modules/less/bin/lessc assets/style/visual.less public/style.css",
     "test-win": "mocha --recursive"
   },
   "author": "Etskh",
@@ -22,6 +20,8 @@
     "express": "^4.14.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
+    "gulp-imagemin": "^3.1.0",
+    "gulp-less": "^3.1.0",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "less": "^2.7.1",

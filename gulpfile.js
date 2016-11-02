@@ -1,11 +1,16 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var less = require('gulp-less');
+var imagemin = require('gulp-imagemin');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
+var path = require('path');
 
 var paths = {
-  scripts: ['assets/js/*.js']
+  scripts: ['assets/js/*.js'],
+  images: ['assets/img/**/*.png'],
+  styles: ['assets/style/*.less'],
 };
 
 // Not all tasks need to use streams
@@ -15,7 +20,7 @@ gulp.task('clean', function() {
   return del(['build']);
 });
 
-gulp.task('scripts', ['clean'], function() {
+gulp.task('scripts', function() {
   // Minify and copy all JavaScript (except vendor scripts)
   // with sourcemaps all the way down
   return gulp.src(paths.scripts)
@@ -26,11 +31,34 @@ gulp.task('scripts', ['clean'], function() {
     .pipe(gulp.dest('public/'));
 });
 
+
+// Copy all static images
+gulp.task('images', function() {
+  return gulp.src(paths.images)
+    // Pass in options to the task
+    .pipe(imagemin({optimizationLevel: 5}))
+    .pipe(gulp.dest('public/img'));
+});
+
+
+// Lessify the less files
+gulp.task('less', function () {
+  return gulp.src('./assets/style/visual.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'assets', 'style') ]
+    }))
+    .pipe(gulp.dest('./public'));
+});
+
+
+
+
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
-  //gulp.watch(paths.images, ['images']);
+  gulp.watch(paths.images, ['images']);
+  gulp.watch(paths.styles, ['less']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'scripts']);
+gulp.task('default', ['clean', 'scripts', 'less', 'images']);
