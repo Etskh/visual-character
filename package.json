@@ -4,7 +4,7 @@
   "description": "It's a great thing!",
   "main": "visual.js",
   "scripts": {
-    "postinstall": "npm run ./node_modules/gulp/bin/gulp",
+    "postinstall": "npm run ./node_modules/gulp/bin/gulp.js",
     "start": "node visual.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "coverage": "./node_modules/.bin/istanbul cover --print both _mocha -- --recursive",
