@@ -19,12 +19,13 @@ BODY {
   cursor: pointer;
   min-width: 48px;
   text-align: center;
-}
-.button:hover {
-  background-color:rgb(120, 120, 130);
-}
-.button:active {
-  background-color:rgb(35, 35, 30);
+
+  &:hover {
+    background-color:rgb(120, 120, 130);
+  }
+  &:active {
+    background-color:rgb(35, 35, 30);
+  }
 }
 
 .add-button {
@@ -69,39 +70,51 @@ BODY {
   table-layout: fixed;
   display: table;
   width:100%;
-}
-#nav > div {
-  display: table-cell;
-  height:86px;
-  text-align: center;
+  margin:0px;
+  padding:0px;
 
-  cursor:pointer;
-  color:#FFF;
-  background-color: rgb(80, 103, 149);
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  transition-duration: 0.5s;
-}
-#nav > div:hover {
-  background-color: rgb(122, 143, 184);
-}
-#nav > div.active {
-  /*background-color: rgba(80, 103, 149, 0.5);*/
-  background-color: transparent;
-  box-shadow: inset rgba(0,0,0, 0.5) 0px 20px 20px;
+  & > div {
+
+    height:128px;
+
+    display: table-cell;
+    text-align: center;
+    cursor:pointer;
+    color:#FFF;
+    background-color: rgb(80, 103, 149);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    transition-duration: 0.5s;
+
+    &:hover {
+      background-color: rgb(122, 143, 184);
+    }
+    &.active {
+      background-color: transparent;
+      box-shadow: inset rgba(0,0,0, 0.5) 0px 20px 20px;
+    }
+  }
+
+  & > #overworld {
+    background-image: url('icons/overworld.png'); }
+  & > #combat {
+    background-image: url('icons/combat.png'); }
+  & > #magic {
+    background-image: url('icons/magic.png'); }
+  & > #equipment {
+    background-image: url('icons/equipment.png'); }
+  & > #statistics {
+    background-image: url('icons/statistics.png'); }
+  & > #debug {
+    background-image: url('icons/debug.png'); }
 }
 
-#nav > #overworld { background-image: url('icons/overworld.png'); }
-#nav > #combat { background-image: url('icons/combat.png'); }
-#nav > #magic { background-image: url('icons/magic.png'); }
-#nav > #equipment { background-image: url('icons/equipment.png'); }
-#nav > #statistics { background-image: url('icons/statistics.png'); }
-#nav > #debug { background-image: url('icons/debug.png'); }
 
 
 #header {
   width:100%;
   font-size:90%;
   text-align:center;
-  padding: 16px;
+  padding-top:16px;
+  padding-bottom:16px;
 }

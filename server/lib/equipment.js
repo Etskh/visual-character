@@ -9,17 +9,6 @@ const cost = require('./util/cost')
 
 const equipmentUrl = url.parse('https://docs.google.com/spreadsheets/d/1F6K60YeuSyXYIURuwweCLy1c3wtwIeo9S9mpECdztlc/pub?output=csv')
 
-String.prototype.toTitleCase = function() {
-  const words = this.split(' ')
-  const heading = []
-  for ( let w = 0; w < words.length; ++w ) {
-    heading.push(
-      words[w].slice(0, 1).toUpperCase() +
-      words[w].substring(1)
-    )
-  }
-  return heading.join(' ')
-}
 
 
 const equipmentData = new Promise(function(resolve, reject) {
@@ -41,7 +30,6 @@ const equipmentData = new Promise(function(resolve, reject) {
         // Add a title object to each
         item.title = item.name.split(' ').join('-')
         item.converted_cost = cost.toSmallestDenomination(item.cost)
-        item.heading = item.name.toTitleCase()
         items.push(item)
       }
 

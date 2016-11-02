@@ -3,6 +3,31 @@
 
 var Equipment = {
 
+  // Sets the initial state of the page
+  init: function() {
+    // The (+) at the top of the inventory window
+    $('#add-item').click(function(){
+      Overlay.Show('/equipment', function(){
+        // Show the list of types
+        $('.item-type').click(function() {
+          var category = this.dataset.category;
+          Overlay.Show('/equipment/category/' + category, function() {
+            $('.add-equipment').click(function(event){
+              var name = this.parentNode.dataset.name;
+              Equipment.addItem( name );
+            });
+            $('.info-equipment').click(function(event){
+              Equipment.showItem(this.parentNode.dataset);
+            });
+          });
+        });
+      });
+    });
+
+    Equipment.setPartialActions();
+  },
+
+
   // Drops an inventory item by id
   dropItem: function ( id, callback) {
     var payload = {
@@ -104,29 +129,5 @@ var Equipment = {
       })
     });
   },
-}
-
-$(document).ready(function(){
-
-  // The (+) at the top of the inventory window
-  $('#add-item').click(function(){
-    Overlay.Show('/equipment', function(){
-      // Show the list of types
-      $('.item-type').click(function() {
-        var category = this.dataset.category;
-        Overlay.Show('/equipment/category/' + category, function() {
-          $('.add-equipment').click(function(event){
-            var name = this.parentNode.dataset.name;
-            Equipment.addItem( name );
-          });
-          $('.info-equipment').click(function(event){
-            Equipment.showItem(this.parentNode.dataset);
-          });
-        });
-      });
-    });
-  });
-
-  Equipment.setPartialActions();
-
-});
+};
+this.equipment = Equipment;

@@ -15,14 +15,16 @@
     rgb(217, 217, 140),
     rgb(217, 159, 140)
     );
+
+  .graph-section {
+    width: 33.3%;
+    height: 100%;
+    display: inline-block;
+    margin: 0px;
+    border-right: solid 1px #FFF;
+  }
 }
-#load-bar .graph-section {
-  width: 33.3%;
-  height: 100%;
-  display: inline-block;
-  margin: 0px;
-  border-right: solid 1px #FFF;
-}
+
 #indicator {
   color:#FFF;
   position:absolute;
@@ -48,57 +50,67 @@
   padding:2px;
   background-color: rgba(100, 100, 100, 0.3);
   border-radius: 6px;
-}
-.owned-item > div {
-  display: table-cell;
-}
-.owned-item .count {
-  text-align:center;
-}
-.owned-item .name {
-  font-size: 110%;
-  cursor: pointer;
-}
-.owned-item .name:hover {
-  background-color: rgba(255,255,255, 0.1);
-}
-.owned-item .weight {
-  font-size: 90%;
-  text-align: right;
-}
 
+  &>div {
+    display: table-cell;
+  }
+
+  .count {
+    text-align:center;
+  }
+  .name {
+    font-size: 110%;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(255,255,255, 0.1);
+    }
+  }
+  .weight {
+    font-size: 90%;
+    text-align: right;
+  }
+}
 
 
 
 
 /* Equipment dialog */
-#overlay .item .actions > div {
-  width: 32px;
-  height:32px;
-  display:inline-block;
-}
-#overlay .item-list {
-  display:table;
-  width: 100%;
-}
-#overlay .item {
-  display:table-row;
-  margin: 4px;
-  width: 100%;
-}
-#overlay .item > div {
-  display:table-cell;
-  padding:8px;
-  padding-bottom:0px;
-}
-#overlay .item .actions {
-  text-align: right;
-}
-#overlay .item-type {
-  text-transform: capitalize;
-  cursor: pointer;
-  padding: 3px;
-}
-#overlay .item-type:hover {
-  background-color: rgba( 255, 255, 255, 0.1)
+#overlay {
+
+  .item-list {
+    display:table;
+    width: 100%;
+  }
+
+  .item {
+    display:table-row;
+    margin: 4px;
+    width: 100%;
+
+    .actions {
+      text-align: right;
+
+      & > div {
+        width: 32px;
+        height:32px;
+        display:inline-block;
+      }
+    }
+
+    &>div {
+      display:table-cell;
+      padding:8px;
+      padding-bottom:0px;
+    }
+  }
+
+  .item-type {
+    text-transform: capitalize;
+    cursor: pointer;
+    padding: 3px;
+
+    &:hover {
+      background-color: rgba( 255, 255, 255, 0.1)
+    }
+  }
 }
