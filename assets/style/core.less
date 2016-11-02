@@ -1,0 +1,107 @@
+
+
+BODY {
+  color:#DDD;
+  text-shadow:#000 0px 0px 5px;
+  background-color: #333;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
+  margin:0px;
+  padding:0px;
+  font-size: 20pt;
+  font-weight: 300;
+}
+.button {
+  background-color:rgb(60, 60, 60);
+  padding: 4px;
+  margin: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 48px;
+  text-align: center;
+}
+.button:hover {
+  background-color:rgb(120, 120, 130);
+}
+.button:active {
+  background-color:rgb(35, 35, 30);
+}
+
+.add-button {
+  color:#FFF;
+  text-shadow: #000 0px 0px 3px;
+  text-align:center;
+  border-radius: 42px;
+  font-size: 110%;
+  width: 42px;
+  height: 42px;
+  background-color: rgb(140, 217, 166);
+  cursor: pointer;
+}
+.add-button:hover {
+  background-color: rgb(160, 237, 186);
+}
+.add-button:active {
+  background-color: rgb(110, 187, 136);
+}
+.info-button {
+  color:#FFF;
+  text-shadow: #000 0px 0px 3px;
+  text-align:center;
+  border-radius: 42px;
+  font-size: 110%;
+  width: 42px;
+  height: 42px;
+  background-color: rgb(140, 166, 217);
+  cursor: pointer;
+}
+
+.error {
+  color:#C66;
+}
+
+
+
+
+
+
+#nav {
+  table-layout: fixed;
+  display: table;
+  width:100%;
+}
+#nav > div {
+  display: table-cell;
+  height:86px;
+  text-align: center;
+
+  cursor:pointer;
+  color:#FFF;
+  background-color: rgb(80, 103, 149);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  transition-duration: 0.5s;
+}
+#nav > div:hover {
+  background-color: rgb(122, 143, 184);
+}
+#nav > div.active {
+  /*background-color: rgba(80, 103, 149, 0.5);*/
+  background-color: transparent;
+  box-shadow: inset rgba(0,0,0, 0.5) 0px 20px 20px;
+}
+
+#nav > #overworld { background-image: url('icons/overworld.png'); }
+#nav > #combat { background-image: url('icons/combat.png'); }
+#nav > #magic { background-image: url('icons/magic.png'); }
+#nav > #equipment { background-image: url('icons/equipment.png'); }
+#nav > #statistics { background-image: url('icons/statistics.png'); }
+#nav > #debug { background-image: url('icons/debug.png'); }
+
+
+#header {
+  width:100%;
+  font-size:90%;
+  text-align:center;
+  padding: 16px;
+}

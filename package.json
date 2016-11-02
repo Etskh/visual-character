@@ -8,9 +8,9 @@
     "start": "node visual.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "coverage": "./node_modules/.bin/istanbul cover --print both _mocha -- --recursive",
-    "test-win": "mocha --recursive",
     "lint": "./node_modules/.bin/eslint server/ visual.js",
     "less": "./node_modules/less/bin/lessc assets/style/visual.less public/style.css",
+    "test-win": "mocha --recursive",
     "less-win": "lessc assets/style/visual.less public/style.css"
   },
   "author": "Etskh",
