@@ -40,4 +40,35 @@ describe('User', function() {
         });
     });
   });
+
+  describe('Can check permissions to characters', function() {
+    it('should be able to have permission to its own', function(done) {
+      auth.getByName('user').then(function(user) {
+        return user.getCharacters().then(function(characters){
+          return user.hasPermissionToCharacter(characters[0].id)
+          .then(function(character){
+            done();
+          });
+        });
+      }, function(error) {
+        expect(error).toNotExist();
+        done();
+      });
+    });
+  });
+
+  describe('Can get an set an active character', function() {
+    it('should save and retrive active characters', function(done) {
+      auth.getByName('user').then(function(user) {
+        return user.getCharacters().then(function(characters) {
+          user.saveActiveCharacter(characters[0].id);
+          user.getActiveCharacter().then(function(character) {
+            expect(characters[0].id).toEqual(character.id);
+            done();
+          });
+        });
+      });
+    });
+  });
+
 });
