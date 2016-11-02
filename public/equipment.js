@@ -1,4 +1,6 @@
 
+
+
 var Equipment = {
 
   // Drops an inventory item by id
@@ -18,9 +20,12 @@ var Equipment = {
   },
 
   // Opens a window with item info
-  showItem: function( item ) {
-    Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
-      // TODO: this
+  showItem: function( item, callback ) {
+    Overlay.Show('/equipment/detail/' + item.title + '?owned=' + item.id, function() {
+      Equipment.setDetailActions();
+      if ( callback ) {
+        callback();
+      }
     });
   },
 
@@ -72,10 +77,7 @@ var Equipment = {
     }
 
     $elem.find('.name').click(function() {
-      var item = this.parentNode.dataset;
-      Overlay.Show('/equipment/' + item.title + '?owned=' + item.id, function() {
-        Equipment.setDetailActions();
-      });
+      Equipment.showItem(this.parentNode.dataset);
     });
   },
 
@@ -95,6 +97,7 @@ var Equipment = {
       var id = parseInt(this.parentNode.dataset.id);
       Equipment.dropItem(id, function() {
         Overlay.Hide();
+        // Hide the item with the dropped id
         $('.owned-item').filter(function () {
           return $(this).data('id') === id;
         }).hide();
@@ -108,14 +111,17 @@ $(document).ready(function(){
   // The (+) at the top of the inventory window
   $('#add-item').click(function(){
     Overlay.Show('/equipment', function(){
-      $('.add-equipment').click(function(event){
-        var name = this.parentNode.dataset.name;
-        Equipment.addItem( name );
-      });
-      $('.info-equipment').click(function(event){
-        var href = this.parentNode.dataset.title
-        Overlay.Show('/equipment/' + href, function(){
-          Equipment.setDetailActions();
+      // Show the list of types
+      $('.item-type').click(function() {
+        var category = this.dataset.category;
+        Overlay.Show('/equipment/category/' + category, function() {
+          $('.add-equipment').click(function(event){
+            var name = this.parentNode.dataset.name;
+            Equipment.addItem( name );
+          });
+          $('.info-equipment').click(function(event){
+            Equipment.showItem(this.parentNode.dataset);
+          });
         });
       });
     });

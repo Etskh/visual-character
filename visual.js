@@ -19,7 +19,6 @@ nunjucks.configure('server/templates', {
   express: app
 })
 
-
 // Use the public directory
 app.use(express.static('public'))
 

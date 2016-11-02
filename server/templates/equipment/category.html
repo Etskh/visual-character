@@ -1,0 +1,22 @@
+{% extends '../overlay.html' %}
+
+{% block title %}{{ category }}{% endblock%}
+
+{% block content %}
+
+  <div class="item-list">
+  {% for equipment in equipmentTypes %}
+    <div class="item">
+      <div class="name">{{ equipment.name }}</div>
+      <div class="cost">{{ equipment.converted_cost }}</div>
+      <div class="actions"
+        data-name="{{ equipment.name }}"
+        data-title="{{ equipment.title }}">
+        <div class="add-equipment add-button">+</div>
+        <div class="info-equipment info-button">&gt;</div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+{% endblock %}

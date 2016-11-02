@@ -7,16 +7,29 @@ const equipment = require('../lib/equipment')
 const router = express.Router()
 
 router.get('/', function (req, res) {
-  equipment.getAllEquipmentData(
+  equipment.getAllTypes(
     // empty
-  ).then(function(equipmentTypes) {
+  ).then(function(categories) {
     return res.render('equipment/index.html', {
-      equipmentTypes: equipmentTypes,
+      categories: categories,
     })
   })
 })
 
-router.get('/:title', function (req, res) {
+
+router.get('/category/:category', function (req, res) {
+  equipment.getByCategory(
+    req.params.category
+  ).then(function(equipmentTypes) {
+    return res.render('equipment/category.html', {
+      equipmentTypes: equipmentTypes,
+      category: req.params.category,
+    })
+  })
+})
+
+
+router.get('/detail/:title', function (req, res) {
 
   let itemGetter = null;
   if ( req.query.owned ) {

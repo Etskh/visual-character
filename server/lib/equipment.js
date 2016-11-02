@@ -54,6 +54,24 @@ const getAllEquipmentData = function() {
   return equipmentData
 }
 
+const getAllEquipmentTypes = function () {
+  return new Promise( function( resolve ) {
+    return resolve([{
+      name: 'weapon',
+    },{
+      name: 'armour',
+    },{
+      name: 'magic',
+    },{
+      name: 'container',
+    },{
+      name: 'exploration',
+    },{
+      name: 'wealth',
+    }])
+  })
+}
+
 const getEquipmentDataByName = function( name ) {
   return new Promise(function( resolve, reject ) {
     getAllEquipmentData().then(function(equipmentData) {
@@ -79,12 +97,17 @@ const getEquipmentDataByTitle = function( title ) {
   })
 }
 
+const getEquipmentByCategory = function ( category ) {
+
+}
+
 
 const createEquipmentController = function( item ) {
   return getEquipmentDataByName(item.equipment).then(function(equipment) {
     return ({
       id: item.id,
       title: equipment.title,
+      heading: equipment.heading,
       description: equipment.description,
       name: [
         _.includes(item.properties, 'masterwork') ? '+1' : '',
@@ -115,3 +138,5 @@ module.exports.createEquipmentController = createEquipmentController
 module.exports.getEquipmentDataByName = getEquipmentDataByName
 module.exports.getEquipmentDataByTitle = getEquipmentDataByTitle
 module.exports.getAllEquipmentData = getAllEquipmentData
+module.exports.getAllTypes = getAllEquipmentTypes
+module.exports.getByCategory = getEquipmentByCategory

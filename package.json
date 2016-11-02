@@ -8,7 +8,9 @@
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "coverage": "./node_modules/.bin/istanbul cover --print both _mocha -- --recursive",
     "test-win": "mocha --recursive",
-    "lint": "./node_modules/.bin/eslint server/ visual.js"
+    "lint": "./node_modules/.bin/eslint server/ visual.js",
+    "less": "./node_modules/less/bin/lessc assets/style/visual.less public/style.css",
+    "less-win": "lessc assets/style/visual.less public/style.css"
   },
   "author": "Etskh",
   "license": "MIT",
@@ -17,6 +19,7 @@
     "cookie-parser": "^1.4.3",
     "csv-parse": "^1.1.7",
     "express": "^4.14.0",
+    "less": "^2.7.1",
     "lodash": "^4.15.0",
     "nunjucks": "^2.4.2",
     "request": "^2.75.0",

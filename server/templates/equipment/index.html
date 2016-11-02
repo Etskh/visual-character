@@ -4,18 +4,11 @@
 
 {% block content %}
 
-  <div class="item-list">
-  {% for equipment in equipmentTypes %}
-    <div class="item">
-      <div class="name">{{ equipment.name }}</div>
-      <div class="cost">{{ equipment.converted_cost }}</div>
-      <div class="type">{{ equipment.type }}</div>
-      <div class="actions"
-        data-name="{{ equipment.name }}"
-        data-title="{{ equipment.title }}">
-        <div class="add-equipment add-button">+</div>
-        <div class="info-equipment info-button">&gt;</div>
-      </div>
+  <div class="item-type-list">
+  {% for category in categories %}
+    <div class="item-type"
+      data-category="{{ category.name }}">
+      <div class="name">{{ category.name }}</div>
     </div>
   {% endfor %}
   </div>
