@@ -149,6 +149,11 @@
         "id": 75,
         "equipment": "spellbook",
         "count": 1
+      },
+      {
+        "id": 76,
+        "equipment": "dagger",
+        "count": "5"
       }
     ],
     "height": 2.9,

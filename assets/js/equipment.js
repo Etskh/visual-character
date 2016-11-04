@@ -59,14 +59,20 @@ var Equipment = {
   },
 
   // Add an item to the character's inventory by name
-  addItem: function ( itemTitle ) {
+  addItem: function ( itemTitle, count ) {
+
+    if( !count ) {
+      return console.error('Equipment.addItem takes 2 arguments');
+    }
+
     var payload = {
       return: 'equipment',
       partial: 'newest-item',
       flash: true,
       action: 'addItem',
       args: [
-        itemTitle
+        itemTitle,
+        count
       ]
     };
 
@@ -114,7 +120,8 @@ var Equipment = {
   setDetailActions: function () {
     $('.add-equipment').click(function(event){
       var title = this.parentNode.dataset.title;
-      Equipment.addItem( title );
+      var count = $('#overlay #count').val();
+      Equipment.addItem( title, count);
     });
 
     $('.buy-equipment').click(function(event){
