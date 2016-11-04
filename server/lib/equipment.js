@@ -56,6 +56,8 @@ const getAllEquipmentTypes = function () {
       name: 'exploration',
     },{
       name: 'wealth',
+    },{
+      name: 'jewlery',
     }])
   })
 }

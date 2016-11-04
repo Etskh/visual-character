@@ -7,7 +7,7 @@ const dropItem = function(character, id) {
   return character.save()
 }
 
-const addItem = function(character, itemTitle) {
+const addItem = function(character, itemTitle, count=1) {
 
   const heighestIdItem = _.maxBy(character.data.equipment, function(o){
     return parseInt(o.id)
@@ -18,7 +18,7 @@ const addItem = function(character, itemTitle) {
     // get the highest id and augment!
     'id': parseInt(heighestIdItem.id) + 1,
     'equipment': itemTitle,
-    'count': 1,
+    'count': count,
   }
 
   character.data.equipment.push(item)
