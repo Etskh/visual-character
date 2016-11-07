@@ -2,6 +2,8 @@
 
 const _ = require('lodash')
 
+
+
 const dropItem = function(character, id, count) {
   const removedItems = _.remove(character.data.equipment, {'id': parseInt(id) })
 
@@ -14,25 +16,37 @@ const dropItem = function(character, id, count) {
   return character.save()
 }
 
+
+
 const addItem = function(character, itemTitle, count ) {
 
-  const heighestIdItem = _.maxBy(character.data.equipment, function(o){
-    return parseInt(o.id)
-  })
+  const highestId = character.data.equipment.length > 0 ?
+    _.maxBy(character.data.equipment, function(o){
+      return parseInt(o.id)
+    }).id : 0
 
-  // Create the item data for the player
   const item = {
-    // get the highest id and augment!
-    'id': parseInt(heighestIdItem.id) + 1,
-    'equipment': itemTitle,
-    'count': count,
+    id: highestId + 1,
+    equipment: itemTitle,
+    count: parseInt(count),
+  }
+
+
+  // Take items of same name out of the list
+  const removedItems = _.remove(
+    character.data.equipment, {'equipment': itemTitle }
+  )
+  if( removedItems.length > 0 ) {
+    // combine all items into one
+    item.count += _.sumBy(removedItems, function(o) { return o.count })
   }
 
   character.data.equipment.push(item)
-
   return character.save()
 }
 
+
+/*
 const getWealthAsItems = function( character, wealth ) {
 
   let copper = _.find(character.equipment, {title: 'copper-piece'})
@@ -52,7 +66,7 @@ const buyItem = function( character, itemTitle, cost ) {
   // add item to inventory
   //return character.addItem(name)
 }
-
+*/
 
 module.exports.add = function( characterController ) {
   characterController.dropItem = function(id, count) {
@@ -64,6 +78,6 @@ module.exports.add = function( characterController ) {
   }
 
   characterController.buyItem = function(itemTitle, cost) {
-    return addItem(characterController, itemTitle, cost)
+    return addItem(characterController, itemTitle, 1)
   }
 }

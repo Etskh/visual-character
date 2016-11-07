@@ -72,14 +72,18 @@ var Equipment = {
       action: 'addItem',
       args: [
         itemTitle,
-        count
+        parseInt(count)
       ]
     };
 
     doAction( payload, function(reply) {
+      // Remove all owned items with the same title
+      $('.owned-item').filter(function () {
+        return $(this).data('title') === itemTitle;
+      }).hide();
+      // Append the new partial
       $('#item-list').append(reply.partial);
       Overlay.Hide();
-
       Equipment.setPartialActions($('#item-list > div').last());
     });
   },

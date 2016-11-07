@@ -97,7 +97,7 @@ const getEquipmentByCategory = function ( category ) {
 
 
 const createEquipmentController = function( item ) {
-  return getEquipmentDataByName(item.equipment).then(function(equipment) {
+  return getEquipmentDataByTitle(item.equipment).then(function(equipment) {
     return ({
       id: item.id,
       title: equipment.title,

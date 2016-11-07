@@ -28,7 +28,7 @@
     "slots": {},
     "equipment": [
       {
-        "equipment": "chain shirt",
+        "equipment": "chain-shirt",
         "count": 1,
         "id": 1
       },
@@ -39,7 +39,7 @@
       },
       {
         "id": 3,
-        "equipment": "short sword",
+        "equipment": "short-sword",
         "count": 1,
         "properties": [
           "masterwork"
@@ -67,17 +67,17 @@
       },
       {
         "id": 8,
-        "equipment": "copper piece",
+        "equipment": "copper-piece",
         "count": 35
       },
       {
         "id": 9,
-        "equipment": "silver piece",
+        "equipment": "silver-piece",
         "count": 125
       },
       {
         "id": 10,
-        "equipment": "gold piece",
+        "equipment": "gold-piece",
         "count": 500
       }
     ],
@@ -112,22 +112,12 @@
     "equipment": [
       {
         "id": 8,
-        "equipment": "copper piece",
+        "equipment": "copper-piece",
         "count": 35
       },
       {
-        "id": 9,
-        "equipment": "silver piece",
-        "count": 125
-      },
-      {
-        "id": 10,
-        "equipment": "gold piece",
-        "count": 500
-      },
-      {
         "id": 3,
-        "equipment": "light crossbow",
+        "equipment": "light-crossbow",
         "count": 1
       },
       {
@@ -141,19 +131,24 @@
         "count": 10
       },
       {
-        "id": 71,
-        "equipment": "hemp rope",
-        "count": 1
+        "id": 11,
+        "equipment": "arrow",
+        "count": "1"
       },
       {
-        "id": 75,
-        "equipment": "spellbook",
-        "count": 1
+        "id": 13,
+        "equipment": "silver-piece",
+        "count": 127
       },
       {
-        "id": 76,
+        "id": 18,
         "equipment": "dagger",
-        "count": "5"
+        "count": 8
+      },
+      {
+        "id": 19,
+        "equipment": "gold-piece",
+        "count": 500
       }
     ],
     "height": 2.9,

@@ -16,6 +16,7 @@ router.get('/:id', function (req, res) {
       character: character,
     })
   }, function(error){
+    console.log(error);
     return res.render('uhoh.html', { error: error })
   })
 })
