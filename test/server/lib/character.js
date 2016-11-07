@@ -32,7 +32,7 @@ describe('Character', function() {
     })
   })
 
-  it('returns the error if it can\'t read the file', function(done) {
+  it('returns the error if it can\'t parse the JSON', function(done) {
 
     const errorMessage = 'This is an error';
     sinon.stub(JSON, "parse", function( contents ) {
@@ -49,13 +49,23 @@ describe('Character', function() {
   })
 
 
-  it('returns the error if it can\'t read the file', function(done) {
+  it('returns the error if it can\'t find the character', function(done) {
     character.getById(999999999).then( function(character) {
       assert(false)
       done()
     }, function(error) {
       expect(error).toExist()
       done()
+    })
+  })
+
+  it('can save. Yeah, that\'s it', function(done) {
+    character.getById(1).then( function(character) {
+      character.save()
+        .then(function(savedCharacter) {
+          expect(savedCharacter.id).toEqual(character.id)
+          done()
+        })
     })
   })
 })
