@@ -9,6 +9,8 @@ const createStatFromData = function( data, statusEffects ) {
 
   _.forEach( statusEffects, function(statusEffect) {
 
+    console.log(statusEffect)
+
     const max = statusEffect.stats['max_' + data.name]
     if( max ) {
       // Set the lowest maximum value
