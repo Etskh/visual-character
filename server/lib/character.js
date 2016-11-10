@@ -3,6 +3,7 @@
 // TODO: Move this to ./server/lib
 
 const fs = require('fs')
+const Promise = require('bluebird')
 const _ = require('lodash')
 
 const equipment = require('./equipment')
@@ -16,13 +17,14 @@ const carry = require('./util/carry')
 // Datafile
 const dataPath = './server/data/characters.json'
 
+const readFile = Promise.promisify(fs.readFile)
+const writeFile = Promise.promisify(fs.writeFile)
+
 
 const saveCharacter = function(character) {
   return new Promise( function(resolve, reject ) {
-    fs.readFile(dataPath, function(error, contents) {
-      if(error) {
-        return reject(error)
-      }
+    return readFile(dataPath)
+    .then(function(contents){
       try {
         var allCharacterData = JSON.parse(contents)
       }
@@ -33,16 +35,10 @@ const saveCharacter = function(character) {
       _.remove(allCharacterData, { 'id': parseInt(character.id) })
       allCharacterData.push(character.data)
 
-      fs.writeFile(
-        dataPath, JSON.stringify(allCharacterData, null, 2),
-        function( error ) {
-          if ( error ) {
-            return reject(error)
-          }
-          // Reload the character with saved data
-          return resolve(character.reload())
-        }
-      )
+      return writeFile(dataPath, JSON.stringify(allCharacterData, null, 2))
+      .then(function() {
+        return resolve(character.reload())
+      })
     })
   })
 }
