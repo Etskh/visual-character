@@ -116,24 +116,9 @@
         "count": 35
       },
       {
-        "id": 3,
-        "equipment": "light-crossbow",
-        "count": 1
-      },
-      {
         "id": 4,
         "equipment": "quiver",
         "count": 1
-      },
-      {
-        "id": 5,
-        "equipment": "bolt",
-        "count": 10
-      },
-      {
-        "id": 11,
-        "equipment": "arrow",
-        "count": "1"
       },
       {
         "id": 13,
@@ -141,14 +126,24 @@
         "count": 127
       },
       {
-        "id": 18,
-        "equipment": "dagger",
-        "count": 8
-      },
-      {
         "id": 19,
         "equipment": "gold-piece",
         "count": 500
+      },
+      {
+        "id": 20,
+        "equipment": "dagger",
+        "count": 1
+      },
+      {
+        "id": 22,
+        "equipment": "bolt",
+        "count": 18
+      },
+      {
+        "id": 23,
+        "equipment": "light-crossbow",
+        "count": 1
       }
     ],
     "height": 2.9,
