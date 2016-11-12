@@ -15,57 +15,32 @@ describe('Character', function() {
     })
   })
 
-  it('returns the error if it can\'t read the file', function(done) {
+  it('gets the character data', function(done) {
+    character.getData().then(
+      function(characterData) {
+      done()
+    })
+  })
 
-    const errorMessage = 'This is an error';
-    sinon.stub(fs, "readFile", function( dataPath, callback ) {
-      return callback(errorMessage)
+  it('gets the character data', function(done) {
+
+    const getDataError = 'error'
+
+    sinon.stub(character, "getData", function() {
+      return new Promise(function(resolve, reject) {
+        return reject(getDataError)
+      })
     })
 
-    character.getById(1).then( function(character) {
+    character.getData()
+    .then(function(characterData) {
       assert(false)
       done()
     }, function(error) {
-      expect(error).toEqual(errorMessage)
-      fs.readFile.restore()
+      assert(getDataError).equals(error)
       done()
     })
   })
 
-  it('returns the error if it can\'t parse the JSON', function(done) {
-
-    const errorMessage = 'This is an error';
-    sinon.stub(JSON, "parse", function( contents ) {
-      throw new Error(errorMessage)
-    })
-
-    character.getById(1).then( function(character) {
-      assert(false)
-      done()
-    }, function(error) {
-      JSON.parse.restore()
-      done()
-    })
-  })
-
-
-  it('returns the error if it can\'t find the character', function(done) {
-    character.getById(999999999).then( function(character) {
-      assert(false)
-      done()
-    }, function(error) {
-      expect(error).toExist()
-      done()
-    })
-  })
-
-  it('can save. Yeah, that\'s it', function(done) {
-    character.getById(1).then( function(character) {
-      character.save()
-        .then(function(savedCharacter) {
-          expect(savedCharacter.id).toEqual(character.id)
-          done()
-        })
-    })
-  })
+  
 })

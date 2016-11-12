@@ -21,16 +21,25 @@ const readFile = Promise.promisify(fs.readFile)
 const writeFile = Promise.promisify(fs.writeFile)
 
 
-const saveCharacter = function(character) {
-  return new Promise( function(resolve, reject ) {
+const getCharacterData = function() {
+  return new Promise( function(resolve, reject) {
     return readFile(dataPath)
     .then(function(contents){
       try {
-        var allCharacterData = JSON.parse(contents)
+        return resolve(JSON.parse(contents))
       }
       catch (error) {
         return reject(error)
       }
+    })
+  })
+}
+
+
+const saveCharacter = function(character) {
+  return new Promise( function(resolve, reject ) {
+    return getCharacterData()
+      .then(function(allCharacterData){
 
       _.remove(allCharacterData, { 'id': parseInt(character.id) })
       allCharacterData.push(character.data)
@@ -46,23 +55,14 @@ const saveCharacter = function(character) {
 
 const getCharacterDataById = function( id ) {
   return new Promise(function( resolve, reject ) {
-    fs.readFile(dataPath, function(error, contents) {
-      if(error) {
-        return reject(error)
-      }
-
-      try {
-        var characterData = JSON.parse(contents)
-      }
-      catch (error) {
-        return reject(error)
-      }
+    return getCharacterData()
+      .then(function(characterData){
 
       const character = _.find(characterData, { 'id': parseInt(id) })
       if ( !character ) {
         return reject('Unknown character with id ' + id )
       }
-      resolve(character)
+      return resolve(character)
     })
   })
 }
@@ -165,6 +165,6 @@ const getCharacterById = function( id ) {
 }
 
 
-
+module.exports.getData = getCharacterData
 module.exports.getById = getCharacterById
 module.exports.getByIds = getCharacterByIds

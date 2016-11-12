@@ -131,11 +131,6 @@
         "count": 500
       },
       {
-        "id": 20,
-        "equipment": "dagger",
-        "count": 1
-      },
-      {
         "id": 22,
         "equipment": "bolt",
         "count": 18
@@ -144,6 +139,11 @@
         "id": 23,
         "equipment": "light-crossbow",
         "count": 1
+      },
+      {
+        "id": 24,
+        "equipment": "dagger",
+        "count": 2
       }
     ],
     "height": 2.9,
