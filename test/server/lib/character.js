@@ -37,10 +37,10 @@ describe('Character', function() {
       assert(false)
       done()
     }, function(error) {
-      assert(getDataError).equals(error)
+      expect(getDataError).toEqual(error)
       done()
     })
   })
 
-  
+
 })
