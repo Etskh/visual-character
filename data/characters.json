@@ -1,0 +1,87 @@
+[{
+    "id": "1",
+    "name": "Pig",
+    "age": "10.5",
+    "fields": {
+        "current": {
+            "exp": "0",
+            "hitpoints": "13",
+            "nonlethal": "0"
+        }
+    },
+    "choices": [{
+            "type": "race",
+            "reason": "level 1",
+            "decision": "goblin"
+        },
+        {
+            "type": "class",
+            "reason": "level 1",
+            "decision": "wizard"
+        },
+        {
+            "type": "hitpoints",
+            "reason": "level 1",
+            "decision": "6"
+        },
+        {
+            "type": "feat",
+            "reason": "level 1",
+            "decision": "Spell Focus",
+            "target": "Illusion"
+        },
+        {
+            "type": "skill",
+            "reason": "level 1",
+            "decision": "",
+            "remaining": "5"
+        },
+        {
+            "type": "str",
+            "reason": "level 1",
+            "decision": "11"
+        },
+        {
+            "type": "dex",
+            "reason": "level 1",
+            "decision": "13"
+        },
+        {
+            "type": "con",
+            "reason": "level 1",
+            "decision": "13"
+        },
+        {
+            "type": "int",
+            "reason": "level 1",
+            "decision": "17"
+        },
+        {
+            "type": "wis",
+            "reason": "level 1",
+            "decision": "10"
+        },
+        {
+            "type": "cha",
+            "reason": "level 1",
+            "decision": "10"
+        },
+        {
+            "type": "hitpoints",
+            "reason": "level 2",
+            "decision": "6"
+        }
+    ],
+    "inventory": [{
+        "itemType": "morningstar",
+        "material": "steel"
+    }, {
+        "itemType": "heavy crossbow",
+        "material": "wooden",
+        "count": 2
+    }, {
+        "itemType": "bolt",
+        "material": "wooden",
+        "count": 10
+    }]
+}]

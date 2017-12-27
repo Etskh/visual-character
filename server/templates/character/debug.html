@@ -1,9 +1,0 @@
-<div class="sub-section">
-  <div class="title">All Stats</div>
-  {% for name, stat in character.stats %}
-  <div class="stat-line">
-    <div class="stat-name">{{ name }}</div>
-    <div class="stat {{ stat.status }}">{{ stat.sum() }}</div>
-  </div>
-  {% endfor %}
-</div>

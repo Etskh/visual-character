@@ -1,0 +1,56 @@
+
+Ranged weapon: bullseye
+Spellbook: book
+
+
+[ Advancement ]
+    [ If the character is invalid, this is the only one that shows]
+    [ basic information (name, class, race, level ) ]
+    [ experience bar ]
+    [ outstanding choices ]
+
+World
+    [ Rest for the night: hotel ]
+    [ day in world (age of character) ]
+    Non-combat actions
+        Perceive
+        Sense motive
+        Deceive
+
+Inventory
+    [ Slots ]
+    Encumbrance
+    [ Items ]
+
+Magic
+    -
+
+Combat
+    Health -> Heal, Damage
+    Defences -> AC, Fort, Will, Reflex
+    Combat Actions
+        Discern spell
+        Sneak
+
+Companions
+    -
+
+Options
+    -
+
+Debug Info
+    [ Column1: Character info ]
+    [ Column2: All console logs ]
+
+
+
+
+Features:
+    action priority
+        base: each action is given a base priority, attacks high, rarely-used skills low
+        time taken: free actions are lower than standard actions, move actions, and fullround actions
+        trained-only&nottrained: if a character is untrained, they will be very low and possibly disabled
+        ability: how good the character is compared to other abilities moves it up
+    trained only skills
+    data in skills (movespeed_ratio)
+    maximums with stats (get(dex), but if there's max_dex, then take that instead)

@@ -1,3 +1,11 @@
+# generated files
+public/app.css
+public/bundle.js
+public/favicon.png
+dist
+
+# nodejs stuff
 node_modules
-*.log
-public
+# test output
+coverage
+.nyc_output

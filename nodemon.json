@@ -1,0 +1,14 @@
+{
+  "ext": "js json jsx less",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "verbose": true,
+  "watch": [
+    "src/server",
+    "src/client"
+  ],
+  "events": {
+    "restart": "gulp nodemon"
+  }
+}

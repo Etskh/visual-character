@@ -1,24 +1,23 @@
 {
   "env": {
-    "node": true,
-    "es6": true
-  },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "sourceType": "module"
+    "browser": true,
+    "node": true
   },
   "rules": {
-    "indent": [
-      "error", 2
-    ],
-    "linebreak-style": [
-      "error",  "unix"
-    ],
-    "quotes": [
-      "error", "single"
-    ],
-    "semi": [
-      "error", "never"
+    "comma-dangle": [
+      "error",
+      "only-multiline"
     ]
-  }
+  },
+  "globals": {
+    "document": false,
+    "React": false,
+    "ReactDOM": false
+  },
+  "extends": "airbnb",
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
+  ]
 }
