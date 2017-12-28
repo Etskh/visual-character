@@ -1,7 +1,8 @@
 {
     "presets": [
         ["env", {
-            "modules": false
+            "modules": "commonjs",
+            "useBuiltIns": "usage"
         }],
         "stage-1",
         "react"
