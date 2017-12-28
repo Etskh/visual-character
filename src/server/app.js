@@ -43,6 +43,7 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: 'Character Manager',
     description: 'A system agnostic RPG character manager',
+    isProduction: (process.env.NODE_ENV === 'production'),
   });
 });
 
