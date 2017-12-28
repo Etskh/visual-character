@@ -8,7 +8,18 @@
     ],
     "env": {
         "test": {
-            "plugins": ["istanbul"]
+            "plugins": [
+                "istanbul"
+            ],
+            "presets": [
+                [
+                    "env",
+                    {
+                        "modules": "commonjs",
+                        "useBuiltIns": "usage"
+                    }
+                ]
+            ]
         }
     },
     "plugins": [

@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 
 const gulp = require('gulp');
-const gutil = require('gulp-util');
 const less = require('gulp-less');
 const minifyCSS = require('gulp-csso');
 const sourcemaps = require('gulp-sourcemaps');
