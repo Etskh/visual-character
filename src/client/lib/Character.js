@@ -74,17 +74,6 @@ const download = (id) => {
         }
       });
 
-      // Check inventory
-      character.inventory.forEach((item) => {
-        checkDataAgainstRules(item, {
-          count: {
-            optional: 'number',
-          },
-          itemType: Items.itemTypes.map( type => type.name ),
-          material: Items.materials.map( mat => mat.name ),
-        });
-      });
-
       return resolve(character);
     });
   });

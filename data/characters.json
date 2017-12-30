@@ -73,15 +73,15 @@
         }
     ],
     "inventory": [{
-        "itemType": "morningstar",
-        "material": "steel"
+        "itemType": "spellbook"
     }, {
         "itemType": "heavy crossbow",
-        "material": "wooden",
-        "count": 2
+        "count": 1
     }, {
         "itemType": "bolt",
-        "material": "wooden",
         "count": 10
+    }, {
+        "itemType": "gem stone",
+        "count": 50
     }]
 }]

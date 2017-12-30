@@ -19,7 +19,8 @@ const getStat = (statName, context) => {
 };
 
 function MoreDetails(stat, character) {
-  // TODO: make this a button to show the other stat!
+  // TICKET: make this a button to show the other stat!
+  // https://github.com/Etskh/visual-character/issues/37
   return <div>{stat.fullname}</div>
 }
 
@@ -88,7 +89,8 @@ export default function BreakdownButton (props) {
       optional: 'boolean',
     },
     'character': 'object',
-    // TODO: Get all possible stats it could be
+    // TICKET: Get all possible stats it could be
+    // https://github.com/Etskh/visual-character/issues/38
     'stat': 'string',
   });
 

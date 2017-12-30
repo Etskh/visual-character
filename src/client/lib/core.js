@@ -15,7 +15,7 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
     if (rule.length) {
       if (rule.indexOf(data[field]) === -1) {
         // It's an array, so it must be ONE of [...]
-        Console.error(`'${field}' was "${data[field]}", but must be one of ${JSON.stringify(rule)} ${config.isOptional ? 'or nothing' : ''}`);
+        config.output(`'${field}' was "${data[field]}", but must be one of ${JSON.stringify(rule)} ${config.isOptional ? 'or nothing' : ''}`);
         return false;
       }
       return true;
@@ -31,12 +31,13 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
       if (rule.needs && !data[rule.needs]) {
         // If the rule needs another field, and it doesnt exist,
         // whine
-        Console.error(`If '${field}' exists, '${rule.needs}' needs to exist as well.`);
+        config.output(`If '${field}' exists, '${rule.needs}' needs to exist as well.`);
         return false;
       }
 
       return checkFieldAgainstRule_r(field, data, rule.optional, {
         isOptional: true,
+        output: config.output,
       });
     }
 
@@ -47,7 +48,7 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
   // It's a string
   if (rule === 'string') {
     if (typeof data[field] !== 'string') {
-      Console.error(`'${field}' was "${data[field]}", but must be a string ${config.isOptional ? 'or nothing' : ''}`);
+      config.output(`'${field}' was "${data[field]}", but must be a string ${config.isOptional ? 'or nothing' : ''}`);
       return false;
     }
     return true;
@@ -63,7 +64,7 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
       }
 
       // Okay, well we tried
-      Console.error(`'${field}' was "${data[field]}", but must be a number ${config.isOptional ? 'or nothing' : ''}`);
+      config.output(`'${field}' was "${data[field]}", but must be a number ${config.isOptional ? 'or nothing' : ''}`);
       return false;
     }
     return true;
@@ -72,21 +73,21 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
   if (rule === 'boolean') {
     if (typeof data[field] !== 'boolean') {
       // Okay, well we tried
-      Console.error(`'${field}' was "${data[field]}", but must be a boolean (true|false) ${config.isOptional ? 'or nothing' : ''}`);
+      config.output(`'${field}' was "${data[field]}", but must be a boolean (true|false) ${config.isOptional ? 'or nothing' : ''}`);
       return false;
     }
-    
+
     return true;
   }
 
 
   if (rule === 'object' || rule === 'array') {
     if (typeof data[field] !== 'object') {
-      Console.error(`'${field}' was "${data[field]}", but must be an object ${config.isOptional ? 'or nothing' : ''}`);
+      config.output(`'${field}' was "${data[field]}", but must be an object ${config.isOptional ? 'or nothing' : ''}`);
       return false;
     }
     if (rule === 'array' && typeof data[field].length === 'undefined') {
-      Console.error(`'${field}' was "${JSON.stringify(data[field])}", but must be an array ${config.isOptional ? 'or nothing' : ''}`);
+      config.output(`'${field}' was "${JSON.stringify(data[field])}", but must be an array ${config.isOptional ? 'or nothing' : ''}`);
     }
     return true;
   }
@@ -102,8 +103,30 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
   return true;
 };
 
+export const checkDataAsErrors = (data, typeRules ) => {
+  // Map all fields to 'true' or 'false' then reduce then to one boolean
+  return Object.keys(typeRules).reduce( (acc, field) => {
+    // Check each rule individually and add together
+    const output = [];
+    const outputCallback = (err) => {
+      output.push(err);
+    }
+    checkFieldAgainstRule_r(field, data, typeRules[field], {
+      output: outputCallback,
+    });
+    // Add the outputs to the existing array
+    return acc.concat(output);
+  }, []) && Object.keys(data).reduce((acc, field) => {
+    // Now check the data to see if there's extra data fields
+    if (!typeRules[field]) {
+      return acc.concat([`Unknown field '${field}'`]);
+    }
+    return acc;
+  }, []);
+}
 
-export const checkDataAgainstRules = (data, typeRules) => {
+
+export const checkDataAgainstRules = (data, typeRules ) => {
   if (!typeRules) {
     Console.error('Unknown typeRules');
     return false;
@@ -115,19 +138,28 @@ export const checkDataAgainstRules = (data, typeRules) => {
   }
 
   // Map all fields to 'true' or 'false' then reduce then to one boolean
-  return Object.keys(typeRules).reduce(
+  const passed = Object.keys(typeRules).reduce(
     (acc, field) =>
     // Check each rule individually and add together
       acc && checkFieldAgainstRule_r(field, data, typeRules[field], {
-      // empty config
+        output: (err) => {
+          Console.error(err);
+        },
       })
     , true
   ) && Object.keys(data).reduce((acc, field) => {
     // Now check the data to see if there's extra data fields
     if (!typeRules[field]) {
+      console.log(typeRules);
       Console.error(`Unknown field '${field}'`);
       return false;
     }
     return acc && true;
   }, true);
+
+  if( !passed ) {
+    Console.error(`   for ${data.name}`);
+  }
+
+  return passed;
 };

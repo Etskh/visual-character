@@ -1,8 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  // TODO: put this into webpack.dev.js (https://webpack.js.org/guides/production/)
-  //devtool: 'inline-source-map',
+  // TICKET: put this into webpack.dev.js (https://webpack.js.org/guides/production/)
+  // https://github.com/Etskh/visual-character/issues/39
+  devtool: 'inline-source-map',
   entry: './src/client/app.js',
   output: {
     filename: 'bundle.js',

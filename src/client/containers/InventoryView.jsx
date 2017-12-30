@@ -51,25 +51,32 @@ function LoadMeter(encumbrancePercentage) {
 function ItemExtraInfo(item) {
   if ( item.category.name === 'weapon' ) {
     // simple mace | 1 - 8 damage | 19-20 x2
-    const crit = (item.data.critRange > 1 ?
-      (21 - item.data.critRange) + '-' : ''
+    const crit = (item.itemType.data.critRange > 1 ?
+      (21 - item.itemType.data.critRange) + '-' : ''
       ) + '20';
 
-    console.log(item);
-
     return <Row>
-      <Col>{`${item.data.complexity} ${item.data.type}`}</Col>
-      <Col>{`${item.data.dice}`}</Col>
-      <Col>{`${crit}x${item.data.critMult}`}</Col>
+      <Col>{`${item.itemType.data.complexity} ${item.itemType.data.type}`}</Col>
+      <Col>{`${item.itemType.data.dice}`}</Col>
+      <Col>{`${crit}x${item.itemType.data.critMult}`}</Col>
     </Row>;
   }
 
+  if ( item.category.name === 'wealth' ) {
+    return <Row>
+      <Col>{`Value: ~${item.data.cost.total} gp`}</Col>
+    </Row>
+  }
+
   // No extra processing required for these types
-  if ( ['ammunition'].indexOf(item.category.name) !== -1 ) {
+  if ([
+    'ammunition',
+    'spellbook',
+  ].indexOf(item.category.name) !== -1 ) {
     return null;
   }
 
-  console.error(`Unknown category name for list rendering: ${item.category.name}`);
+  console.warn(`Unknown category name for list rendering: ${item.category.name}`);
   return null;
 }
 
@@ -80,12 +87,10 @@ function InventoryItem(item, isEven) {
   }}>
     <Row>
       <Col>
-        <button className='btn btn-primary btn-sm'>
-          {`${item.count>1 ? item.count:''} ${Translation.get(item.name, item.count)}`}
-        </button>
+        {`${item.count>1 ? item.count:''} ${Translation.get(item.name, item.count)}`}
       </Col>
       <Col>{item.category.name}</Col>
-      <Col>{Translation.weight(item.itemType.weight * item.count)}</Col>
+      <Col>{Translation.weight(item.weight * item.count)}</Col>
     </Row>
     <div style={{
       padding: 5,
@@ -109,8 +114,16 @@ export default class InventoryView extends React.Component {
 
     return <NavigationWindow
       title='Inventory'>
-      <Row>{`Encumbrance: ${bracket.name}`}</Row>
+      <Row>
+        <Col>
+          {'Encumbrance: '}
+          <button className='btn btn-primary'>{bracket.name}</button>
+        </Col>
+      </Row>
       {LoadMeter(encumbrance)}
+      <Row>
+        <Col>{`Carrying: ${Translation.weight(this.props.character.get('current_load'))}`}</Col>
+      </Row>
       {this.props.character.items.map(item => {
         return InventoryItem(item, (++index % 2 === 0));
       })}

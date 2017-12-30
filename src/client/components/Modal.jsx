@@ -64,7 +64,8 @@ export default class Modal extends React.Component {
 }
 
 Modal.open = (title, acceptText, component) => {
-  // TODO: allow without acceptText
+  // TICKET: allow without acceptText
+  // https://github.com/Etskh/visual-character/issues/40
   const promise = new Promise(resolve => {
     modalInstance.onSetContent(title, acceptText, component, resolve);
     $('#' + modalId).modal();

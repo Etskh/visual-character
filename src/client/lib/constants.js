@@ -1,23 +1,36 @@
 
 
-
+const MOVESPEED_INCREMENT = [
+  10,
+  15,
+  20,
+  30,
+  40,
+  50,
+  60
+];
 
 export const ATTACK_DICE = [
   '1',
   '1d2',
   '1d3',
-  '1d4',
-  '1d6',
-  '1d8',
-  '2d4',
-  '1d10',
-  '2d6',
-  '1d12',
-  '2d8',
-  '3d4',
-  '2d10',
-  '3d6',
-];
+].concat((function(){
+  const dice = [];
+  const diceSides = [
+    4, 6, 8, 10, 12, 20,
+  ];
+
+  for(let count = 1; count < 4; count += 1) {
+    for( let sides = 0; sides < diceSides.length; sides += 1) {
+      dice.push({count, sides: diceSides[sides] });
+    }
+  }
+  dice.sort((a, b) => {
+    return a.count * a.sides - b.count * b.sides;
+  });
+  return dice.map(d => `${d.count}d${d.sides}`);
+})());
+
 export const DAMAGE_TYPES = [
   'b',
   's',
@@ -25,7 +38,7 @@ export const DAMAGE_TYPES = [
   's/p',
   'b/p',
 ];
-const CRAFT_SKILLS = [
+export const CRAFT_SKILLS = [
   'alchemy',
   'armour',
   'bows',
@@ -34,8 +47,8 @@ const CRAFT_SKILLS = [
 ];
 export const AMMO_TYPES = [
   'arrow',
-  'self',
   'bolt',
+  'self', // for thrown
 ];
 
 export const STATS = [
@@ -51,6 +64,7 @@ export const SLOTS = [
   'main-hand',
   'off-hand',
   'torso',
+  'feet',
   // ... TODO: etc.
 ];
 
@@ -136,7 +150,7 @@ export const SKILLS = [{
 
 
 export const ENCUMBRANCE = [{
-  name: 'Light',
+  name: 'None',
   light_load_min: 0,
   light_load_max: 1,
   effect: null, // no effect when light
