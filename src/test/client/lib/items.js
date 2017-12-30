@@ -11,6 +11,7 @@ import {
   itemCategories,
   itemTypes,
   materials,
+  materialTypes,
   getItem,
 } from '../../../client/lib/Items';
 
@@ -65,12 +66,7 @@ describe('Lib:Items', () => {
       name: 'string',
       hp: 'number',
       hardness: 'number',
-      type: [
-        'wood',
-        'metal',
-        'fabric',
-        'paper',
-      ],
+      type: materialTypes.map(mt => mt.name),
       dataGetter: 'ignore',
     };
     materials.forEach( mat => {

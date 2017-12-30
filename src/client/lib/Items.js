@@ -171,10 +171,12 @@ export const itemCategories = [{
 }];
 
 
-const materialTypes = [{
+export const materialTypes = [{
   name: 'any',
 }, {
   name: 'metal',
+}, {
+  name: 'fabric',
 }, {
   name: 'wood',
 }, {
