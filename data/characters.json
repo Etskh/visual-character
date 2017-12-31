@@ -81,7 +81,31 @@
         "itemType": "bolt",
         "count": 10
     }, {
-        "itemType": "gem stone",
-        "count": 50
+        "itemType": "fire opal gem",
+        "count": 4
+    }, {
+        "itemType": "emerald gem",
+        "count": 1
+    }, {
+        "itemType": "jasper gem",
+        "count": 1
+    }, {
+        "itemType": "gold piece",
+        "count": 3
+    }, {
+        "itemType": "silver piece",
+        "count": 9
+    }, {
+        "itemType": "copper piece",
+        "count": 9
+    }, {
+        "itemType": "golden topaz gem",
+        "count": 1
+    }, {
+        "itemType": "jade gem",
+        "count": 2
+    }, {
+        "itemType": "moonstone gem",
+        "count": 1
     }]
 }]

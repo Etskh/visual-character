@@ -64,7 +64,7 @@ function ItemExtraInfo(item) {
 
   if ( item.category.name === 'wealth' ) {
     return <Row>
-      <Col>{`Value: ~${item.data.cost.total} gp`}</Col>
+      <Col>{`Value: ~${item.count * item.data.cost.total} gp`}</Col>
     </Row>
   }
 
@@ -117,7 +117,7 @@ export default class InventoryView extends React.Component {
       <Row>
         <Col>
           {'Encumbrance: '}
-          <button className='btn btn-primary'>{bracket.name}</button>
+          <button className='btn btn-primary btn-sm'>{bracket.name}</button>
         </Col>
       </Row>
       {LoadMeter(encumbrance)}

@@ -185,6 +185,35 @@ export const materialTypes = [{
   name: 'precious metals'
 }];
 
+/*
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199
+*/
+const GEMSTONES = {
+  // Low quality 10 - 50
+  'agate': 11,
+  'azurite': 13,
+  'blue quartz': 17,
+  'hematite': 23,
+  'malachite': 29,
+  'obsidian': 31,
+  'tigereye': 37,
+  // semi-precious  50 - 100
+  'bloodstone': 53,
+  'jasper': 61,
+  'moonstone': 79,
+  'onyx': 89,
+  // medium qality
+  'amethyst': 101,
+  'red garnet': 103,
+  'green garnet': 107,
+  'jade': 127,
+  // gemstones 500
+  'golden topaz': 503,
+  // jewels
+  'emerald': 1031,
+  'fire opal': 2017,
+  //'blue sapphire': 3077,
+};
 
 export const itemTypes = [{
   name: 'fullplate',
@@ -304,13 +333,6 @@ export const itemTypes = [{
     pages: 100,
   },
 }, {
-  name: 'gem stone',
-  category: 'wealth',
-  cost: 100,
-  weight: 0.1,
-  // TODO: make it not gold
-  defaultMaterial: 'gold',
-}, {
   name: 'gold piece',
   category: 'wealth',
   cost: 1,
@@ -330,7 +352,16 @@ export const itemTypes = [{
   weight: 0.01,
   // TODO: make it not gold
   defaultMaterial: 'gold',
-}];
+}].concat(Object.keys(GEMSTONES).map( gem => {
+  return {
+    name: `${gem} gem`,
+    category: 'wealth',
+    cost: GEMSTONES[gem],
+    weight: 0.1,
+    // TODO: make it not gold - make it 'gem'
+    defaultMaterial: 'gold',
+  };
+}));
 
 
 
@@ -496,3 +527,68 @@ export const getItem = (item) => {
 export const getItems = (items) => {
   return items.map(getItem);
 };
+
+export const getItemsWorth = (cost) => {
+  const wealthItemTypes = itemTypes.filter(type => type.category === 'wealth');
+
+  // Get the most valuable item for how much cost we have
+  const mostValuableReducer = (highestCost) => {
+    return (acc, cur) => {
+      if( !acc ) {
+        return cur;
+      }
+      if ( acc.cost > highestCost ) {
+        return cur;
+      }
+      if ( cur.cost < highestCost && cur.cost > acc.cost ) {
+        return cur;
+      }
+      return acc;
+    };
+  };
+  const items = [];
+
+  let costToGo = cost;
+  let maxruns = wealthItemTypes.length; // failsafe
+  while( costToGo > 0.01 ) {
+    const valuable = wealthItemTypes.reduce(mostValuableReducer(costToGo), null);
+    const howMany = parseInt(costToGo / valuable.cost);
+    //console.log(`${howMany} ${valuable.name}s fit into ${costToGo}gp`);
+    costToGo -= (valuable.cost * howMany) - 0.0001;
+    if( howMany > 0.01 ) {
+      items.push({
+        itemType: valuable.name,
+        count: howMany,
+      });
+    }
+    if( --maxruns < 0 ) break; // failsafe
+  }
+
+  return items;
+};
+
+
+export const getRandomItemsWorth = (cost) => {
+  const split = Math.random();
+  const items = [];
+  [
+    cost * split,
+    (1 - split) * cost,
+  ].forEach( costToGo => {
+    const itemsWorth = getItemsWorth(costToGo);
+    itemsWorth.forEach( item => {
+      // Find if it already exists, and if not, add it!
+      const existingItem = items.find(i => item.itemType === i.itemType );
+      if( existingItem ) {
+        existingItem.count += item.count;
+      }
+      else {
+        items.push(item);
+      }
+    });
+  });
+
+  //console.log(JSON.stringify(items));
+
+  return items;
+}

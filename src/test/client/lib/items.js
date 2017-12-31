@@ -13,6 +13,8 @@ import {
   materials,
   materialTypes,
   getItem,
+  getItemsWorth,
+  getRandomItemsWorth,
 } from '../../../client/lib/Items';
 
 describe('Lib:Items', () => {
@@ -82,7 +84,6 @@ describe('Lib:Items', () => {
         isMasterwork: true,
       },
     });
-    console.log(item);
     const itemRules = {
       name: 'string',
       weight: 'number', // in pounds (per item)
@@ -99,5 +100,21 @@ describe('Lib:Items', () => {
     expect(item.data.ac.total).toBe(2),
     expect(item.data.check_penalty).toBeA('object');
     expect(item.data.check_penalty.total).toBe(-1);
+  });
+
+  it('getItemsWorth works as expected', () => {
+    const itemList = getItemsWorth(3.45);
+    expect(itemList.length).toBe(3);
+    expect(itemList[0].itemType).toBe('gold piece');
+    expect(itemList[0].count).toBe(3);
+    expect(itemList[1].itemType).toBe('silver piece');
+    expect(itemList[1].count).toBe(4);
+    expect(itemList[2].itemType).toBe('copper piece');
+    expect(itemList[2].count).toBe(5);
+  });
+
+  it('getRandomItemsWorth works as expected', () => {
+    const items = getRandomItemsWorth(10000);
+    expect(items.length).toNotBe(1);
   });
 });

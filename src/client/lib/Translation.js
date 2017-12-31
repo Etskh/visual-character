@@ -4,8 +4,8 @@ let currentTranslator = null;
 export default class Translation {
   // Pounds
   weight(w) {
-    return `${Math.round(100*w/2.2)/100} kg`;
-    //return `${w} lb${w!==1?'s':''}`;
+    //return `${Math.round(100*w/2.2)/100} kg`;
+    return `${w} lb${w!==1?'s':''}`;
   }
 }
 
