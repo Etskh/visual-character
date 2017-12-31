@@ -122,7 +122,7 @@ export default class InventoryView extends React.Component {
       </Row>
       {LoadMeter(encumbrance)}
       <Row>
-        <Col>{`Carrying: ${Translation.weight(this.props.character.get('current_load'))}`}</Col>
+        <Col>{`Carrying: ${Translation.weight(parseInt(this.props.character.get('current_load') * 100) /100 )}`}</Col>
       </Row>
       {this.props.character.items.map(item => {
         return InventoryItem(item, (++index % 2 === 0));
