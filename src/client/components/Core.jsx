@@ -1,6 +1,6 @@
 
 export function Row(props) {
-  return <div className="row">
+  return <div style={props.style || {}} className="row">
     {props.children}
   </div>;
 }

@@ -555,10 +555,11 @@ export const getItemsWorth = (cost) => {
     const howMany = parseInt(costToGo / valuable.cost);
     //console.log(`${howMany} ${valuable.name}s fit into ${costToGo}gp`);
     costToGo -= (valuable.cost * howMany) - 0.0001;
-    if( howMany > 0.01 ) {
+    if( howMany > 0.01 && valuable.cost >= 1 ) {
       items.push({
         itemType: valuable.name,
-        count: howMany,
+        // if it's gold, add an extra from rounding
+        count: howMany + (valuable.cost === 1 ? 1 : 0),
       });
     }
     if( --maxruns < 0 ) break; // failsafe
@@ -588,7 +589,7 @@ export const getRandomItemsWorth = (cost) => {
     });
   });
 
-  //console.log(JSON.stringify(items));
+  //console.log(items);
 
   return items;
 }

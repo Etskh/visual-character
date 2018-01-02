@@ -160,7 +160,11 @@ export const ENCUMBRANCE = [{
   light_load_max: 2,
   effect: {
     name: 'Medium encumbrance',
-    // effect stuff
+    data: {
+      max_dex: 3,
+      check_penalty: -3,
+      move_speed_ratio: 0.6,
+    },
   },
 }, {
   name: 'Heavy',
@@ -168,15 +172,38 @@ export const ENCUMBRANCE = [{
   light_load_max: 3,
   effect: {
     name: 'Heavy encumbrance',
-    // effect stuff
+    data: {
+      max_dex: 1,
+      check_penalty: -6,
+      move_speed_ratio: 0.6,
+      run_multiplier: 3,
+    },
   },
 }, {
   name: 'Staggering',
   light_load_min: 3,
   light_load_max: 6, // up to double max-load
+  effect: {
+    name: 'Staggered',
+    data: {
+      max_dex: 0,
+      check_penalty: -20,
+      move_speed_ratio: 0.1,
+      run_multiplier: 0,
+    },
+  },
 }, {
   name: 'Unbearable',
   light_load_min: 6,
+  effect: {
+    name: 'Immobile',
+    data: {
+      max_dex: 0,
+      check_penalty: -20,
+      move_speed_ratio: 0,
+      run_multiplier: 0,
+    },
+  },
 }];
 export const getEncumbranceBracket = (weight, lightLoad) => {
   const weightScale = weight / lightLoad;
