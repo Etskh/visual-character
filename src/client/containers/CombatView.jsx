@@ -1,10 +1,9 @@
 
-import { Row, Col, } from '../components/Core';
+import { Row, Col, Button, } from '../components/Core';
 import NavigationWindow from '../components/NavigationWindow';
 import HealthBarColumn from '../components/HealthBar';
-import BreakdownButton from '../components/BreakdownButton';
+import StatButton from '../components/StatButton';
 import SkillActions from '../components/SkillActions';
-
 
 export default class CombatView extends React.Component {
   constructor(props) {
@@ -22,23 +21,22 @@ export default class CombatView extends React.Component {
           <Row><h3>Defences</h3></Row>
           <Row>
             <Col>
-              <BreakdownButton
-                stat='ac'
+              <StatButton
                 size='large'
-                noPlus={true}
+                stat='ac'
                 character={this.props.character}
-              />
+                noPlus={true}/>
             </Col>
             <Col>
-              <BreakdownButton
+              <StatButton
                 stat='fort_save'
                 character={this.props.character}
               />
-              <BreakdownButton
+              <StatButton
                 stat='ref_save'
                 character={this.props.character}
               />
-              <BreakdownButton
+              <StatButton
                 stat='will_save'
                 character={this.props.character}
               />

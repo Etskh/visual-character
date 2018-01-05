@@ -5,10 +5,24 @@ import {
 import Race from './Race';
 
 const stats = {
+  base: {
+    name: 'base',
+    fullname: 'base',
+  },
   ac: {
     name: 'AC',
     fullname: 'Armour class',
     description: 'The defences you have against physical attacks. A higher armour class helps avoid attacks completely. You can raise your armour class by wearing armour (if you are proficient), by being dexterous, or through magic.',
+  },
+  skill_stealth_from_size: {
+    name: 'Size',
+    fullname: 'Size',
+    description: 'It is easier to hide away from enemies when you are smaller and much harder to hide from enemies when you are larger.',
+  },
+  ac_from_size: {
+    name: 'Size',
+    fullname: 'Size',
+    description: 'You are harder to hit when you are smaller, and easier to hit when you were larger.',
   },
   check_penalty: {
     name: 'CP',
@@ -65,9 +79,8 @@ STATS.forEach((stat) => {
 });
 
 
-
 [
-  // Have the list of classes elsewhere
+  // TODO: Have the list of classes elsewhere
   'wizard',
 ].forEach((className) => {
   for (let level = 1; level < 20; level += 1) {
@@ -80,7 +93,7 @@ STATS.forEach((stat) => {
 });
 
 
-SKILLS.forEach( skill => {
+SKILLS.forEach((skill) => {
   stats[`skill_${skill.name}`] = {
     name: skill.name,
     fullname: skill.name,
@@ -89,9 +102,20 @@ SKILLS.forEach( skill => {
 });
 
 
-Race.getStats().forEach( race => {
+Race.getStats().forEach((race) => {
   stats[race.name] = race;
 });
 
 
-export default stats;
+export default class Stats {
+  static get(key, data) {
+    if( !stats[key] ) {
+      console.error('Unknown stat ' + key);
+    }
+
+    return Object.assign(stats[key], {
+      data,
+      stat: key,
+    });
+  }
+}

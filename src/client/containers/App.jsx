@@ -6,6 +6,7 @@ import DebugFooter from '../components/DebugFooter';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
 
+import AdvancementView from '../containers/AdvancementView';
 import WorldView from '../containers/WorldView';
 import CombatView from '../containers/CombatView';
 import InventoryView from '../containers/InventoryView';
@@ -17,16 +18,20 @@ export class App extends React.Component {
     this.state = {
       character: null,
       navs: [{
+        name: 'Advancement',
+        icon: 'level-up',
+        component: AdvancementView,
+      }, {
         name: 'World',
         icon: 'map-o',
         component: WorldView,
       }, {
         name: 'Inventory',
-        icon: 'cubes',
+        icon: 'flask',
         component: InventoryView,
-      }, {
-        name: 'Magic',
-        icon: 'flash',
+      //}, {
+      //  name: 'Magic',
+      //  icon: 'flash',
       }, {
         name: 'Combat',
         icon: 'gavel',
@@ -34,9 +39,9 @@ export class App extends React.Component {
       //}, {
       //  name: 'Companions',
       //  icon: 'paw',
-      }, {
-        name: 'Options',
-        icon: 'gear',
+      //}, {
+      //  name: 'Options',
+      //  icon: 'gear',
       }],
     };
 
@@ -75,7 +80,7 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    this.onSelectNav(this.state.navs[1]);
+    this.onSelectNav(this.state.navs[0]);
     Character.load(1).then( character => {
       this.onCharacterLoad(character);
     });

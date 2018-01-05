@@ -46,16 +46,18 @@ export default class Modal extends React.Component {
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" className="btn btn-primary" onClick={() => {
-              $('#base-modal').modal('hide');
-              const modal = document.getElementById(modalId);
-              const state = {
-                inputs: modal.getElementsByTagName('input'),
-              };
-              setTimeout(() => {
-                this.onAccept(state);
-              }, 300);
-            }}>{this.state.acceptText}</button>
+            {this.state.acceptText ?
+              <button type="button" className="btn btn-primary" onClick={() => {
+                $('#base-modal').modal('hide');
+                const modal = document.getElementById(modalId);
+                const state = {
+                  inputs: modal.getElementsByTagName('input'),
+                };
+                setTimeout(() => {
+                  this.onAccept(state);
+                }, 300);
+              }}>{this.state.acceptText}</button>
+              : null }
           </div>
         </div>
       </div>
@@ -63,7 +65,7 @@ export default class Modal extends React.Component {
   }
 }
 
-Modal.open = (title, acceptText, component) => {
+Modal.open = (title, component, acceptText) => {
   // TICKET: allow without acceptText
   // https://github.com/Etskh/visual-character/issues/40
   const promise = new Promise(resolve => {

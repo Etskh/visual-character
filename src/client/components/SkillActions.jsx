@@ -1,5 +1,6 @@
 import { Row, Col } from './Core';
-import BreakdownButton from './BreakdownButton';
+// TODO: make this action button
+import StatButton from './StatButton';
 import { SKILLS } from '../lib/constants';
 
 
@@ -29,7 +30,7 @@ export default class SkillActions extends React.Component {
 
     return <Row>
       <Col>{actionList.map( action => {
-        return <BreakdownButton
+        return <StatButton
           name={action.name}
           stat={`skill_${action.skill.name}`}
           character={character}

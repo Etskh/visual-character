@@ -3,6 +3,7 @@ import {
   DAMAGE_TYPES,
   AMMO_TYPES,
 } from './constants';
+import Console from './log';
 import { checkDataAgainstRules } from './core';
 
 
@@ -16,52 +17,52 @@ export const itemCategories = [{
   name: 'weapon',
   slot: 'main-hand',
   dataRules: {
-    'hitpoints': {
+    hitpoints: {
       optional: 'number',
     },
-    'isMasterwork': {
+    isMasterwork: {
       optional: 'boolean',
     },
-    'bonus': {
+    bonus: {
       optional: 'number',
       needs: 'isMasterwork',
     },
   },
   typeRules: {
-    'complexity': [
+    complexity: [
       'simple',
       'martial',
       'exotic'
     ],
-    'dice': ATTACK_DICE,
-    'type': [
+    dice: ATTACK_DICE,
+    type: [
       'mace',
       'bow',
       'sword',
       'dagger',
       'crossbow',
     ],
-    'damageType': DAMAGE_TYPES,
-    'ammunition': {
+    damageType: DAMAGE_TYPES,
+    ammunition: {
       optional: AMMO_TYPES,
       needs: 'range',
     },
-    'range': {
+    range: {
       optional: 'number',
       needs: 'ammunition',
     },
-    'critRange': 'number',
-    'critMult': 'number',
-    'handed': [
+    critRange: 'number',
+    critMult: 'number',
+    handed: [
       'light',
       'one',
       'two',
     ],
   },
-  dataGetter: (item, itemType) => {
+  dataGetter: (item) => {
     const data = {};
-    if( item.data.isMasterwork ) {
-      data['masterwork'] = {
+    if (item.data.isMasterwork) {
+      data.masterwork = {
         cost: 300,
         attack: 1,
       };
@@ -82,31 +83,31 @@ export const itemCategories = [{
   craftSkill: 'armour',
   slot: 'torso',
   dataRules: {
-    'hitpoints': {
+    hitpoints: {
       optional: 'number',
     },
-    'isMasterwork': {
+    isMasterwork: {
       optional: 'boolean',
     },
-    'bonus': {
+    bonus: {
       optional: 'number',
       needs: 'isMasterwork',
     },
   },
   typeRules: {
-    'weight': [
+    weight: [
       'light',
       'medium',
       'heavy',
     ],
-    'ac': 'number',
-    'check_penalty': 'number',
-    'max_dex': 'number',
+    ac: 'number',
+    check_penalty: 'number',
+    max_dex: 'number',
   },
   dataGetter: (item) => {
     const data = {};
-    if( item.data.isMasterwork ) {
-      data['masterwork'] = {
+    if (item.data.isMasterwork) {
+      data.masterwork = {
         cost: 150,
         check_penalty: 1,
       };
@@ -127,29 +128,29 @@ export const itemCategories = [{
   craftSkill: 'armour',
   slot: 'off-hand',
   dataRules: {
-    'hitpoints': {
+    hitpoints: {
       optional: 'number',
     },
-    'isMasterwork': {
+    isMasterwork: {
       optional: 'boolean',
     },
-    'bonus': {
+    bonus: {
       optional: 'number',
       needs: 'isMasterwork',
     },
   },
   typeRules: {
-    'weight': [
+    weight: [
       'light',
       'heavy'
     ],
-    'ac': 'number',
-    'check_penalty': 'number',
+    ac: 'number',
+    check_penalty: 'number',
   },
   dataGetter: (item) => {
     const data = {};
-    if( item.data.isMasterwork ) {
-      data['masterwork'] = {
+    if (item.data.isMasterwork) {
+      data.masterwork = {
         cost: 150,
         check_penalty: 1,
       };
@@ -185,38 +186,36 @@ export const materialTypes = [{
   name: 'precious metals'
 }];
 
-/*
-2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199
-*/
 const GEMSTONES = {
   // Low quality 10 - 50
-  'agate': 11,
-  'azurite': 13,
+  agate: 11,
+  azurite: 13,
   'blue quartz': 17,
-  'hematite': 23,
-  'malachite': 29,
-  'obsidian': 31,
-  'tigereye': 37,
+  hematite: 23,
+  malachite: 29,
+  obsidian: 31,
+  tigereye: 37,
   // semi-precious  50 - 100
-  'bloodstone': 53,
-  'jasper': 61,
-  'moonstone': 79,
-  'onyx': 89,
+  bloodstone: 53,
+  jasper: 61,
+  moonstone: 79,
+  onyx: 89,
   // medium qality
-  'amethyst': 101,
+  amethyst: 101,
   'red garnet': 103,
   'green garnet': 107,
-  'jade': 127,
+  jade: 127,
   // gemstones 500
   'golden topaz': 503,
   // jewels
-  'emerald': 1031,
+  emerald: 1031,
   'fire opal': 2017,
-  //'blue sapphire': 3077,
+  // 'blue sapphire': 3077,
 };
 
 export const itemTypes = [{
   name: 'fullplate',
+  description: 'Created as a stiff breastplate, and interlocking bands of metal complete with epaulets.',
   weight: 50,
   cost: 1200,
   category: 'armour',
@@ -229,6 +228,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'chainmail',
+  description: 'Small interlocking rings keep the wearer safe, while being more flexible than traditional armour',
   weight: 20,
   cost: 600,
   category: 'armour',
@@ -241,6 +241,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'heavy metal shield',
+  description: 'This stable of soldiers is good for deflecting arrows and spear stabs',
   weight: 15,
   cost: 20,
   category: 'shield',
@@ -252,6 +253,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'morningstar',
+  description: 'Because the mace-like weapon has spikes around its ball, it is also an effective piercing weapon',
   weight: 8,
   cost: 8,
   category: 'weapon',
@@ -267,6 +269,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'longbow',
+  description: 'Larger than a smallbow, cannot be used on horseback',
   weight: 3,
   cost: 75,
   category: 'weapon',
@@ -284,6 +287,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'heavy crossbow',
+  description: 'You draw a heavy crossbow back by turning a small winch. Loading a heavy crossbow is a Full-Round Action that provokes Attacks of Opportunity.',
   weight: 8,
   cost: 50,
   category: 'weapon',
@@ -301,12 +305,14 @@ export const itemTypes = [{
   },
 }, {
   name: 'boots',
+  description: 'Standard footwear',
   weight: 0,
   cost: 0,
   category: 'boots',
   defaultMaterial: 'cloth',
 }, {
   name: 'bolt',
+  description: 'Constructed of a stiff rod with a sharp tip',
   category: 'ammunition',
   cost: 0.1,
   weight: 0.1,
@@ -316,6 +322,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'arrow',
+  description: 'Constructed of a long and thin rod with a sharp tip',
   category: 'ammunition',
   cost: 0.05,
   weight: 3 / 20,
@@ -325,6 +332,7 @@ export const itemTypes = [{
   },
 }, {
   name: 'spellbook',
+  description: 'A wizards companion, that they use to record their spells. A wizard needs their spellbook on hand to prepare spells after a long rest.',
   category: 'spellbook',
   cost: 15,
   weight: 3,
@@ -334,12 +342,14 @@ export const itemTypes = [{
   },
 }, {
   name: 'gold piece',
+  description: 'On the face is the noble head of an ancient monarch',
   category: 'wealth',
   cost: 1,
   weight: 0.01,
   defaultMaterial: 'gold',
 }, {
   name: 'silver piece',
+  description: 'Leaves of several plants wind around in a circular design near the edge',
   category: 'wealth',
   cost: 0.1,
   weight: 0.01,
@@ -347,23 +357,21 @@ export const itemTypes = [{
   defaultMaterial: 'gold',
 }, {
   name: 'copper piece',
+  description: 'The number 1 is embossed on the front, with straight lines reaching almost to the edge',
   category: 'wealth',
   cost: 0.01,
   weight: 0.01,
   // TODO: make it not gold
   defaultMaterial: 'gold',
-}].concat(Object.keys(GEMSTONES).map( gem => {
-  return {
-    name: `${gem} gem`,
-    category: 'wealth',
-    cost: GEMSTONES[gem],
-    weight: 0.1,
-    // TODO: make it not gold - make it 'gem'
-    defaultMaterial: 'gold',
-  };
-}));
-
-
+}].concat(Object.keys(GEMSTONES).map(gem => ({
+  name: `${gem} gem`,
+  description: 'This gemsone is worth a lot. You could try selling it',
+  weight: 0.1,
+  cost: GEMSTONES[gem],
+  category: 'wealth',
+  // TODO: make it not gold - make it 'gem'
+  defaultMaterial: 'gold',
+})));
 
 
 export const materials = [{
@@ -398,25 +406,25 @@ export const materials = [{
   hardness: 15,
   dataGetter: (item, itemType) => {
     const getCost = () => {
-      if( itemType.category === 'armour') {
-        switch( itemType.data.weight ) {
-        case 'light':
-          return 1000 - 150;
-        case 'medium':
-          return 4000 - 150;
-        case 'heavy':
-          return 9000 - 150;
-        default:
-          console.error(`Unknown armour type ${itemType.name}`);
+      if (itemType.category === 'armour') {
+        switch (itemType.data.weight) {
+          case 'light':
+            return 1000 - 150;
+          case 'medium':
+            return 4000 - 150;
+          case 'heavy':
+            return 9000 - 150;
+          default:
+            Console.error(`Unknown armour type ${itemType.name}`);
         }
       }
 
-      if( itemType.category === 'shield' ) {
+      if (itemType.category === 'shield') {
         return 1000 - 150;
       }
 
-      return itemType.weight * 500 - 300;
-    }
+      return (itemType.weight * 500) - 300;
+    };
 
     return {
       mithral: {
@@ -430,9 +438,9 @@ export const materials = [{
 
 export const getItem = (item) => {
   checkDataAgainstRules(item, {
-    itemType: itemTypes.map( type => type.name ),
+    itemType: itemTypes.map(type => type.name),
     material: {
-      optional: materials.map( mat => mat.name )
+      optional: materials.map(mat => mat.name)
     },
     count: {
       optional: 'number',
@@ -441,13 +449,13 @@ export const getItem = (item) => {
   });
 
   // Get parent objects for the object
-  const itemType = itemTypes.find(t => t.name === item.itemType );
-  const material = materials.find(m => {
-    return m.name === (item.material ? item.material : itemType.defaultMaterial );
-  });
-  const category = itemCategories.find(c => c.name === itemType.category );
+  const itemType = itemTypes.find(t => t.name === item.itemType);
+  const material = materials.find(m => m.name === (
+    item.material ? item.material : itemType.defaultMaterial));
+  const category = itemCategories.find(c => c.name === itemType.category);
 
   // If item data doesn't exist, initialize it!
+  // eslint-disable-next-line no-param-reassign
   item.data = item.data ? item.data : {};
 
   // What are the effects
@@ -467,21 +475,21 @@ export const getItem = (item) => {
     itemType,
     material,
   ];
-  dataStats.forEach( stat => {
+  dataStats.forEach((stat) => {
     data[stat] = {
       // start empty for everything
     };
   });
 
   // For all the sources, add up the data
-  dataSources.forEach( source => {
-    if( source.dataGetter ) {
-      let sourceData = source.dataGetter(item, itemType, category);
-      Object.keys(sourceData).forEach( sourceName => {
-        dataStats.forEach( stat => {
+  dataSources.forEach((source) => {
+    if (source.dataGetter) {
+      const sourceData = source.dataGetter(item, itemType, category);
+      Object.keys(sourceData).forEach((sourceName) => {
+        dataStats.forEach((stat) => {
           // if material.mithral.cost
           //   data.cost.mithral = material.mithral.cost
-          if( sourceData[sourceName][stat] ) {
+          if (sourceData[sourceName][stat]) {
             data[stat][sourceName] = sourceData[sourceName][stat];
           }
         });
@@ -489,8 +497,8 @@ export const getItem = (item) => {
     }
 
     // Now for each data stat, just add it
-    dataStats.forEach( stat => {
-      if( source.data && source.data[stat] ) {
+    dataStats.forEach((stat) => {
+      if (source.data && source.data[stat]) {
         data[stat][source.name] = source.data[stat];
       }
     });
@@ -500,9 +508,9 @@ export const getItem = (item) => {
   data.cost[itemType.name] = itemType.cost;
 
   // Total all the data keys
-  Object.keys(data).forEach(field => {
+  Object.keys(data).forEach((field) => {
     data[field].total = Object.keys(data[field]).reduce((acc, cur) => {
-      if( cur === 'total') {
+      if (cur === 'total') {
         return acc;
       }
       return acc + data[field][cur];
@@ -512,57 +520,53 @@ export const getItem = (item) => {
   // Create the item
   const returnedItem = {
     name: itemType.name,
-    itemType: itemType,
-    material: material,
-    category: category,
+    itemType,
+    material,
+    category,
     weight: itemType.weight * (data.scale_weight.total ? data.scale_weight.total : 1),
     count: item.count ? item.count : 1,
-    //actions: [],
-    data: data,
+    // actions: [],
+    data,
   };
 
   return returnedItem;
 };
 
-export const getItems = (items) => {
-  return items.map(getItem);
-};
+export const getItems = items => items.map(getItem);
 
 export const getItemsWorth = (cost) => {
   const wealthItemTypes = itemTypes.filter(type => type.category === 'wealth');
 
   // Get the most valuable item for how much cost we have
-  const mostValuableReducer = (highestCost) => {
-    return (acc, cur) => {
-      if( !acc ) {
-        return cur;
-      }
-      if ( acc.cost > highestCost ) {
-        return cur;
-      }
-      if ( cur.cost < highestCost && cur.cost > acc.cost ) {
-        return cur;
-      }
-      return acc;
-    };
+  const mostValuableReducer = highestCost => (acc, cur) => {
+    if (!acc) {
+      return cur;
+    }
+    if (acc.cost > highestCost) {
+      return cur;
+    }
+    if (cur.cost < highestCost && cur.cost > acc.cost) {
+      return cur;
+    }
+    return acc;
   };
   const items = [];
 
   let costToGo = cost;
   let maxruns = wealthItemTypes.length; // failsafe
-  while( costToGo > 0.01 ) {
+  while (costToGo > 0.01) {
     const valuable = wealthItemTypes.reduce(mostValuableReducer(costToGo), null);
-    const howMany = parseInt(costToGo / valuable.cost);
-    //console.log(`${howMany} ${valuable.name}s fit into ${costToGo}gp`);
+    const howMany = parseInt(costToGo / valuable.cost, 10);
+    // console.log(`${howMany} ${valuable.name}s fit into ${costToGo}gp`);
     costToGo -= (valuable.cost * howMany) - 0.0001;
-    if( howMany > 0.01 && valuable.cost >= 1 ) {
+    if (howMany > 0.01 && valuable.cost >= 1) {
       items.push({
         itemType: valuable.name,
         // if it's gold, add an extra from rounding
         count: howMany + (valuable.cost === 1 ? 1 : 0),
       });
     }
-    if( --maxruns < 0 ) break; // failsafe
+    maxruns -= 1; if (maxruns < 0) break; // failsafe
   }
 
   return items;
@@ -575,21 +579,20 @@ export const getRandomItemsWorth = (cost) => {
   [
     cost * split,
     (1 - split) * cost,
-  ].forEach( costToGo => {
+  ].forEach((costToGo) => {
     const itemsWorth = getItemsWorth(costToGo);
-    itemsWorth.forEach( item => {
+    itemsWorth.forEach((item) => {
       // Find if it already exists, and if not, add it!
-      const existingItem = items.find(i => item.itemType === i.itemType );
-      if( existingItem ) {
+      const existingItem = items.find(i => item.itemType === i.itemType);
+      if (existingItem) {
         existingItem.count += item.count;
-      }
-      else {
+      } else {
         items.push(item);
       }
     });
   });
 
-  //console.log(items);
+  // console.log(items);
 
   return items;
-}
+};

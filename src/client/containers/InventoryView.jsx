@@ -1,98 +1,93 @@
 import NavigationWindow from '../components/NavigationWindow';
 import { Row, Col } from '../components/Core';
-import { getEncumbranceBracket, ENCUMBRANCE } from '../lib/constants';
 import Translation from '../lib/Translation';
 import { itemCategories } from '../lib/Items';
 import Modal from '../components/Modal';
+import EncumbranceSection from './inventory/Encumbrance';
 
-// TODO: move this to its own component file
-function EncumbranceBar(which, encumbrancePercentage) {
-  const style = {
-    width: '33%',
-    height: '100%',
-    display: 'inline-block',
-    color: 'white',
-    textAlign: 'center',
-    paddingTop: 3,
+function getCritInfo(item) {
+  const crit = (item.itemType.data.critRange > 1 ?
+    (21 - item.itemType.data.critRange) + '-' : ''
+    ) + '20';
+  return `${crit} x${item.itemType.data.critMult}`
+}
+
+function WeaponDetail(item) {
+  /*
+  data: {
+    complexity: 'simple',
+    dice: '1d10',
+    type: 'crossbow',
+    damageType: 'p',
+    range: 120,
+    ammunition: 'bolt',
+    critRange: 2,
+    critMult: 2,
+    handed: 'two',
+  },
+  */
+  const complexityDescs = {
+    'simple': 'Simple weapons are usually easy to pick up and use',
+    'martial': 'Marial weapons require training to use properly',
+    'exotic': 'Exotic weapons are strange and uncanny, and probably require a certain culture or upbringing to use properly',
   };
-
-  switch(which) {
-  case 'light':
-    style.background = '#1dd153';
-    break;
-  case 'medium':
-    style.background = encumbrancePercentage > 1 ? '#e1d31d' : '#BBB';
-    break;
-  case 'heavy':
-    style.background = encumbrancePercentage > 2 ? '#d1531d' : '#BBB';
-    break;
-  }
-  return <div style={style}></div>
-}
-
-function EncunbranceBracketData(data) {
-  return <table style={{
-    width: '100%',
-  }}>
-    <tbody>
-      {Object.keys(data).map( stat => {
-        return <tr key={stat}>
-          <td>{stat}</td>
-          <td>{data[stat]}</td>
-        </tr>
-      })}
-    </tbody>
-  </table>
-}
-
-
-function EncumbranceInfo(currentBracket, character) {
-  const lightLoad = character.get('light_load');
+  const handedDescs = {
+    'light': 'This weapon is best suited as an off-hand weapon, but can be used as a main weapon in a pinch',
+    'one': 'This weapon is best suited as a one-handed weapon',
+    'two': 'This weapon takes two free hands to use',
+  };
+  const damageTypeDescs = {
+    'p': 'Piercing',
+    'b': 'Bludgeoning',
+    's': 'Slashing or slicing',
+  };
+  const critMutlDescs = {
+    '2': 'twice',
+    '3': 'three times',
+    '4': 'four times',
+  };
+  const critNumbers = ((range) => {
+    let numbers = [];
+    while( range > 1 ) {
+      numbers.push(21 - range);
+      range--;
+    }
+    return numbers;
+  })(item.itemType.data.critRange);
+  const criticalNumberDesc = critNumbers.length > 0
+    ? critNumbers.join(', ') + ' or 20'
+    : 'natural 20'
 
   return <div>
-    {ENCUMBRANCE.map( bracket => {
-      // If there's a max, say "x to y"
-      // If there isn't a max, say "over x"
-      const weightRange = bracket.light_load_max ?
-        `${Translation.weight(lightLoad * bracket.light_load_min)} - ${Translation.weight(lightLoad * bracket.light_load_max)}`
-        : `over ${Translation.weight(lightLoad * bracket.light_load_min)}`
-
-      return <div key={bracket.name} style={{
-          marginTop: 10,
-          background: currentBracket.name === bracket.name ? '#8ccbf7' : 'transparent',
-        }}>
-        <Row>
-          <Col align='center'><h6>{bracket.name}</h6></Col>
-        </Row>
-        <Row>
-          <Col>{weightRange}</Col>
-          <Col>{bracket.effect ?
-            EncunbranceBracketData(bracket.effect.data)
-            : 'No effect from this bracket'}</Col>
-        </Row>
-      </div>;
-    })}
-  </div>
+    <Row>
+      <Col>Hands: {handedDescs[item.itemType.data.handed]}</Col>
+      <Col>Complexity: {item.itemType.data.complexity}<br/> {complexityDescs[item.itemType.data.complexity]}</Col>
+    </Row>
+    <Row>
+      <Col>Damage</Col>
+      <Col>{item.itemType.data.dice}</Col>
+      <Col>{damageTypeDescs[item.itemType.data.damageType]}</Col>
+    </Row>
+    <Row>
+      {/*
+      <Col>Critical chance:</Col>
+      <Col>{getCritInfo(item)}</Col>
+      <Col>On a {criticalNumberDesc} there's a chance to deal {critMutlDescs[item.itemType.data.critMult]} the damage.</Col>
+      */}
+    </Row>
+    {item.itemType.data.range ? <Row>
+      <Col>Range</Col>
+      <Col>{Translation.distance(item.itemType.data.range)}</Col>
+    </Row> : null}
+  </div>;
 }
 
-// TODO: move this to its own component file
-function LoadMeter(encumbrancePercentage) {
-  return <div style={{
-    width: '100%',
-    height: 30,
-    overflow: 'hidden',
-    position: 'relative',
-  }}>
-    {EncumbranceBar('light', encumbrancePercentage)}
-    {EncumbranceBar('medium', encumbrancePercentage)}
-    {EncumbranceBar('heavy', encumbrancePercentage)}
-    <div style={{
-      position: 'absolute',
-      bottom: 0,
-      left: parseInt(100 * encumbrancePercentage / 3) + '%',
-      color: 'white',
-    }}><i className="fa fa-map-pin fa-2x" aria-hidden="true"></i></div>
-  </div>
+function ItemDetail(item) {
+  const description = item.itemType.description || '[description]';
+  return <div>
+    <p>{description}</p>
+    { item.category.name === 'weapon' ? WeaponDetail(item) : null }
+  </div>;
 }
 
 
@@ -101,13 +96,21 @@ function InventoryItem(item, isEven, children) {
   if( !children ) {
     children = [];
   }
+  const fullname = `${item.count>1 ? item.count:''} ${Translation.get(item.name, item.count)}`;
+
   return <div key={item.key} style={{
     background: isEven ? '#CDC' : '#FFF',
     padding: 5,
   }}>
     <Row>
       <Col>
-        {`${item.count>1 ? item.count:''} ${Translation.get(item.name, item.count)}`}
+        <button
+          className='btn btn-outline-primary btn-sm'
+          onClick={() => {
+            Modal.open(fullname, ItemDetail(item));
+          }}>
+          {fullname}
+        </button>
       </Col>
       {children.map( child => {
         return <Col key={child.toString()}>{child}</Col>;
@@ -120,13 +123,9 @@ function InventoryItem(item, isEven, children) {
 }
 
 function WeaponItem(item, isEven) {
-  const crit = (item.itemType.data.critRange > 1 ?
-    (21 - item.itemType.data.critRange) + '-' : ''
-    ) + '20';
-
   return InventoryItem(item, isEven, [
     item.itemType.data.dice, // 1d10
-    `${crit} x${item.itemType.data.critMult}`, // 19-20 x2
+    getCritInfo(item), // 19-20 x2
   ]);
 }
 
@@ -179,19 +178,29 @@ function InventoryItems(items) {
     }, 0);
     return <div key={section.name}
       style={{
-        paddingTop: 20,
+        marginTop: 20,
       }}>
       <Row>
         <Col>
-          <button className='btn btn-secondary' style={{}} onClick={()=> {
+          <button className='btn btn-secondary' onClick={()=> {
             // Toggle contents of this section
+            // Don't bother with state - they'll thank us!
             $(`#section-${section.name}`).toggle('fast');
+            $(`#toggle-open-${section.name}`).toggle();
+            $(`#toggle-closed-${section.name}`).toggle();
           }}>
             <h5 style={{marginBottom: 0}}>
-              {section.collapsed ?
-                <i className="fa fa-plus-square-o" aria-hidden="true"></i>
-                : <i className="fa fa-minus-square-o" aria-hidden="true"></i>
-              }
+              <i id={`toggle-closed-${section.name}`}
+                style={{
+                  display: section.collapsed ? 'inline' : 'none',
+                }}
+                className="fa fa-plus-square-o"
+                aria-hidden="true"></i>
+              <i id={`toggle-open-${section.name}`}
+                style={{
+                  display: !section.collapsed ? 'inline' : 'none',
+                }}
+                className="fa fa-minus-square-o" aria-hidden="true"></i>
               {section.name}
             </h5>
           </button>
@@ -222,34 +231,20 @@ function InventoryItems(items) {
 export default class InventoryView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      character: this.props.character,
+    };
   }
 
   render() {
-    const encumbrance = this.props.character.get('current_load') / this.props.character.get('light_load');
-    const bracket = getEncumbranceBracket(
-      this.props.character.get('current_load'),
-      this.props.character.get('light_load')
-    );
-
     return <NavigationWindow
       title='Inventory'>
       <Row>
-        <Col>
-          {'Encumbrance: '}
-          <button className='btn btn-primary btn-sm'
-            onClick={() => {
-              Modal.open('Encumbrance', 'OK', EncumbranceInfo(bracket, this.props.character));
-            }}>{bracket.name}</button>
-        </Col>
-      </Row>
-      {LoadMeter(encumbrance)}
-      <Row>
-        <Col>{`Carrying: ${Translation.weight(parseInt(this.props.character.get('current_load') * 100) /100 )}`}</Col>
+        <Col>{EncumbranceSection(this.state.character)}</Col>
       </Row>
       <Row>
-        <Col>
-          {InventoryItems(this.props.character.items)}
-        </Col>
+        <Col>{InventoryItems(this.state.character.items)}</Col>
       </Row>
     </NavigationWindow>;
   }

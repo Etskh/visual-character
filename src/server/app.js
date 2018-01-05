@@ -7,7 +7,7 @@ const hbs = require('express-hbs');
 // Local modules
 const logger = require('./lib/logger');
 const apiRoute = require('./routes/api');
-const pkg = require('../package');
+//const pkg = require('../../package');
 
 // Create the app
 const app = express();
@@ -22,9 +22,9 @@ app.set('views', path.join(__dirname, '../views'));
 
 // App configuration
 const config = {
-  name: pkg.name,
-  description: pkg.description,
-  version: pkg.version,
+  name: 'Visual Character',
+  description: 'A system agnostic RPG character manager',
+  version: '0.1',
   port: process.env.PORT || 3000,
 };
 
@@ -41,8 +41,8 @@ app.use((req, res, next) => {
 // Main route
 app.get('/', (req, res) => {
   res.render('index', {
-    title: 'Character Manager',
-    description: 'A system agnostic RPG character manager',
+    title: config.name,
+    description: config.description,
     isProduction: (process.env.NODE_ENV === 'production'),
   });
 });

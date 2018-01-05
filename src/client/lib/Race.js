@@ -26,12 +26,8 @@ Race.load = (name) => {
   return Promise.resolve(race);
 };
 
-Race.getStats = () => {
-  return races.map( race => {
-    return {
-      name: race.name,
-      fullname: race.name,
-      description: race.stat_description,
-    };
-  })
-}
+Race.getStats = () => races.map(race => ({
+  name: race.name,
+  fullname: race.name,
+  description: race.stat_description,
+}));

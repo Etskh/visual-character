@@ -29,8 +29,7 @@ export default class Navigation extends React.Component {
         onClick={() => {
           this.props.onSelectNav(nav);
         }}>
-        <div className={"fa fa-4x fa-" + nav.icon} aria-hidden="true"></div>
-        <div>{nav.name}</div>
+        <div className={"fa fa-3x fa-" + nav.icon} aria-hidden="true"></div>
       </a>
     </li>;
   }

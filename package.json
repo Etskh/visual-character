@@ -1,7 +1,7 @@
 {
-  "name": "character-manager",
+  "name": "visual-character",
   "main": "dist/app.js",
-  "description": "RPG character manager",
+  "description": "A system agnostic RPG character manager",
   "author": "Etskh",
   "license": "MIT",
   "version": "0.0.1",

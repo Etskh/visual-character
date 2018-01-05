@@ -62,7 +62,7 @@ export default function HealthBarColumn(character) {
       <Col align='center'>
         <button className="btn btn-sm btn-danger"
           onClick={() => {
-            Modal.open('Take Damage', 'Damage', DamageContent()).then( state => {
+            Modal.open('Take Damage', DamageContent(), 'Damage').then( state => {
               const value = state.inputs[0].value;
               if( value ) {
                 character.takeDamage(parseInt(value));
@@ -73,7 +73,7 @@ export default function HealthBarColumn(character) {
       <Col align='center'>
         <button className="btn btn-sm btn-success"
           onClick={() => {
-            Modal.open('Heal', 'Heal', HealContent()).then( state => {
+            Modal.open('Heal', HealContent(), 'Heal').then( state => {
               const value = state.inputs[0].value;
               if( value ) {
                 character.heal(parseInt(value));

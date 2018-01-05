@@ -59,7 +59,6 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
       // If it's not actually a number,
       // let's check if it's a string that we can parse into a number
       if (!Number.isNaN(parseFloat(data[field]))) {
-        data[field] = parseFloat(data[field]);
         return true;
       }
 
@@ -103,14 +102,14 @@ const checkFieldAgainstRule_r = (field, data, rule, config) => {
   return true;
 };
 
-export const checkDataAsErrors = (data, typeRules ) => {
+export const checkDataAsErrors = (data, typeRules) =>
   // Map all fields to 'true' or 'false' then reduce then to one boolean
-  return Object.keys(typeRules).reduce( (acc, field) => {
+  Object.keys(typeRules).reduce((acc, field) => {
     // Check each rule individually and add together
     const output = [];
     const outputCallback = (err) => {
       output.push(err);
-    }
+    };
     checkFieldAgainstRule_r(field, data, typeRules[field], {
       output: outputCallback,
     });
@@ -123,10 +122,9 @@ export const checkDataAsErrors = (data, typeRules ) => {
     }
     return acc;
   }, []);
-}
 
 
-export const checkDataAgainstRules = (data, typeRules ) => {
+export const checkDataAgainstRules = (data, typeRules) => {
   if (!typeRules) {
     Console.error('Unknown typeRules');
     return false;
@@ -149,15 +147,14 @@ export const checkDataAgainstRules = (data, typeRules ) => {
     , true
   ) && Object.keys(data).reduce((acc, field) => {
     // Now check the data to see if there's extra data fields
-    if (!typeRules[field]) {
-      console.log(typeRules);
-      Console.error(`Unknown field '${field}'`);
-      return false;
-    }
-    return acc && true;
-  }, true);
+      if (!typeRules[field]) {
+        Console.error(`Unknown field '${field}'`);
+        return false;
+      }
+      return acc && true;
+    }, true);
 
-  if( !passed ) {
+  if (!passed) {
     Console.error(`   for ${data.name}`);
   }
 

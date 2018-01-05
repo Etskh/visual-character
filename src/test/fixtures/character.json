@@ -1,0 +1,141 @@
+{
+    "id": "1",
+    "name": "Pig",
+    "fields": {
+        "current": {
+            "age": 10.5,
+            "exp": "0",
+            "hitpoints": "8",
+            "nonlethal": "0"
+        }
+    },
+    "choices": [{
+            "id": "2",
+            "type": "race",
+            "reason": "level 1",
+            "decision": "goblin"
+        },
+        {
+            "id": "3",
+            "type": "class",
+            "reason": "level 1",
+            "decision": "wizard"
+        },
+        {
+            "id": "4",
+            "type": "hitpoints",
+            "reason": "level 1",
+            "decision": "6"
+        },
+        {
+            "id": "5",
+            "type": "feat",
+            "reason": "level 1",
+            "decision": "Spell Focus",
+            "target": "Illusion"
+        },
+        {
+            "id": "1",
+            "type": "skill",
+            "reason": "level 1",
+            "decision": "",
+            "remaining": "5"
+        },
+        {
+            "id": "6",
+            "type": "base_stat",
+            "target": "str",
+            "reason": "level 1",
+            "decision": "11"
+        },
+        {
+            "id": "7",
+            "type": "base_stat",
+            "target": "dex",
+            "reason": "level 1",
+            "decision": "13"
+        },
+        {
+            "id": "8",
+            "type": "base_stat",
+            "target": "con",
+            "reason": "level 1",
+            "decision": "13"
+        },
+        {
+            "id": "9",
+            "type": "base_stat",
+            "target": "int",
+            "reason": "level 1",
+            "decision": "17"
+        },
+        {
+            "id": "9",
+            "type": "base_stat",
+            "target": "wis",
+            "reason": "level 1",
+            "decision": "10"
+        },
+        {
+            "id": "10",
+            "type": "base_stat",
+            "target": "cha",
+            "reason": "level 1",
+            "decision": "10"
+        },
+        {
+            "id": "11",
+            "type": "hitpoints",
+            "reason": "level 2",
+            "decision": "6"
+        }
+    ],
+    "inventory": [{
+            "itemType": "spellbook"
+        },
+        {
+            "itemType": "heavy crossbow",
+            "count": "1"
+        },
+        {
+            "itemType": "bolt",
+            "count": "10"
+        },
+        {
+            "itemType": "fire opal gem",
+            "count": "4"
+        },
+        {
+            "itemType": "emerald gem",
+            "count": "1"
+        },
+        {
+            "itemType": "jasper gem",
+            "count": "1"
+        },
+        {
+            "itemType": "gold piece",
+            "count": "3"
+        },
+        {
+            "itemType": "silver piece",
+            "count": "9"
+        },
+        {
+            "itemType": "copper piece",
+            "count": "10"
+        },
+        {
+            "itemType": "golden topaz gem",
+            "count": "1"
+        },
+        {
+            "itemType": "jade gem",
+            "count": "2"
+        },
+        {
+            "itemType": "moonstone gem",
+            "count": "1"
+        }
+    ]
+}

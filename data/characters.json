@@ -1,111 +1,133 @@
-[{
+[
+  {
     "id": "1",
     "name": "Pig",
-    "age": "10.5",
     "fields": {
-        "current": {
-            "exp": "0",
-            "hitpoints": "13",
-            "nonlethal": "0"
-        }
+      "current": {
+        "age": "10.5",
+        "exp": "0",
+        "hitpoints": "13",
+        "nonlethal": "0"
+      }
     },
-    "choices": [{
-            "type": "race",
-            "reason": "level 1",
-            "decision": "goblin"
-        },
-        {
-            "type": "class",
-            "reason": "level 1",
-            "decision": "wizard"
-        },
-        {
-            "type": "hitpoints",
-            "reason": "level 1",
-            "decision": "6"
-        },
-        {
-            "type": "feat",
-            "reason": "level 1",
-            "decision": "Spell Focus",
-            "target": "Illusion"
-        },
-        {
-            "type": "skill",
-            "reason": "level 1",
-            "decision": "",
-            "remaining": "5"
-        },
-        {
-            "type": "str",
-            "reason": "level 1",
-            "decision": "11"
-        },
-        {
-            "type": "dex",
-            "reason": "level 1",
-            "decision": "13"
-        },
-        {
-            "type": "con",
-            "reason": "level 1",
-            "decision": "13"
-        },
-        {
-            "type": "int",
-            "reason": "level 1",
-            "decision": "17"
-        },
-        {
-            "type": "wis",
-            "reason": "level 1",
-            "decision": "10"
-        },
-        {
-            "type": "cha",
-            "reason": "level 1",
-            "decision": "10"
-        },
-        {
-            "type": "hitpoints",
-            "reason": "level 2",
-            "decision": "6"
-        }
+    "choices": [
+      {
+        "type": "race",
+        "reason": "level 1",
+        "decision": "goblin"
+      },
+      {
+        "type": "class",
+        "reason": "level 1",
+        "decision": "wizard"
+      },
+      {
+        "type": "hitpoints",
+        "reason": "level 1",
+        "decision": "6"
+      },
+      {
+        "type": "feat",
+        "reason": "level 1",
+        "decision": "Spell Focus",
+        "target": "Illusion"
+      },
+      {
+        "type": "base_stat",
+        "target": "str",
+        "reason": "level 1",
+        "decision": "11"
+      },
+      {
+        "type": "base_stat",
+        "target": "dex",
+        "reason": "level 1",
+        "decision": "13"
+      },
+      {
+        "type": "base_stat",
+        "target": "con",
+        "reason": "level 1",
+        "decision": "13"
+      },
+      {
+        "type": "base_stat",
+        "target": "int",
+        "reason": "level 1",
+        "decision": "17"
+      },
+      {
+        "type": "base_stat",
+        "target": "wis",
+        "reason": "level 1",
+        "decision": "10"
+      },
+      {
+        "type": "base_stat",
+        "target": "cha",
+        "reason": "level 1",
+        "decision": "10"
+      },
+      {
+        "type": "hitpoints",
+        "reason": "level 2",
+        "decision": "6"
+      },
+      {
+        "type": "skill",
+        "decision": "5",
+        "reason": "level 1",
+        "target": "sense motive"
+      }
     ],
-    "inventory": [{
+    "inventory": [
+      {
         "itemType": "spellbook"
-    }, {
+      },
+      {
         "itemType": "heavy crossbow",
-        "count": 1
-    }, {
+        "count": "1"
+      },
+      {
         "itemType": "bolt",
-        "count": 10
-    }, {
+        "count": "10"
+      },
+      {
         "itemType": "fire opal gem",
-        "count": 4
-    }, {
+        "count": "4"
+      },
+      {
         "itemType": "emerald gem",
-        "count": 1
-    }, {
+        "count": "1"
+      },
+      {
         "itemType": "jasper gem",
-        "count": 1
-    }, {
+        "count": "1"
+      },
+      {
         "itemType": "gold piece",
-        "count": 3
-    }, {
+        "count": "3"
+      },
+      {
         "itemType": "silver piece",
-        "count": 9
-    }, {
+        "count": "9"
+      },
+      {
         "itemType": "copper piece",
-        "count": 10
-    }, {
+        "count": "10"
+      },
+      {
         "itemType": "golden topaz gem",
-        "count": 1
-    }, {
+        "count": "1"
+      },
+      {
         "itemType": "jade gem",
-        "count": 2
-    }, {
+        "count": "2"
+      },
+      {
         "itemType": "moonstone gem",
-        "count": 1
-    }]
-}]
+        "count": "1"
+      }
+    ]
+  }
+]

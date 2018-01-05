@@ -1,35 +1,38 @@
 
-
-const MOVESPEED_INCREMENT = [
-  10,
-  15,
-  20,
-  30,
-  40,
-  50,
-  60
-];
-
-export const ATTACK_DICE = [
-  '1',
-  '1d2',
-  '1d3',
-].concat((function(){
+function diceGetter() {
   const dice = [];
   const diceSides = [
     4, 6, 8, 10, 12, 20,
   ];
 
-  for(let count = 1; count < 4; count += 1) {
-    for( let sides = 0; sides < diceSides.length; sides += 1) {
-      dice.push({count, sides: diceSides[sides] });
+  for (let count = 1; count < 4; count += 1) {
+    for (let sides = 0; sides < diceSides.length; sides += 1) {
+      dice.push({ count, sides: diceSides[sides] });
     }
   }
-  dice.sort((a, b) => {
-    return a.count * a.sides - b.count * b.sides;
-  });
-  return dice.map(d => `${d.count}d${d.sides}`);
-})());
+  dice.sort((a, b) => (a.count * a.sides) - (b.count * b.sides));
+  return [
+    '1',
+    '1d2',
+    '1d3',
+  ].concat(dice.map(d => `${d.count}d${d.sides}`));
+}
+
+/*
+  1,
+  1d2,
+  1d3,
+  1d4,
+  1d6,
+  1d8,
+  ...
+  2d12,
+  3d8,
+  3d10,
+  ...
+  3d20
+*/
+export const ATTACK_DICE = diceGetter();
 
 export const DAMAGE_TYPES = [
   'b',
@@ -74,12 +77,7 @@ export const CHOICE_TYPES = [
   'feat',
   'hitpoints',
   'skill',
-  'str',
-  'dex',
-  'con',
-  'int',
-  'wis',
-  'cha',
+  'base_stat',
 ];
 
 export const CHOICE_REASONS = [
@@ -208,7 +206,7 @@ export const ENCUMBRANCE = [{
 export const getEncumbranceBracket = (weight, lightLoad) => {
   const weightScale = weight / lightLoad;
   return ENCUMBRANCE.reduce((acc, cur) => {
-    if (weightScale > cur.light_load_min) {
+    if (weightScale >= cur.light_load_min) {
       if (cur.light_load_max && cur.light_load_max > weightScale) {
         return cur;
       }
@@ -236,3 +234,29 @@ export const CHARACTER_DATA =
     'light_load',
     'current_load',
   ]).concat(SKILLS.map(skill => `skill_${skill.name}`));
+
+export const getNextLevel = (currentLevel) => {
+  const choices = [];
+  // if the next level is odd, add a feat
+  if( (currentLevel + 1) % 2 === 1) {
+    choices.push({
+      type: 'feat',
+      decision: null,
+      reason: `level ${currentLevel + 1}`,
+    });
+  }
+  // If the next level is divisible by four, add a stat-point
+  if( (currentLevel + 1) % 4 === 0) {
+    choices.push({
+      type: 'stat',
+      decision: null,
+      reason: `level ${currentLevel + 1}`,
+    });
+  }
+  
+  return {
+    level: currentLevel + 1,
+    exp: 2000, // TODO: fix this
+    choices: choices,
+  };
+}

@@ -15,3 +15,20 @@ export function Col(props) {
     {props.children}
   </div>;
 }
+
+export function Button(props) {
+  const type = props.type || 'secondary';
+  return <button
+    style={{
+      margin: 4,
+    }}
+    className={[
+      'btn',
+      'btn-' + type,
+      props.size !== 'large' ? 'btn-sm' : '',
+      props.disabled ? 'disabled' : '',
+    ].join(' ')}
+    onClick={props.onClick}>
+    {props.children}
+  </button>;
+}
