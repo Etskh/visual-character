@@ -1,5 +1,5 @@
 import NavigationWindow from '../components/NavigationWindow';
-import SkillActions from '../components/SkillActions';
+import ActionList from '../components/ActionList';
 
 export default class WorldView extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ export default class WorldView extends React.Component {
   render() {
     return <NavigationWindow
       title='World'>
-      <SkillActions
+      <ActionList
         character={this.props.character}
         when='world'/>
       <p>World stuff goes in here</p>

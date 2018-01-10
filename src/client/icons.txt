@@ -3,11 +3,11 @@ Ranged weapon: bullseye
 Spellbook: book
 
 
-[ Advancement ]
+Advancement
     [ If the character is invalid, this is the only one that shows]
-    [ basic information (name, class, race, level ) ]
+    basic information (name, class, [race], level )
     [ experience bar ]
-    [ outstanding choices ]
+    outstanding choices
 
 World
     [ Rest for the night: hotel ]
@@ -20,7 +20,7 @@ World
 Inventory
     [ Slots ]
     Encumbrance
-    [ Items ]
+    Items
 
 Magic
     -

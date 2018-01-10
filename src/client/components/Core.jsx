@@ -1,4 +1,30 @@
 
+export function DiceIcon(path, size) {
+  const scale = (size || 1) * 16;
+  return <img src={`/${path}`} width={scale * 0.95} height={scale * 1.0}/>
+}
+
+export function Icon(props) {
+  if( props.icon === '1d20') {
+    return DiceIcon('twenty_sided_dice.svg', props.size || 1);
+  }
+
+  const size =  props.size ? (
+    props.size > 2 ? `fa-${props.size.toString()}x` : 'fa-lg') : '';
+
+  const colour = props.colour || '#FFF';
+  return <i className={[
+      'fa',
+      size,
+      'fa-' + props.icon,
+    ].join(' ')}
+    style={{
+      color: colour,
+    }}
+    aria-hidden="true">
+  </i>
+}
+
 export function Row(props) {
   return <div style={props.style || {}} className="row">
     {props.children}
@@ -7,11 +33,26 @@ export function Row(props) {
 
 export function Col(props) {
   const alignment = props.align ? props.align : 'left';
+  const classNames = ['col'];
+  if( typeof props.size === 'number' ) {
+    // if it's a number, then we want only col-{size}
+    classNames.push(`col-${props.size}`);
+  }
+  else if ( typeof props.size === 'object' ) {
+    Object.keys(props.size).forEach( size => {
+      if( size === 'mobile') {
+        classNames.push(`col-${props.size[size]}`);
+      }
+      else if( size === 'desktop' ) {
+        classNames.push(`col-sm-${props.size[size]}`);
+      }
+    });
+  }
   return <div
-    className={`col ${props.size?'col-xs-'+props.size:''}`}
-    style={{
+    className={classNames.join(' ')}
+    style={Object.assign(props.style || {}, {
       textAlign: alignment,
-    }}>
+    })}>
     {props.children}
   </div>;
 }
@@ -19,16 +60,44 @@ export function Col(props) {
 export function Button(props) {
   const type = props.type || 'secondary';
   return <button
-    style={{
+    style={Object.assign( props.style || {}, {
       margin: 4,
-    }}
+    })}
     className={[
       'btn',
       'btn-' + type,
       props.size !== 'large' ? 'btn-sm' : '',
       props.disabled ? 'disabled' : '',
     ].join(' ')}
-    onClick={props.onClick}>
+    onClick={(e) => {
+      if( !props.disabled ) {
+        props.onClick(e);
+      }
+    }}>
     {props.children}
   </button>;
+}
+
+export class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    this.setState({
+      hasError: true,
+    });
+    // You can also log the error to an error reporting service
+    console.error(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
 }

@@ -7,7 +7,7 @@ const hbs = require('express-hbs');
 // Local modules
 const logger = require('./lib/logger');
 const apiRoute = require('./routes/api');
-//const pkg = require('../../package');
+// const pkg = require('../../package');
 
 // Create the app
 const app = express();

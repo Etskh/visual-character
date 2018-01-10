@@ -1,21 +1,16 @@
 
+// eslint-disable-next-line import/prefer-default-export
 export const createData = (name, transformer) => {
   const fields = [];
   let defaultTransformer = transformer;
   return {
     // constant functions
-    getName: () => {
-      return name;
-    },
-    getFields: () => {
-      return fields;
-    },
-    getTotal: (ctx) => {
-      const total = fields.reduce((acc,cur) => {
-        return acc + cur.valueGetter();
-      }, 0);
+    getName: () => name,
+    getFields: () => fields,
+    getTotal: () => {
+      const total = fields.reduce((acc, cur) => acc + cur.valueGetter(), 0);
 
-      if( defaultTransformer ) {
+      if (defaultTransformer) {
         return defaultTransformer(total);
       }
       return total;
@@ -25,21 +20,21 @@ export const createData = (name, transformer) => {
     addBaseValue: (val) => {
       fields.push({
         name: 'base',
-        valueGetter: () => ( val ),
+        valueGetter: () => (val),
       });
     },
-    addValue: (name, val) => {
+    addValue: (valueName, val) => {
       fields.push({
-        name,
-        valueGetter: () => ( val ),
+        name: valueName,
+        valueGetter: () => (val),
       });
     },
-    addChoice: (name, value, choice) => {
+    addChoice: (choiceName, value, choice) => {
       fields.push({
-        name,
+        name: choiceName,
         sourceType: 'choice',
         source: choice,
-        valueGetter: () => ( value ),
+        valueGetter: () => (value),
       });
     },
     addItem: (item) => {
@@ -47,7 +42,7 @@ export const createData = (name, transformer) => {
         name: item.name,
         sourceType: 'item',
         source: item,
-        valueGetter: () => ( item.itemType.data[name] ),
+        valueGetter: () => (item.itemType.data[name]),
       });
     },
     addEffect: (effect) => {
@@ -55,7 +50,7 @@ export const createData = (name, transformer) => {
         name: effect.name,
         sourceType: 'effect',
         source: effect,
-        valueGetter: () => ( effect.data[name] ),
+        valueGetter: () => (effect.data[name]),
       });
     },
     addData: (data) => {
@@ -64,14 +59,14 @@ export const createData = (name, transformer) => {
         sourceType: 'data',
         source: data,
         valueGetter: data.getTotal,
-        //valueGetter: () => {
+        // valueGetter: () => {
         //  console.log(`Getting ${data.getName()}(${data.getTotal()}) for ${name}`);
         //  return data.getTotal();
-        //},
+        // },
       });
     },
     setTransformer: (t) => {
       defaultTransformer = t;
     },
-  }
+  };
 };

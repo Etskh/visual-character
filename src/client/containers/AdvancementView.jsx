@@ -1,5 +1,4 @@
 import NavigationWindow from '../components/NavigationWindow';
-import SkillActions from '../components/SkillActions';
 import { Row, Col } from '../components/Core';
 import { SKILLS, getNextLevel } from '../lib/constants';
 
@@ -108,7 +107,7 @@ export class AdvancementSkillView extends React.Component {
           return <tr key={skill.name}>
             <td>{skill.name}</td>
             <td>{skill.stat}</td>
-            <td>{character.newData['skill_' + skill.name].getTotal()}</td>
+            <td>{character.get('skill_' + skill.name)}</td>
             <td className='text-success'>
               {skillPoints ? `+ ${skillPoints}` : null}
             </td>

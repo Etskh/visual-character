@@ -21,9 +21,13 @@ export default class Navigation extends React.Component {
       itemStyle.backgroundColor = '#FFF';
       itemStyle.color = 'black';
     }
+    if( nav.isDisabled ) {
+      //itemStyle.backgroundColor = '#CCC';
+      itemStyle.color = '#CCC';
+    }
 
     return <li style={{margin: 0,}} className="nav-item" key={nav.name}>
-      <a className="nav-link"
+      <a className={'nav-link'}
         style={itemStyle}
         href="#"
         onClick={() => {

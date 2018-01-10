@@ -1,6 +1,7 @@
 
 import Character from '../lib/Character';
 
+import { ErrorBoundary } from '../components/Core';
 import Navigation from '../components/Navigation';
 import DebugFooter from '../components/DebugFooter';
 import Loading from '../components/Loading';
@@ -15,34 +16,42 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      character: null,
-      navs: [{
-        name: 'Advancement',
-        icon: 'level-up',
-        component: AdvancementView,
-      }, {
-        name: 'World',
-        icon: 'map-o',
-        component: WorldView,
-      }, {
-        name: 'Inventory',
-        icon: 'flask',
-        component: InventoryView,
+    const navs = [{
+      name: 'Advancement',
+      icon: 'level-up',
+      component: AdvancementView,
+      showsWhenInvalid: true,
+    }, {
+      name: 'World',
+      icon: 'map-o',
+      component: WorldView,
+    }, {
+      name: 'Inventory',
+      icon: 'flask',
+      component: InventoryView,
       //}, {
       //  name: 'Magic',
       //  icon: 'flash',
-      }, {
-        name: 'Combat',
-        icon: 'gavel',
-        component: CombatView,
+    }, {
+      name: 'Combat',
+      icon: 'gavel',
+      component: CombatView,
       //}, {
       //  name: 'Companions',
       //  icon: 'paw',
       //}, {
       //  name: 'Options',
       //  icon: 'gear',
-      }],
+    }];
+
+    this.state = {
+      character: null,
+      navs: navs.map( nav => {
+        return Object.assign(nav, {
+          isDisabled: false,
+          isSelected: false,
+        });
+      }),
     };
 
     this.onSelectNav = this.onSelectNav.bind(this);
@@ -53,37 +62,42 @@ export class App extends React.Component {
     this.setState( prevState => {
       return {
         navs: prevState.navs.map( nav => {
-          if ( selectedNav.name === nav.name ) {
-            nav.isSelected = true;
-          }
-          else {
-            nav.isSelected = false;
-          }
-          return nav;
+          return Object.assign(nav, {
+            isSelected: selectedNav.name === nav.name,
+          });
         }),
       };
     });
   }
 
   onCharacterLoad(character) {
-    console.log(`Loaded character ${character.name}`);
 
+    // Set the onChange handler to be this function
     character.onChange = () => {
-      character.save().then( character => {
-        this.onCharacterLoad( character );
+      character.save().then( loadedCharacter => {
+        this.onCharacterLoad( loadedCharacter );
       });
     }
 
-    this.setState({
-      character: character,
+    // Now set the state because we've loaded the character
+    this.setState( prevState => {
+      return {
+        character: character,
+        navs: prevState.navs.map( nav => {
+          return Object.assign(nav, {
+            isDisabled: character.isInvalid && !nav.showsWhenInvalid,
+          });
+        }),
+      };
     });
   }
 
   componentDidMount() {
-    this.onSelectNav(this.state.navs[0]);
+    // TODO: get this from the user options
     Character.load(1).then( character => {
       this.onCharacterLoad(character);
     });
+    this.onSelectNav(this.state.navs[1]);
   }
 
   renderActiveNav(navs, props) {
@@ -92,7 +106,7 @@ export class App extends React.Component {
       return <Loading/>;
     }
     if ( !activeNav.component ) {
-      console.warn(`Naviation ${activeNav.name} has no component`)
+      console.warn(`Navigation ${activeNav.name} has no component`);
       return null;
     }
 
@@ -104,10 +118,14 @@ export class App extends React.Component {
       character: this.state.character,
     };
     return <div id="page">
-      <Navigation navs={this.state.navs} onSelectNav={this.onSelectNav}/>
+      <Navigation
+        navs={this.state.navs}
+        onSelectNav={this.onSelectNav}/>
       { this.renderActiveNav(this.state.navs, windowProps)}
       <DebugFooter />
-      <Modal />
+      <ErrorBoundary>
+        <Modal />
+      </ErrorBoundary>
     </div>;
   }
 }

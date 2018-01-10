@@ -4,7 +4,7 @@
   "description": "A system agnostic RPG character manager",
   "author": "Etskh",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "scripts": {
     "build": "gulp",
     "dev": "nodemon",

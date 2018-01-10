@@ -3,7 +3,7 @@ import { Row, Col, Button, } from '../components/Core';
 import NavigationWindow from '../components/NavigationWindow';
 import HealthBarColumn from '../components/HealthBar';
 import StatButton from '../components/StatButton';
-import SkillActions from '../components/SkillActions';
+import ActionList from '../components/ActionList';
 
 export default class CombatView extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ export default class CombatView extends React.Component {
         </Col>
       </Row><Row>
         <Col>
-          <SkillActions
+          <ActionList
             character={this.props.character}
             when='combat'/>
         </Col>

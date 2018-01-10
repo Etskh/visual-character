@@ -95,6 +95,18 @@ export const SKILLS = [{
     when: 'world',
     type: 'conversation',
     description: 'Lie to somebody.',
+    blocks: [{
+      type: 'roll',
+      comparison: 'against',
+      target: 'sense motive',
+      isTargetSecret: true,
+    }, {
+      type: 'success',
+      text: 'You lie successfully... you presume',
+    }, {
+      type: 'failure',
+      text: 'They see through your charade',
+    }],
   }],
 }, {
   name: 'climb',
@@ -104,13 +116,22 @@ export const SKILLS = [{
   name: 'knowledge (arcana)',
   stat: 'int',
 }, {
+  name: 'knowledge (dungeoneering)',
+  stat: 'int',
+}, {
+  name: 'knowledge (geography)',
+  stat: 'int',
+}, {
+  name: 'knowledge (nature)',
+  stat: 'int',
+}, {
   name: 'perception',
   stat: 'wis',
   actions: [{
-    name: 'Perception',
+    name: 'Look / Listen',
     when: 'world',
-    type: 'audio/visual',
-    description: 'Perceive the area with your eyes; try to spot anomalies.',
+    type: 'reaction',
+    description: 'Perceive the area with your eyes and ears.',
   }],
 }, {
   name: 'sense motive',
@@ -118,8 +139,20 @@ export const SKILLS = [{
   actions: [{
     name: 'Sense Motive',
     when: 'world',
-    type: 'conversation',
+    type: 'reaction',
     description: 'Discern lies from the interactions you have with other characters',
+    blocks: [{
+      type: 'roll',
+      comparison: 'against',
+      target: 'bluff',
+      isTargetSecret: true,
+    }, {
+      type: 'success',
+      text: 'You see through their deceit',
+    }, {
+      type: 'failure',
+      text: 'They must not be lying to you',
+    }],
   }],
 }, {
   name: 'spellcraft',
@@ -132,17 +165,29 @@ export const SKILLS = [{
   }],
 }, {
   name: 'stealth',
-  sizeTranslator: size => (size * -4),
   stat: 'dex',
   hasCheckPenalty: true,
   actions: [{
     name: 'Sneak',
     when: 'combat',
+    duration: 'move',
     type: 'move',
-    description: '',
+    description: 'Move undetected around a battle field',
     data: {
       move_speed_ratio: 0.5,
     },
+    blocks: [{
+      type: 'roll',
+      comparison: 'against',
+      target: 'perception',
+      isTargetSecret: true,
+    }, {
+      type: 'success',
+      text: 'You meld into the shadows and move half your move speed',
+    }, {
+      type: 'failure',
+      text: 'You still move half your speed, but you aren\'t moving as clandestinely as you think you are.',
+    }],
   }],
 }];
 
@@ -216,29 +261,10 @@ export const getEncumbranceBracket = (weight, lightLoad) => {
 };
 
 
-export const CHARACTER_DATA =
-  // str, dex, etc
-  // and str_mod, dex_mod, etc.
-  STATS.concat(STATS.map(stat => `${stat}_mod`)).concat([
-    'size',
-    'total_hp',
-    'check_penalty',
-    'ac',
-    'ac_flatfooted',
-    'ac_touch',
-    'bab',
-    'level',
-    'fort_save',
-    'ref_save',
-    'will_save',
-    'light_load',
-    'current_load',
-  ]).concat(SKILLS.map(skill => `skill_${skill.name}`));
-
 export const getNextLevel = (currentLevel) => {
   const choices = [];
   // if the next level is odd, add a feat
-  if( (currentLevel + 1) % 2 === 1) {
+  if ((currentLevel + 1) % 2 === 1) {
     choices.push({
       type: 'feat',
       decision: null,
@@ -246,17 +272,28 @@ export const getNextLevel = (currentLevel) => {
     });
   }
   // If the next level is divisible by four, add a stat-point
-  if( (currentLevel + 1) % 4 === 0) {
+  if ((currentLevel + 1) % 4 === 0) {
     choices.push({
       type: 'stat',
       decision: null,
       reason: `level ${currentLevel + 1}`,
     });
   }
-  
+
   return {
     level: currentLevel + 1,
     exp: 2000, // TODO: fix this
-    choices: choices,
+    choices,
   };
-}
+};
+
+
+export const STARTING_CHOICES = [{
+  type: 'class',
+  reason: 'new character',
+  decision: null,
+}, {
+  type: 'race',
+  reason: 'new character',
+  decision: null,
+}];

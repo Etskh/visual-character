@@ -194,13 +194,13 @@ function InventoryItems(items) {
                 style={{
                   display: section.collapsed ? 'inline' : 'none',
                 }}
-                className="fa fa-plus-square-o"
+                className="fa fa-chevron-right"
                 aria-hidden="true"></i>
               <i id={`toggle-open-${section.name}`}
                 style={{
                   display: !section.collapsed ? 'inline' : 'none',
                 }}
-                className="fa fa-minus-square-o" aria-hidden="true"></i>
+                className="fa fa-chevron-down" aria-hidden="true"></i>
               {section.name}
             </h5>
           </button>

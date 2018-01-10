@@ -3,11 +3,9 @@ import {
   STATS,
   CHOICE_TYPES,
   CHOICE_REASONS,
-  CHARACTER_DATA,
   SKILLS,
-  SLOTS,
 } from './constants';
-import Race from './Race';
+// import Race from './Race'; TODO: use this component to get race info
 import * as Items from './Items';
 import Fetch from './Fetch';
 import Console from './log';
@@ -24,10 +22,8 @@ export const parseData = (character) => {
   //
   // Get the stats
   //
-  const getMod = (v) => {
-    return Math.floor(v / 2) - 5;
-  }
-  STATS.forEach( stat => {
+  const getMod = v => Math.floor(v / 2) - 5;
+  STATS.forEach((stat) => {
     dataCtx[stat] = createData(stat);
     dataCtx[`${stat}_mod`] = createData(`${stat}_mod`, getMod);
     dataCtx[`${stat}_mod`].addData(dataCtx[stat]);
@@ -40,6 +36,7 @@ export const parseData = (character) => {
     'ac',
     'check_penalty',
     'total_hp',
+    'light_load',
     'current_load',
     // action stuff
     'attack',
@@ -57,26 +54,31 @@ export const parseData = (character) => {
     'ac_from_size',
     'attack_from_size',
     'skill_stealth_from_size',
-  ].forEach( stat => {
+  ].forEach((stat) => {
     dataCtx[stat] = createData(stat);
   });
 
   //
   // Skills section that includes check penalties
   //
-  SKILLS.forEach( skill => {
+  SKILLS.forEach((skill) => {
     const name = `skill_${skill.name}`;
     dataCtx[name] = createData(name);
+    // NOTE: skill points are added later
     dataCtx[name].addData(dataCtx[`${skill.stat}_mod`]);
-    if( skill.hasCheckPenalty ) {
+    if (skill.hasCheckPenalty) {
       dataCtx[name].addData(dataCtx.check_penalty);
     }
   });
+  //
+  // NOTE: All data should be created by this point in the function!
+  //
+
 
   //
   // Carry capacity
   //
-  dataCtx.light_load = createData('light_load', (v) => {
+  dataCtx.light_load.setTransformer(() => {
     const str = dataCtx.str.getTotal();
     const size = dataCtx.size.getTotal();
     let sizeMultiple = 2 ** (size + (size < 0 ? 1 : 0));
@@ -85,23 +87,19 @@ export const parseData = (character) => {
       sizeMultiple = 0.75;
     }
     return Math.round((
-        (str * 2.5) +
+      (str * 2.5) +
         (1.25 ** str)
-      ) * sizeMultiple);
+    ) * sizeMultiple);
   });
-
-  //
-  // NOTE: All data should be created by this point in the function!
-  //
 
   //
   // Defenses
   //
   dataCtx.ac.addBaseValue(10);
   dataCtx.ac.addData(dataCtx.dex_mod);
-  //dataCtx.ac_flatfooted.addBaseValue(10);
-  //dataCtx.ac_touch.addBaseValue(10);
-  //dataCtx.ac_touch.addData(dataCtx.dex_mod);
+  // dataCtx.ac_flatfooted.addBaseValue(10);
+  // dataCtx.ac_touch.addBaseValue(10);
+  // dataCtx.ac_touch.addData(dataCtx.dex_mod);
   dataCtx.will_save.addData(dataCtx.wis_mod);
   dataCtx.ref_save.addData(dataCtx.dex_mod);
   dataCtx.fort_save.addData(dataCtx.con_mod);
@@ -121,51 +119,61 @@ export const parseData = (character) => {
   // Stats affected by size
   //
   const sizeAffecting = {
-    'str': 2,   // gets stronger as embiggen
-    'dex': -2,  // gets more nimble as they get small
-    'ac': -1,   // smaller is harder to hit
-    'attack': -1, // hitting bigger stuff is easier
-    'skill_stealth': -4, // stealth is easier when you're small
+    str: 2, // gets stronger as embiggen
+    dex: -2, // gets more nimble as they get small
+    ac: -1, // smaller is harder to hit
+    attack: -1, // hitting bigger stuff is easier
+    skill_stealth: -4, // stealth is easier when you're small
   };
-  Object.keys(sizeAffecting).forEach( stat => {
+  Object.keys(sizeAffecting).forEach((stat) => {
     const name = `${stat}_from_size`;
     dataCtx[stat].addData(dataCtx[name]);
     dataCtx[name].addData(dataCtx.size);
-    dataCtx[name].setTransformer((val) => {
-      return val * sizeAffecting[stat];
-    });
+    dataCtx[name].setTransformer(val => val * sizeAffecting[stat]);
   });
 
   //
   // Choices
   //
-  character.choices.forEach( choice => {
-    if( choice.type === 'base_stat' && choice.target ) {
+  character.choices.forEach((choice) => {
+    if (choice.type === 'base_stat' && choice.target) {
       /* {
         type: 'base_stat',
         target: 'str',
         decision: 10,
       } */
       dataCtx[choice.target].addChoice(choice.type, parseInt(choice.decision, 10), choice);
-    }
-    else if( choice.type === 'hitpoints' ) {
+    } else if (choice.type === 'hitpoints') {
+      /*
+        type: 'hitpoints',
+        decision: '6',
+        reason: 'level 1 wizard',
+      */
       dataCtx.total_hp.addChoice(choice.type, parseInt(choice.decision, 10), choice);
-    }
-    else if( choice.type === 'class' ) {
+    } else if (choice.type === 'class') {
       /*
         type: 'class',
         decision: 'wizard',
         reason: 'level 1',
       */
       dataCtx.level.addChoice(`${choice.reason} ${choice.decision}`, 1, choice);
-    }
-    else if( choice.type === 'skill' && choice.target ) {
-      dataCtx[`skill_${choice.target}`].addChoice(choice.type, parseInt(choice.decision, 10), choice);
-    }
-    else if( choice.type === 'race' && choice.decision ) {
+    } else if (choice.type === 'skill' && choice.target) {
+      /*
+        type: 'skill',
+        decision: '6',
+        reason: 'level 1',
+        target: 'spellcraft',
+      */
+      dataCtx[`skill_${choice.target}`].addChoice('points', parseInt(choice.decision, 10), choice);
+    } else if (choice.type === 'race' && choice.decision) {
+      /*
+        type: 'race',
+        decision: 'goblin',
+        reason: 'level 1',
+      */
       // TODO: load race in based on decision
       // load race
-      let race = {
+      const race = {
         name: 'goblin',
         data: {
           // nimble but unlikable
@@ -174,12 +182,11 @@ export const parseData = (character) => {
           size: -1,
         },
       };
-      Object.keys(race.data).forEach( field => {
+      Object.keys(race.data).forEach((field) => {
         dataCtx[field].addChoice(choice.decision, race.data[field], choice);
       });
-    }
-    else {
-      // TODO: how to handle feats???
+    } else {
+      // TODO: how to do feats???
     }
   });
 
@@ -228,20 +235,45 @@ export const parseData = (character) => {
   });
 
   return dataCtx;
-}
+};
+
+
+const parseActions = () => {
+  const actions = [];
+
+  // Add skill actions
+  SKILLS.forEach((skill) => {
+    if (skill.actions) {
+      skill.actions.forEach((action) => {
+        actions.push({
+          ...action,
+          stat: `skill_${skill.name}`,
+        });
+      });
+    }
+  });
+
+  // Add combat actions based on items
+  actions.push({
+    name: 'Shoot heavy crossbow',
+    when: 'combat',
+    stat: 'ranged_main_attack',
+    type: 'ranged',
+    description: 'Unleash a bolt from your readied crossbow',
+    blocks: [{
+      type: 'roll',
+      stat: 'ranged_main_attack',
+      target: 'AC',
+    }],
+  });
+
+  return actions;
+};
 
 
 const download = (id) => {
   Console.log(`Downloading character ${id}...`);
   return Fetch.get('character', id).then((character) => {
-    // Empty objects arent saved
-    if (!character.slots) {
-      character.slots = {};
-    }
-    if (!character.inventory) {
-      character.inventory = [];
-    }
-
     // Check over-all object
     checkDataAgainstRules(character, {
       id: 'number',
@@ -280,107 +312,40 @@ const download = (id) => {
       checkDataAgainstRules(character.fields[fieldType], characterFieldRules[fieldType]);
     });
 
-    // Check slots
-    Object.keys(character.slots).forEach((slotName) => {
-      if (SLOTS.indexOf(slotName) === -1) {
-        Console.error(`Unknown slot name ${slotName} on character ${character.id}`);
-      }
-    });
-
-    return character;
-  });
-};
-
-/*
-const parseClass = (character) => {
-  // Class data
-  //
-  const classesData = [{
-    id: 1,
-    name: 'wizard',
-    bab_growth: 'slow',
-    fort_save_growth: 'bad',
-    ref_save_growth: 'bad',
-    will_save_growth: 'good',
-    features: [],
-  }];
-  const growthTypes = {
-    slow: lvl => Math.floor(lvl / 2),
-    bad: lvl => Math.floor(lvl / 3),
-    good: lvl => Math.floor(lvl / 2) + 2,
-  };
-  function getMetric(growth, level) {
-    if (!growthTypes[growth]) {
-      Console.error(`Unknown growth type "${growth}"`);
-      return 0;
-    }
-
-    return growthTypes[growth](level);
-  }
-
-  const classLevels = {
-    // empty
-  };
-  character.choices.forEach((choice) => {
-    if (choice.type === 'class') {
-      if (!classLevels[choice.decision]) {
-        classLevels[choice.decision] = 1;
-      } else {
-        classLevels[choice.decision] += 1;
-      }
-    }
-  });
-  const saves = [
-    'bab',
-    'fort_save',
-    'ref_save',
-    'will_save',
-  ];
-  saves.forEach((field) => {
-    character.data[field] = {
-      // empty
-    };
-    Object.keys(classLevels).forEach((className) => {
-      const growthMetric = classesData.find(cls => className === cls.name)[`${field}_growth`];
-      character.data[field][`level ${classLevels[className]} ${className}`] =
-        getMetric(growthMetric, classLevels[className]);
+    return Object.assign(character, {
+      inventory: character.inventory || [],
     });
   });
-
-  character.data.fort_save.con_mod = character.data.con_mod.total;
-  character.data.ref_save.dex_mod = character.data.dex_mod.total;
-  character.data.will_save.wis_mod = character.data.wis_mod.total;
-
-  return Promise.resolve(character);
 };
-*/
 
 
 const parseItems = (character) => {
-
   const items = [];
   character.inventory.forEach((item) => {
     items.push(Items.getItem(item));
   });
 
-  items.forEach((item) => {
+  return items.map((item) => {
     // Iterate the last number on the item
     let count = 1;
     let { name } = item; // equivalent to `let name = item.name;`
-    const currentItems = character.newData.current_load.getFields();
-    while (currentItems.find( field => field.name === name )) {
+    const currentItems = character.data.current_load.getFields();
+    const itemFinder = field => (field.name === name);
+    while (currentItems.find(itemFinder)) {
       // Search for the name 'morningstar 2' in the current_load
       // and if it's there, make it 'morningstar 3'
       count += 1;
       name = `${item.count} ${item.name} ${count}`;
     }
-    // Set the key to be a unique name for the item
-    item.key = name;
-    // produces 'morningstar', 'morningstar 2', 'morningstar 3'
-    character.newData.current_load.addValue(name, item.itemType.weight * item.count);
-  });
 
-  return items;
+    // produces 'morningstar', 'morningstar 2', 'morningstar 3'
+    character.data.current_load.addValue(name, item.itemType.weight * item.count);
+
+    return Object.assign(item, {
+      // Set the key to be a unique name for the item
+      key: name,
+    });
+  });
 };
 
 /*
@@ -407,59 +372,25 @@ const parseRace = (character) => {
 */
 
 
-
-const parse = (character) => {
+const parse = (characterData) => {
   // Initialize the data fields
-  /*character.data = {
-    // empty
-  };
-  CHARACTER_DATA.forEach((field) => {
-    character.data[field] = {
-      total: 0,
-    };
-  });*/
+  const character = Object.assign({}, characterData);
 
   // Add the player's choices for the base stats
   // Check if the player is invalid!
-  const statChoice = character.choices.find(choice => choice.type === 'base_stat');
+  const statChoice = characterData.choices.find(choice => choice.type === 'base_stat');
   if (!statChoice) {
     Console.error('Character hasn\'t chosen stats yet');
     character.isInvalid = true;
   }
-  character.isInvalid = true;
+  // character.isInvalid = true;
 
-  // Level accumulation
-  //character.choices.filter(choice => choice.type === 'class').forEach((choice) => {
-  //  character.data.level[choice.reason] = 1;
-  //});
-
-  ///return parseRace(character)
-    //.then(totalFields)
-    //.then(parseItems)
-    //.then(parseMods)
-    //.then(totalFields)
-    //.then(parseClass)
-    //.then(parseSkills)
-    //.then(totalFields)
-    //.then(parseRemainingData)
-    //.then(totalFields)
-    //.then((finalCharacter) => {
-      // Check that we have all the field rules we need
-      //
-      // All fields are objects so let's just put them in as an array
-      // and then process them to add the value
-      // TODO: move this to tests
-      /*checkDataAgainstRules(character.data, CHARACTER_DATA.reduce((acc, cur) => {
-        acc[cur] = 'object';
-        return acc;
-      }, {}));
-      */
-
-  character.newData = parseData(character);
+  character.data = parseData(character);
   character.items = parseItems(character);
+  character.actions = parseActions(character);
+  Console.log(character);
 
   return character;
-    //});
 };
 
 
@@ -473,7 +404,7 @@ export default class Character {
   }
 
   get(field) {
-    if (!this.newData[field]) {
+    if (!this.data[field]) {
       // If the data field doesn't exist
       if (this.fields.current[field]) {
         // Return the current value for the field they're asking for
@@ -490,7 +421,7 @@ export default class Character {
     }
 
     // Return the total of the computed field data
-    return this.newData[field].getTotal();
+    return this.data[field].getTotal();
   }
 
   takeDamage(value) {
@@ -518,12 +449,12 @@ export default class Character {
   // TODO: add a reason parameter so we can pick which level the
   // skillpoints should be deducted from.
   addSkillPoints(points) {
-    // TODO: make sure we give it an object like {
+    // TODO: make sure we get an object like {
     //  spellcraft: 9,
     //  craft (carpentry): 2,
-    //}
+    // }
     let pointCount = 0;
-    const choicesToAdd = Object.keys(points).map( skillName => {
+    const choicesToAdd = Object.keys(points).map((skillName) => {
       pointCount += points[skillName];
       // Create the skill
       return {
@@ -532,19 +463,17 @@ export default class Character {
         target: skillName,
       };
     });
-    const choiceWithPoints = this.choices.find( choice => {
-      return choice.type === 'skill' && !choice.target;
-    });
+    const choiceWithPoints = this.choices.find(choice => choice.type === 'skill' && !choice.target);
     const newPointCount = parseInt(choiceWithPoints.decision, 10) - pointCount;
-    // equal 0, then remove it
-    if( newPointCount === 0) {
+    if (newPointCount === 0) {
+      // equal 0, then remove it
       this.choices.splice(this.choices.indexOf(choiceWithPoints), 1);
-    }
-    else {
+    } else {
+      // otherwise, just subtract the points
       choiceWithPoints.decision = newPointCount;
     }
 
-    choicesToAdd.forEach( choice => {
+    choicesToAdd.forEach((choice) => {
       // TODO: If the choice already exists, increase it by the new value
       // if it doesn't then push it.
       this.choices.push(choice);

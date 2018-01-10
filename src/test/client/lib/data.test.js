@@ -2,13 +2,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import expect from 'expect';
 import {
-  checkDataAgainstRules,
-} from '../../../client/lib/core';
-import {
-  SLOTS,
-  CRAFT_SKILLS,
-} from '../../../client/lib/constants';
-import {
   createData,
 } from '../../../client/lib/Data';
 
@@ -36,9 +29,7 @@ describe('Lib:Data', () => {
   });
 
   it('can have transformations', () => {
-    const data = createData('str', (val) => {
-      return (val / 2) - 5;
-    });
+    const data = createData('str', val => (val / 2) - 5);
     data.addBaseValue(12);
 
     expect(data.getTotal()).toBe(1);
@@ -83,9 +74,7 @@ describe('Lib:Data', () => {
   it('can add data object', () => {
     const ctx = {
       str: createData('str'),
-      str_mod: createData('str_mod', (val) => {
-        return ( val / 2) - 5;
-      }),
+      str_mod: createData('str_mod', val => (val / 2) - 5),
     };
     ctx.str.addBaseValue(18);
 
@@ -98,7 +87,7 @@ describe('Lib:Data', () => {
           str: 2,
         },
       },
-    })
+    });
     // We expect it will add up the sources ( 18 + 2 == 20 ) 20 / 2 - 5 = 5
     expect(ctx.str_mod.getTotal()).toBe(5);
   });

@@ -14,15 +14,25 @@ const stats = {
     fullname: 'Armour class',
     description: 'The defences you have against physical attacks. A higher armour class helps avoid attacks completely. You can raise your armour class by wearing armour (if you are proficient), by being dexterous, or through magic.',
   },
+  str_from_size: {
+    name: 'Str from size',
+    fullname: 'Strength from size',
+    alias: 'size',
+  },
+  dex_from_size: {
+    name: 'Dex from size',
+    fullname: 'Dexterity from size',
+    alias: 'size',
+  },
   skill_stealth_from_size: {
     name: 'Size',
     fullname: 'Size',
-    description: 'It is easier to hide away from enemies when you are smaller and much harder to hide from enemies when you are larger.',
+    alias: 'size',
   },
   ac_from_size: {
     name: 'Size',
     fullname: 'Size',
-    description: 'You are harder to hit when you are smaller, and easier to hit when you were larger.',
+    alias: 'size',
   },
   check_penalty: {
     name: 'CP',
@@ -33,6 +43,7 @@ const stats = {
     name: 'Size',
     fullname: 'Size modifier',
     description: 'Smaller and larger creatures are better, or worse, at certain tasks. Smaller creatures will be harder to hit, and harder to spot when they hide. Larger creatures, on the other hand will be better at bullying smaller creatures.',
+    hideFields: true,
   },
   fort_save: {
     name: 'Fort',
@@ -53,6 +64,10 @@ const stats = {
     name: 'Skill points',
     fullname: 'Skill points',
     description: 'These are the points you can assin to each skill, individually. You gain new points at each level, at a rate based on the class you level into plus your intelligence modifier',
+  },
+  base_stat: {
+    name: 'Base',
+    fullname: 'Base',
   }
 };
 
@@ -68,11 +83,12 @@ STATS.forEach((stat) => {
   };
   stats[stat] = {
     name: stat,
-    fullname: stat,
+    fullname: statNames[stat],
     description: '[tbd]',
   };
   stats[`${stat}_mod`] = {
     name: `${stat} modifier`,
+    alias: stat,
     fullname: `${statNames[stat]} modifier`,
     description: `You take a ${statNames[stat]}. You take a modifier. Ungh! ${statNames[stat]} modifier!`,
   };
@@ -104,13 +120,14 @@ SKILLS.forEach((skill) => {
 
 Race.getStats().forEach((race) => {
   stats[race.name] = race;
+  stats[race.name].hideFields = true;
 });
 
 
 export default class Stats {
   static get(key, data) {
-    if( !stats[key] ) {
-      console.error('Unknown stat ' + key);
+    if (!stats[key]) {
+      throw new Error(`Unknown stat ${key}`);
     }
 
     return Object.assign(stats[key], {

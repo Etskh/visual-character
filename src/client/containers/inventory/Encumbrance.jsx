@@ -105,7 +105,7 @@ export default function EncumbranceSection(character) {
     <Row>
       <Col>
         {'Encumbrance: '}
-        <button className='btn btn-info btn-sm'
+        <button className='btn btn-warning btn-sm'
           onClick={() => {
             Modal.open('Encumbrance', EncumbranceInfo(bracket, character));
           }}>{bracket.name}</button>
