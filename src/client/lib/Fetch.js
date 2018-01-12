@@ -2,46 +2,36 @@
 
 export default class Fetch {
   static get(model, id) {
-    if( Fetch.jQuery === null ) {
+    if (Fetch.jQuery === null) {
       Fetch.jQuery = $;
     }
     return new Promise((resolve, reject) => {
       Fetch.jQuery.ajax({
         url: `/api/${model}/${id}`,
         method: 'GET',
-        success: (obj) => {
-          return resolve(obj);
-        },
-        error: (jqXhr, textStatus, errorThrown) => {
-          return reject({
-            textStatus,
-            httpError: errorThrown,
-            xhr: jqXhr,
-          });
-        },
+        success: obj => resolve(obj),
+        error: (_, textStatus, errorThrown) => reject(new Error(JSON.stringify({
+          textStatus,
+          httpError: errorThrown,
+        }))),
       });
     });
   }
 
   static save(model, id, data) {
-    if( Fetch.jQuery === null ) {
+    if (Fetch.jQuery === null) {
       Fetch.jQuery = $;
     }
     return new Promise((resolve, reject) => {
       Fetch.jQuery.ajax({
         url: `/api/${model}/${id}`,
         method: 'POST',
-        data: data,
-        success: (obj) => {
-          return resolve(obj);
-        },
-        error: (jqXhr, textStatus, errorThrown) => {
-          return reject({
-            textStatus,
-            httpError: errorThrown,
-            xhr: jqXhr,
-          });
-        },
+        data,
+        success: obj => resolve(obj),
+        error: (_, textStatus, errorThrown) => reject(new Error(JSON.stringify({
+          textStatus,
+          httpError: errorThrown,
+        }))),
       });
     });
   }

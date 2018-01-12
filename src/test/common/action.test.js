@@ -54,9 +54,9 @@ describe('Common:Action', () => {
         random: 111,
       };
       Action.create('firingAction', callback);
-      Action.fire('firingAction', actionData).then( () => {
+      Action.fire('firingAction', actionData).then(() => {
         expect(callback.calledWith(actionData)).toBe(true);
-      })
+      });
     });
     it('calls subscribe instances callback', () => {
       const callback = sinon.spy();
@@ -85,9 +85,7 @@ describe('Common:Action', () => {
         other: 111,
       };
       const callback = sinon.spy();
-      Action.create('promiseChangeAction', () => {
-        return Promise.resolve(changedData);
-      });
+      Action.create('promiseChangeAction', () => Promise.resolve(changedData));
       Action.subscribe(__filename, 'promiseChangeAction', callback);
       return Action.fire('promiseChangeAction', null).then(() => {
         expect(callback.calledWith(changedData)).toEqual(true);
@@ -106,7 +104,7 @@ describe('Common:Action', () => {
       return Promise.all([
         Action.fire('unsubAllAction_1'),
         Action.fire('unsubAllAction_2'),
-      ]).then( () => {
+      ]).then(() => {
         expect(callback.called).toBe(false);
       });
     });

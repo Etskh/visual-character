@@ -9,7 +9,6 @@ export default class User {
   }
 
   saveSetting(key, value) {
-    console.log('User saving setting: ', key, value);
     this.settings[key] = value;
     return this.save();
   }

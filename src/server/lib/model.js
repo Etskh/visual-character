@@ -1,15 +1,14 @@
-// TODO: Change this to 'impot/export'
-const fs = require('fs');
-const logger = require('./logger');
+import fs from 'fs';
+import Logger from './logger';
 
-function getModelPath(model) {
+export function getModelPath(model) {
   return `./data/${model}s.json`;
 }
 
-function loadAll(model) {
+export function loadAll(model) {
   return new Promise((resolve, reject) => fs.readFile(getModelPath(model), (err, contents) => {
     if (err) {
-      logger.error({
+      Logger.error({
         action: 'model::loadAll',
         model,
         err,
@@ -20,7 +19,7 @@ function loadAll(model) {
     try {
       data = JSON.parse(contents.toString());
     } catch (jsonParseErr) {
-      logger.error({
+      Logger.error({
         action: 'model::loadAll',
         model,
         jsonParseErr,
@@ -31,13 +30,12 @@ function loadAll(model) {
   }));
 }
 
-
-function saveAll(model, data) {
+export function saveAll(model, data) {
   return new Promise((resolve, reject) => {
     const allCharacterData = JSON.stringify(data, null, 2);
     return fs.writeFile(getModelPath(model), allCharacterData, (writeErr) => {
       if (writeErr) {
-        console.error({
+        Logger.error({
           action: 'model::saveAll',
           model,
           data,
@@ -50,41 +48,34 @@ function saveAll(model, data) {
   });
 }
 
-module.exports = {
-  get: (model, id) => new Promise((resolve, reject) => loadAll(model).then((all) => {
-    const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
-    if (!character) {
-      logger.warn({
-        action: 'model::get',
-        model,
-        id,
-        err: `No ${model} with id ${id}`,
-      });
-      return resolve(null);
-    }
-    return resolve(character);
-  })),
-  save: (model, id, data) => loadAll(model).then((all) => {
-    const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
-    if (!character) {
-      console.error({
-        action: 'model::save',
-        model,
-        id,
-        err: `No ${model} with id ${id}`,
-      });
-      return Promise.reject(new Error(`No ${model} with id ${id}`));
-    }
-    // Write the new fields into this
-    Object.keys(character).forEach((field) => {
-      character[field] = data[field];
+export const get = (model, id) => new Promise(resolve => loadAll(model).then((all) => {
+  const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
+  if (!character) {
+    Logger.warn({
+      action: 'model::get',
+      model,
+      id,
+      err: `No ${model} with id ${id}`,
     });
-    return saveAll(model, all).then(() => {
-      return character;
-    });
-  }),
+    return resolve(null);
+  }
+  return resolve(character);
+}));
 
-  getModelPath: getModelPath,
-  saveAll: saveAll,
-  loadAll: loadAll,
-};
+export const save = (model, id, data) => loadAll(model).then((all) => {
+  const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
+  if (!character) {
+    Logger.error({
+      action: 'model::save',
+      model,
+      id,
+      err: `No ${model} with id ${id}`,
+    });
+    return Promise.reject(new Error(`No ${model} with id ${id}`));
+  }
+  // Write the new fields into this
+  Object.keys(character).forEach((field) => {
+    character[field] = data[field];
+  });
+  return saveAll(model, all).then(() => character);
+});

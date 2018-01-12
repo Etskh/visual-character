@@ -1,5 +1,5 @@
 
-export const _actions = {};
+export const actions = {};
 
 export function create(name, callback) {
   const action = {
@@ -9,29 +9,29 @@ export function create(name, callback) {
   };
 
   // If it already exists, then throw an exception
-  if ( _actions[name] ) {
+  if (actions[name]) {
     throw new Error(`Action ${name} already exists! Pick a different name`);
   }
-  _actions[name] = action;
+  actions[name] = action;
 
   return action;
 }
 
 export function get(name) {
-  if ( ! _actions[name] ) {
+  if (!actions[name]) {
     throw new Error(`No action named ${name}!`);
   }
-  return _actions[name];
+  return actions[name];
 }
 
-export function subscribe(instance, actionName, callback ) {
+export function subscribe(instance, actionName, callback) {
   const action = get(actionName);
   action.instances[instance] = callback;
 }
 
 export function unsubscribe(instance, actionName) {
   const action = get(actionName);
-  if( action.instances[instance] ) {
+  if (action.instances[instance]) {
     action.instances[instance] = null;
   }
 }
@@ -41,23 +41,22 @@ export function fire(actionName, data) {
   // Simplest case: data is already good to go, and we dont have a defaultCallback
   // that can transform the data before the listeners
   let resultingData = Promise.resolve(data);
-  if( action.defaultCallback ) {
+  if (action.defaultCallback) {
     const defaultData = action.defaultCallback(data);
     // if we were handed something
-    if( defaultData ) {
-      if( typeof defaultData.then === 'function' ) {
+    if (defaultData) {
+      if (typeof defaultData.then === 'function') {
         // If it's a promise, then it's all good in the hood
         resultingData = defaultData;
-      }
-      else {
+      } else {
         // Otherwise, we need to wrap it up in a promise
         resultingData = Promise.resolve(defaultData);
       }
     }
   }
-  return resultingData.then( modifiedData => {
-    Object.keys(action.instances).forEach( instance => {
-      if( action.instances[instance] ) {
+  return resultingData.then((modifiedData) => {
+    Object.keys(action.instances).forEach((instance) => {
+      if (action.instances[instance]) {
         action.instances[instance](modifiedData);
       }
     });
@@ -65,8 +64,7 @@ export function fire(actionName, data) {
 }
 
 export function unsubscribeAll(instance) {
-  Object.keys(_actions).forEach( actionName => {
-    const action = get(actionName);
+  Object.keys(actions).forEach((actionName) => {
     unsubscribe(instance, actionName);
   });
 }

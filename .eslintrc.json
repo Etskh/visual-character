@@ -1,23 +1,26 @@
 {
-  "env": {
-    "browser": true,
-    "node": true
-  },
-  "rules": {
-    "comma-dangle": [
-      "error",
-      "only-multiline"
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "comma-dangle": [
+            "error",
+            "only-multiline"
+        ],
+        "no-underscore-dangle": [
+            "off"
+        ]
+    },
+    "globals": {
+        "document": false,
+        "React": false,
+        "ReactDOM": false
+    },
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
     ]
-  },
-  "globals": {
-    "document": false,
-    "React": false,
-    "ReactDOM": false
-  },
-  "extends": "airbnb",
-  "plugins": [
-    "react",
-    "jsx-a11y",
-    "import"
-  ]
 }
