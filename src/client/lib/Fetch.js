@@ -24,17 +24,28 @@ export default class Fetch {
   }
 
   static save(model, id, data) {
+    if( Fetch.jQuery === null ) {
+      Fetch.jQuery = $;
+    }
     return new Promise((resolve, reject) => {
-      $.post(`/api/${model}/${id}`, data, (obj, success) => {
-        if (success !== 'success') {
-          return reject(obj);
-        }
-
-        return resolve(obj);
+      Fetch.jQuery.ajax({
+        url: `/api/${model}/${id}`,
+        method: 'POST',
+        data: data,
+        success: (obj) => {
+          return resolve(obj);
+        },
+        error: (jqXhr, textStatus, errorThrown) => {
+          return reject({
+            textStatus,
+            httpError: errorThrown,
+            xhr: jqXhr,
+          });
+        },
       });
     });
   }
 }
 
-
+// For mocking the tests, let's export jQuery
 Fetch.jQuery = null;

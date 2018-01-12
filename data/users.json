@@ -7,9 +7,9 @@
     ],
     "activeCharacter": "1",
     "settings": {
-      "weight": "pounds",
+      "weight": "kilograms",
       "distance": "squares",
-      "tab": "Options"
+      "tab": "Inventory"
     }
   }
 ]

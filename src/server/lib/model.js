@@ -37,7 +37,7 @@ function saveAll(model, data) {
     const allCharacterData = JSON.stringify(data, null, 2);
     return fs.writeFile(getModelPath(model), allCharacterData, (writeErr) => {
       if (writeErr) {
-        logger.error({
+        console.error({
           action: 'model::saveAll',
           model,
           data,
@@ -67,7 +67,7 @@ module.exports = {
   save: (model, id, data) => loadAll(model).then((all) => {
     const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
     if (!character) {
-      logger.error({
+      console.error({
         action: 'model::save',
         model,
         id,
@@ -79,7 +79,9 @@ module.exports = {
     Object.keys(character).forEach((field) => {
       character[field] = data[field];
     });
-    return saveAll(model, all);
+    return saveAll(model, all).then(() => {
+      return character;
+    });
   }),
 
   getModelPath: getModelPath,

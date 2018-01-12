@@ -3,5 +3,5 @@ const bunyan = require('bunyan');
 
 module.exports = bunyan.createLogger({
   name: 'Visual Character',
-  src: true,
+  // src: true,
 });
