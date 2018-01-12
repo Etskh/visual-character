@@ -37,8 +37,4 @@ export default class Fetch {
 }
 
 
-Fetch.jQuery = {
-  ajax: () => {
-    // empty
-  },
-};
+Fetch.jQuery = null;

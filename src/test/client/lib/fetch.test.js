@@ -8,6 +8,12 @@ import Fetch from '../../../client/lib/Fetch';
 
 describe('Lib:Fetch', () => {
 
+  Fetch.jQuery = {
+    ajax: () => {
+      // empty
+    },
+  };
+
   describe('get:success', () => {
     const fixture = {
       id: 42,
