@@ -63,7 +63,6 @@ const stats = {
   points: {
     name: 'Skill points',
     fullname: 'Skill points',
-    description: 'These are the points you can assin to each skill, individually. You gain new points at each level, at a rate based on the class you level into plus your intelligence modifier',
   },
   base_stat: {
     name: 'Base',

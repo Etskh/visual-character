@@ -2,13 +2,23 @@
 
 export default class Fetch {
   static get(model, id) {
+    if( Fetch.jQuery === null ) {
+      Fetch.jQuery = $;
+    }
     return new Promise((resolve, reject) => {
-      $.get(`/api/${model}/${id}`, (obj, success) => {
-        if (success !== 'success') {
-          return reject(obj);
-        }
-
-        return resolve(obj);
+      Fetch.jQuery.ajax({
+        url: `/api/${model}/${id}`,
+        method: 'GET',
+        success: (obj) => {
+          return resolve(obj);
+        },
+        error: (jqXhr, textStatus, errorThrown) => {
+          return reject({
+            textStatus,
+            httpError: errorThrown,
+            xhr: jqXhr,
+          });
+        },
       });
     });
   }
@@ -25,3 +35,10 @@ export default class Fetch {
     });
   }
 }
+
+
+Fetch.jQuery = {
+  ajax: () => {
+    // empty
+  },
+};

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1",
+    "name": "James",
+    "characters": [
+      "1"
+    ],
+    "activeCharacter": "1",
+    "settings": {
+      "weight": "pounds",
+      "distance": "squares",
+      "tab": "Options"
+    }
+  }
+]

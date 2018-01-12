@@ -5,7 +5,7 @@
     "fields": {
       "current": {
         "age": "10.5",
-        "exp": "0",
+        "exp": "500",
         "hitpoints": "10",
         "nonlethal": "0"
       }

@@ -12,8 +12,6 @@ export default class WorldView extends React.Component {
       <ActionList
         character={this.props.character}
         when='world'/>
-      <p>World stuff goes in here</p>
-      <p>{this.props.character.name}</p>
     </NavigationWindow>;
   }
 }

@@ -12,7 +12,6 @@ export default class Modal extends React.Component {
       content: null,
       acceptText: '',
       isHidden: true,
-      history: [],
     };
 
     this.onSetContent = this.onSetContent.bind(this);
@@ -37,7 +36,6 @@ export default class Modal extends React.Component {
     $(`#${modalId}`).on('hide.bs.modal', (e) => {
       self.setState({
         // When we close it, delete the history (no more going back)
-        history: [],
         isHidden: true,
       });
     });
@@ -53,11 +51,6 @@ export default class Modal extends React.Component {
     // some content in here anywhere
 
     // Push the config as the last history
-    this.setState( prevState => {
-      return {
-        history: prevState.history.concat([config]),
-      };
-    });
     this.onSetContent(config);
 
     if( this.isHidden()) {
@@ -84,14 +77,14 @@ export default class Modal extends React.Component {
       $(`#${modalId}`).modal('hide');
     }
 
-    this.setState( prevState => {
+    /*this.setState( prevState => {
       const config = Object.assign({}, this.state.history[this.state.history.length - 2]);
       console.log(config);
       return {
         ...config,
-        history: this.state.history.slice(0, -1),
+        //history: this.state.history.slice(0, -1),
       };
-    });
+    });*/
   }
 
   render() {
@@ -142,23 +135,6 @@ Modal.open = (title, content, acceptText) => {
       content,
       callback: resolve,
     });
-    /*const setContent = () => {
-      modalInstance.onSetContent({
-        title,
-        content,
-        acceptText,
-        callback: resolve,
-      });
-    }
-
-    if( modalInstance.isHidden() ) {
-      setContent();
-      $(`#${modalId}`).modal();
-    }
-    else {
-      // Set a small delay to show the new content
-      setTimeout(setContent, SMALL_DELAY);
-    }*/
   });
 
   return promise;

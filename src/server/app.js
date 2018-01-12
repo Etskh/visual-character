@@ -1,13 +1,12 @@
-
+// TODO: make this Es20115 syntax
 const path = require('path');
 const express = require('express');
 const hbs = require('express-hbs');
 
-
 // Local modules
 const logger = require('./lib/logger');
 const apiRoute = require('./routes/api');
-// const pkg = require('../../package');
+const pkg = require('../../package');
 
 // Create the app
 const app = express();
@@ -24,7 +23,7 @@ app.set('views', path.join(__dirname, '../views'));
 const config = {
   name: 'Visual Character',
   description: 'A system agnostic RPG character manager',
-  version: '0.1',
+  version: pkg.version,
   port: process.env.PORT || 3000,
 };
 
@@ -51,5 +50,5 @@ app.use('/api', apiRoute);
 
 // Listen on configured port
 app.listen(config.port, () => {
-  logger.info([config.name, 'version', config.version, 'running on port', config.port].join(' '));
+  logger.info(`${config.name} version ${config.version} running on port ${config.port}`);
 });

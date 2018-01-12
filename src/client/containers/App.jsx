@@ -1,5 +1,6 @@
 
 import Character from '../lib/Character';
+import User from '../lib/User';
 
 import { ErrorBoundary } from '../components/Core';
 import Navigation from '../components/Navigation';
@@ -11,6 +12,7 @@ import AdvancementView from '../containers/AdvancementView';
 import WorldView from '../containers/WorldView';
 import CombatView from '../containers/CombatView';
 import InventoryView from '../containers/InventoryView';
+import OptionsView from '../containers/OptionsView';
 
 export class App extends React.Component {
   constructor(props) {
@@ -27,7 +29,7 @@ export class App extends React.Component {
       component: WorldView,
     }, {
       name: 'Inventory',
-      icon: 'flask',
+      icon: 'briefcase',
       component: InventoryView,
       //}, {
       //  name: 'Magic',
@@ -39,12 +41,14 @@ export class App extends React.Component {
       //}, {
       //  name: 'Companions',
       //  icon: 'paw',
-      //}, {
-      //  name: 'Options',
-      //  icon: 'gear',
+    }, {
+        name: 'Options',
+        icon: 'gear',
+        component: OptionsView,
     }];
 
     this.state = {
+      user: null,
       character: null,
       navs: navs.map( nav => {
         return Object.assign(nav, {
@@ -56,14 +60,38 @@ export class App extends React.Component {
 
     this.onSelectNav = this.onSelectNav.bind(this);
     this.onCharacterLoad = this.onCharacterLoad.bind(this);
+    this.onUserLoad = this.onUserLoad.bind(this);
   }
 
   onSelectNav( selectedNav ) {
+    this.state.user.saveSetting('tab', selectedNav.name);
     this.setState( prevState => {
       return {
         navs: prevState.navs.map( nav => {
           return Object.assign(nav, {
             isSelected: selectedNav.name === nav.name,
+          });
+        }),
+      };
+    });
+  }
+
+  onUserLoad(user) {
+    user.onChange = () => {
+      user.save().then( loadedUser => {
+        this.setState({
+          user: loadedUser,
+        });
+      });
+    };
+
+    this.setState( prevState => {
+      return {
+        user: user,
+        // Set the user's last tab open
+        navs: prevState.navs.map( nav => {
+          return Object.assign(nav, {
+            isSelected: nav.name === user.settings.tab,
           });
         }),
       };
@@ -77,7 +105,7 @@ export class App extends React.Component {
       character.save().then( loadedCharacter => {
         this.onCharacterLoad( loadedCharacter );
       });
-    }
+    };
 
     // Now set the state because we've loaded the character
     this.setState( prevState => {
@@ -93,11 +121,16 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: get this from the user options
-    Character.load(1).then( character => {
-      this.onCharacterLoad(character);
+    // Load the user
+    User.load(1).then( user => {
+      this.onUserLoad(user);
+      user.getActiveCharacter().then( character => {
+        this.onCharacterLoad(character);
+      });
     });
-    this.onSelectNav(this.state.navs[1]);
+
+    // Load the first menu
+    //this.onSelectNav(this.state.navs[1]);
   }
 
   renderActiveNav(navs, props) {

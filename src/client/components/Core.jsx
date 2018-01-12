@@ -60,9 +60,9 @@ export function Col(props) {
 export function Button(props) {
   const type = props.type || 'secondary';
   return <button
-    style={Object.assign( props.style || {}, {
+    style={Object.assign({
       margin: 4,
-    })}
+    }, props.style || {})}
     className={[
       'btn',
       'btn-' + type,
@@ -100,4 +100,38 @@ export class ErrorBoundary extends React.Component {
     }
     return this.props.children;
   }
+}
+
+export function RadioChoices(name, selected, onChange, choices) {
+  return <div className="input-group input-group-sm">
+    <div className="input-group-prepend">
+      <div className="input-group-text">{name}</div>
+    </div>
+    <select
+      defaultValue={selected}
+      className="form-control form-control-sm"
+      onChange={(e) => {
+        const value = e.target.options[e.target.selectedIndex].value;
+        if( onChange ) {
+          onChange(value);
+        }
+      }}>
+      {choices.map(choice => {
+        return <option
+          key={choice}
+          value={choice}>{choice}</option>;
+      })}
+    </select>
+  </div>;
+
+  return <div className="btn-group btn-group-toggle" data-toggle="buttons">
+    {choices.map(choice => {
+      const isActive = choice === selected;
+      return <label key={choice} className={`btn btn-secondary btn-sm ${isActive?'active':''}`}>
+        <input type="radio" name={name} id={choice} autoComplete="off"   onClick={(e) => {
+            console.log(e);
+          }}/> {choice}
+      </label>
+    })}
+  </div>
 }

@@ -125,13 +125,13 @@ function InventoryItem(item, isEven, children) {
 function WeaponItem(item, isEven) {
   return InventoryItem(item, isEven, [
     item.itemType.data.dice, // 1d10
-    getCritInfo(item), // 19-20 x2
+    //getCritInfo(item), // 19-20 x2
   ]);
 }
 
 function WealthItem(item, isEven, ) {
   return InventoryItem(item, isEven, [
-    `worth ${item.count * item.data.cost.total} gp`,
+    `${item.count * item.data.cost.total} gp`,
   ]);
 }
 
@@ -206,9 +206,9 @@ function InventoryItems(items) {
           </button>
         </Col>
         {section.extraCol ? <Col>
-          {`Total value ${section.items.reduce((acc,cur) => {
+          {`${section.items.reduce((acc,cur) => {
             return acc + cur.data.cost.total * cur.count;
-          }, 0)}gp`}
+          }, 0)} gp`}
         </Col> : null }
         <Col align='right'>
           total {Translation.weight(combinedWeight)}

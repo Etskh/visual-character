@@ -1,3 +1,4 @@
+// TODO: make this Es20115 syntax
 const express = require('express');
 const bodyParser = require('body-parser');
 const model = require('../lib/model');
@@ -18,5 +19,17 @@ router.post('/character/:id', (req, res) => model.save('character', req.params.i
   .catch(err => res.send({
     error: err,
   })));
+
+// define the home page route
+router.get('/user/:id', (req, res) => model.get('user', req.params.id).then(character => res.send(character)).catch(err => res.send({
+  error: err,
+})));
+
+// define the home page route
+router.post('/user/:id', (req, res) => model.save('user', req.params.id, req.body).then(res.send)
+  .catch(err => res.send({
+    error: err,
+  })));
+
 
 module.exports = router;
