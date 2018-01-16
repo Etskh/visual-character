@@ -78,6 +78,30 @@
         "decision": "5",
         "reason": "level 1",
         "target": "sense motive"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1",
+        "target": "stealth"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1",
+        "target": "knowledge (dungeoneering)"
+      },
+      {
+        "type": "skill",
+        "decision": "2",
+        "reason": "level 1",
+        "target": "climb"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1",
+        "target": "perception"
       }
     ],
     "inventory": [

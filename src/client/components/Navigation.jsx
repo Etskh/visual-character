@@ -31,7 +31,9 @@ export default class Navigation extends React.Component {
         style={itemStyle}
         href="#"
         onClick={() => {
-          this.props.onSelectNav(nav);
+          if ( !nav.isSelected ) {
+            this.props.onSelectNav(nav);
+          }
         }}>
         <div className={"fa fa-3x fa-" + nav.icon} aria-hidden="true"></div>
       </a>

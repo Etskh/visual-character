@@ -2,6 +2,8 @@
 import Character from '../lib/Character';
 import User from '../lib/User';
 
+import * as Action from '../../common/Action';
+
 import { ErrorBoundary } from '../components/Core';
 import Navigation from '../components/Navigation';
 import DebugFooter from '../components/DebugFooter';
@@ -29,7 +31,7 @@ export class App extends React.Component {
       component: WorldView,
     }, {
       name: 'Inventory',
-      icon: 'briefcase',
+      icon: 'diamond',
       component: InventoryView,
       //}, {
       //  name: 'Magic',
@@ -58,9 +60,14 @@ export class App extends React.Component {
       }),
     };
 
+    // Bind local functions to this
     this.onSelectNav = this.onSelectNav.bind(this);
-    this.onCharacterLoad = this.onCharacterLoad.bind(this);
-    this.onUserLoad = this.onUserLoad.bind(this);
+
+    // Create actions
+    // TODO: maybe move these from here if they're big
+    Action.create('init');
+    Action.create('character.change');
+    Action.create('user.change');
   }
 
   onSelectNav( selectedNav ) {
@@ -76,61 +83,50 @@ export class App extends React.Component {
     });
   }
 
-  onUserLoad(user) {
-    user.onChange = () => {
-      user.save().then( loadedUser => {
-        this.setState({
-          user: loadedUser,
-        });
-      });
-    };
-
-    this.setState( prevState => {
-      return {
-        user: user,
-        // Set the user's last tab open
-        navs: prevState.navs.map( nav => {
-          return Object.assign(nav, {
-            isSelected: nav.name === user.settings.tab,
-          });
-        }),
-      };
-    });
-  }
-
-  onCharacterLoad(character) {
-
-    // Set the onChange handler to be this function
-    character.onChange = () => {
-      character.save().then( loadedCharacter => {
-        this.onCharacterLoad( loadedCharacter );
-      });
-    };
-
-    // Now set the state because we've loaded the character
-    this.setState( prevState => {
-      return {
-        character: character,
-        navs: prevState.navs.map( nav => {
-          return Object.assign(nav, {
-            isDisabled: character.isInvalid && !nav.showsWhenInvalid,
-          });
-        }),
-      };
-    });
-  }
-
   componentDidMount() {
-    // Load the user
-    User.load(1).then( user => {
-      this.onUserLoad(user);
-      user.getActiveCharacter().then( character => {
-        this.onCharacterLoad(character);
+    // Subscribe self to all actions that we need!
+    Action.subscribe(__filename, 'init', () => {
+      User.load(1).then( user => {
+        Action.fire('user.change', user);
+      });
+    });
+    Action.subscribe(__filename, 'user.change', (user) => {
+      this.setState( prevState => {
+        return {
+          user: user,
+          // Set the user's last tab open
+          navs: prevState.navs.map( nav => {
+            return Object.assign(nav, {
+              isSelected: nav.name === user.settings.tab,
+            });
+          }),
+        };
+      });
+      if( !this.state.character || this.state.character.id != user.activeCharacter ) {
+        user.getActiveCharacter().then( character => {
+          Action.fire('character.change', character);
+        });
+      }
+    });
+    Action.subscribe(__filename, 'character.change', (character) => {
+      this.setState( prevState => {
+        return {
+          character: character,
+          // Disable navs if the character is invalid
+          navs: prevState.navs.map( nav => {
+            return Object.assign(nav, {
+              isDisabled: character.isInvalid && !nav.showsWhenInvalid,
+            });
+          }),
+        };
       });
     });
 
-    // Load the first menu
-    //this.onSelectNav(this.state.navs[1]);
+    Action.fire('init');
+  }
+
+  componentWillUnmount() {
+    Action.unsubscribeAll(__filename);
   }
 
   renderActiveNav(navs, props) {

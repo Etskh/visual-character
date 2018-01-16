@@ -9,3 +9,4 @@ node_modules
 # test output
 coverage
 .nyc_output
+npm-debug.log
