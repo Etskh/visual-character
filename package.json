@@ -4,16 +4,16 @@
   "description": "A system agnostic RPG character manager",
   "author": "Etskh",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "build": "gulp",
+    "clean": "rm -rf node_modules && rm -rf dist && rm -rf .nyc_coverage && rm -rf coverage",
     "dev": "nodemon",
     "postinstall": "gulp",
     "start": "node dist/app.js",
     "lint": "eslint src --fix",
     "test": "cross-env NODE_ENV=test mocha --require babel-polyfill --require babel-register src/test/**/*.js",
-    "coverage": "nyc npm test",
-    "webpack": "webpack"
+    "coverage": "nyc npm test"
   },
   "//": "don't need react, react-dom because we're doing CDN",
   "dependencies": {

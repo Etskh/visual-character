@@ -1,8 +1,7 @@
 
 import Character from '../lib/Character';
 import User from '../lib/User';
-
-import * as Action from '../../common/Action';
+import Action from '../lib/Action';
 
 import { ErrorBoundary } from '../components/Core';
 import Navigation from '../components/Navigation';
@@ -59,19 +58,23 @@ export class App extends React.Component {
         });
       }),
     };
-
-    // Bind local functions to this
-    this.onSelectNav = this.onSelectNav.bind(this);
-
-    // Create actions
-    // TODO: maybe move these from here if they're big
-    Action.create('init');
-    Action.create('character.change');
-    Action.create('user.change');
   }
 
-  onSelectNav( selectedNav ) {
-    this.state.user.saveSetting('tab', selectedNav.name);
+  componentDidMount() {
+    Action.subscribeAll(this, __filename, {
+      'ui.selectNavigation': this.onSelectNavigation,
+      'user.change': this.onUserChange,
+      'character.change': this.onCharacterChange,
+    });
+
+    Action.fire('init');
+  }
+
+  componentWillUnmount() {
+    Action.unsubscribeAll(__filename);
+  }
+
+  onSelectNavigation(selectedNav) {
     this.setState( prevState => {
       return {
         navs: prevState.navs.map( nav => {
@@ -83,50 +86,32 @@ export class App extends React.Component {
     });
   }
 
-  componentDidMount() {
-    // Subscribe self to all actions that we need!
-    Action.subscribe(__filename, 'init', () => {
-      User.load(1).then( user => {
-        Action.fire('user.change', user);
-      });
+  onUserChange( user ) {
+    this.setState( prevState => {
+      return {
+        user: user,
+        // Set the user's last tab open
+        navs: prevState.navs.map( nav => {
+          return Object.assign(nav, {
+            isSelected: nav.name === user.settings.tab,
+          });
+        }),
+      };
     });
-    Action.subscribe(__filename, 'user.change', (user) => {
-      this.setState( prevState => {
-        return {
-          user: user,
-          // Set the user's last tab open
-          navs: prevState.navs.map( nav => {
-            return Object.assign(nav, {
-              isSelected: nav.name === user.settings.tab,
-            });
-          }),
-        };
-      });
-      if( !this.state.character || this.state.character.id != user.activeCharacter ) {
-        user.getActiveCharacter().then( character => {
-          Action.fire('character.change', character);
-        });
-      }
-    });
-    Action.subscribe(__filename, 'character.change', (character) => {
-      this.setState( prevState => {
-        return {
-          character: character,
-          // Disable navs if the character is invalid
-          navs: prevState.navs.map( nav => {
-            return Object.assign(nav, {
-              isDisabled: character.isInvalid && !nav.showsWhenInvalid,
-            });
-          }),
-        };
-      });
-    });
-
-    Action.fire('init');
   }
 
-  componentWillUnmount() {
-    Action.unsubscribeAll(__filename);
+  onCharacterChange( character ) {
+    this.setState( prevState => {
+      return {
+        character: character,
+        // Disable navs if the character is invalid
+        navs: prevState.navs.map( nav => {
+          return Object.assign(nav, {
+            isDisabled: character.isInvalid && !nav.showsWhenInvalid,
+          });
+        }),
+      };
+    });
   }
 
   renderActiveNav(navs, props) {
@@ -145,11 +130,13 @@ export class App extends React.Component {
   render() {
     const windowProps = {
       character: this.state.character,
+      user: this.state.user,
     };
+    // TODO: render all the different windows at once,
+    // and make the tabs just make them visible
     return <div id="page">
       <Navigation
-        navs={this.state.navs}
-        onSelectNav={this.onSelectNav}/>
+        navs={this.state.navs}/>
       { this.renderActiveNav(this.state.navs, windowProps)}
       <DebugFooter />
       <ErrorBoundary>

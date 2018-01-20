@@ -1,16 +1,23 @@
 import { Row, Col, RadioChoices } from '../components/Core';
 import NavigationWindow from '../components/NavigationWindow';
 import User from '../lib/User';
-import Translation from '../lib/Translation';
+import Action from '../lib/Action';
+import {
+  WEIGHTS,
+  DISTANCES,
+} from '../lib/Translator';
 
 export default class OptionsView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      user: props.user,
+    };
   }
 
   render() {
-    const user = User.activeUser;
-    console.log(user);
+    const user = this.state.user;
     return <NavigationWindow
       title='Options'>
       { user ? <div>
@@ -19,18 +26,18 @@ export default class OptionsView extends React.Component {
           <Col>
             {RadioChoices('weight', user.settings.weight, (option) => {
               User.activeUser.saveSetting('weight', option).then( user => {
-                user.onChange();
+                Action.fire('user.change', user);
               });
-              Translation.setWeightUnit(option);
-            }, Translation.WEIGHTS)}
+            }, WEIGHTS)}
           </Col>
         </Row>
         <Row>
           <Col>
             {RadioChoices('distance', user.settings.distance, (option) => {
-              User.activeUser.saveSetting('distance', option);
-              Translation.setDistanceUnit(option);
-            }, Translation.DISTANCES )}
+              User.activeUser.saveSetting('distance', option).then( user => {
+                Action.fire('user.change', user);
+              });
+            }, DISTANCES )}
           </Col>
         </Row>
       </div> : null }

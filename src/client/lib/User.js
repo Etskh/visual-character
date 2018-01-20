@@ -1,11 +1,16 @@
 import Fetch from './Fetch';
 import Character from './Character';
+import Translator from './Translator';
 
 export default class User {
   constructor(config) {
     Object.keys(config).forEach((field) => {
       this[field] = config[field];
     });
+
+    this.translator = new Translator();
+    this.translator.setDistanceUnit(this.settings.distance);
+    this.translator.setWeightUnit(this.settings.weight);
   }
 
   saveSetting(key, value) {
@@ -30,7 +35,6 @@ export default class User {
     if (!this.activeCharacter) {
       return Promise.resolve(null);
     }
-
     return Character.load(this.activeCharacter);
   }
 

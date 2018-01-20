@@ -1,6 +1,5 @@
 import NavigationWindow from '../components/NavigationWindow';
 import { Row, Col } from '../components/Core';
-import Translation from '../lib/Translation';
 import { itemCategories } from '../lib/Items';
 import Modal from '../components/Modal';
 import EncumbranceSection from './inventory/Encumbrance';
@@ -12,7 +11,7 @@ function getCritInfo(item) {
   return `${crit} x${item.itemType.data.critMult}`
 }
 
-function WeaponDetail(item) {
+function WeaponDetail(translator, item) {
   /*
   data: {
     complexity: 'simple',
@@ -77,7 +76,7 @@ function WeaponDetail(item) {
     </Row>
     {item.itemType.data.range ? <Row>
       <Col>Range</Col>
-      <Col>{Translation.distance(item.itemType.data.range)}</Col>
+      <Col>{translator.distance(item.itemType.data.range)}</Col>
     </Row> : null}
   </div>;
 }
@@ -92,11 +91,11 @@ function ItemDetail(item) {
 
 
 // TODO: move this to its own component file
-function InventoryItem(item, isEven, children) {
+function InventoryItem(translator, item, isEven, children) {
   if( !children ) {
     children = [];
   }
-  const fullname = `${item.count>1 ? item.count:''} ${Translation.get(item.name, item.count)}`;
+  const fullname = `${item.count>1 ? item.count:''} ${translator.get(item.name, item.count)}`;
 
   return <div key={item.key} style={{
     background: isEven ? '#CDC' : '#FFF',
@@ -116,27 +115,27 @@ function InventoryItem(item, isEven, children) {
         return <Col key={child.toString()}>{child}</Col>;
       })}
       <Col align='right'>
-        {Translation.weight(item.weight * item.count)}
+        {translator.weight(item.weight * item.count)}
       </Col>
     </Row>
   </div>
 }
 
-function WeaponItem(item, isEven) {
-  return InventoryItem(item, isEven, [
+function WeaponItem(translator, item, isEven) {
+  return InventoryItem(translator, item, isEven, [
     item.itemType.data.dice, // 1d10
     //getCritInfo(item), // 19-20 x2
   ]);
 }
 
-function WealthItem(item, isEven, ) {
-  return InventoryItem(item, isEven, [
+function WealthItem(translator, item, isEven, ) {
+  return InventoryItem(translator, item, isEven, [
     `${item.count * item.data.cost.total} gp`,
   ]);
 }
 
 
-function InventoryItems(items) {
+function InventoryItems(items, translator) {
   // Arrange the items into collapsable sections
   const sections = [{
     name: 'Weapons',
@@ -211,7 +210,7 @@ function InventoryItems(items) {
           }, 0)} gp`}
         </Col> : null }
         <Col align='right'>
-          total {Translation.weight(combinedWeight)}
+          <em>{translator.weight(combinedWeight)}</em>
         </Col>
       </Row>
       <div id={`section-${section.name}`}
@@ -219,7 +218,7 @@ function InventoryItems(items) {
           display: section.collapsed ? 'none' : 'block',
         }}>
         {section.items.map(item => {
-          return section.itemFunction(item, (++index % 2 !== 0));
+          return section.itemFunction(translator, item, (++index % 2 !== 0));
         })}
       </div>
     </div>;
@@ -233,7 +232,8 @@ export default class InventoryView extends React.Component {
     super(props);
 
     this.state = {
-      character: this.props.character,
+      character: props.character,
+      user: props.user,
     };
   }
 
@@ -241,10 +241,10 @@ export default class InventoryView extends React.Component {
     return <NavigationWindow
       title='Inventory'>
       <Row>
-        <Col>{EncumbranceSection(this.state.character)}</Col>
+        <Col>{EncumbranceSection(this.state.character, this.state.user.translator)}</Col>
       </Row>
       <Row>
-        <Col>{InventoryItems(this.state.character.items)}</Col>
+        <Col>{InventoryItems(this.state.character.items, this.state.user.translator)}</Col>
       </Row>
     </NavigationWindow>;
   }

@@ -68,3 +68,9 @@ export function unsubscribeAll(instance) {
     unsubscribe(instance, actionName);
   });
 }
+
+export function subscribeAll(self, instance, events) {
+  Object.keys(events).forEach((actionName) => {
+    subscribe(instance, actionName, events[actionName].bind(self));
+  });
+}

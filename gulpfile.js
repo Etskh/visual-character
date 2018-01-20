@@ -39,6 +39,6 @@ gulp.task('less', () => {
     .pipe(gulp.dest('./public'));
 });
 
-gulp.task('nodemon', ['webpack', 'server']);
+gulp.task('nodemon', ['webpack', 'less']);
 
 gulp.task('default', ['server', 'less', 'webpack', 'icon']);

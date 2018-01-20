@@ -1,6 +1,5 @@
 // Lib
 import { getEncumbranceBracket, ENCUMBRANCE } from '../../lib/constants';
-import Translation from '../../lib/Translation';
 // Components
 import { Row, Col } from '../../components/Core';
 import Modal from '../../components/Modal';
@@ -46,7 +45,7 @@ function EncumbranceBracketData(data) {
 }
 
 
-function EncumbranceInfo(currentBracket, character) {
+function EncumbranceInfo(currentBracket, character, translator) {
   const lightLoad = character.get('light_load');
 
   return <div>
@@ -54,8 +53,8 @@ function EncumbranceInfo(currentBracket, character) {
       // If there's a max, say "x to y"
       // If there isn't a max, say "over x"
       const weightRange = bracket.light_load_max ?
-        `${Translation.weight(lightLoad * bracket.light_load_min)} - ${Translation.weight(lightLoad * bracket.light_load_max)}`
-        : `over ${Translation.weight(lightLoad * bracket.light_load_min)}`
+        `${translator.weight(lightLoad * bracket.light_load_min)} - ${translator.weight(lightLoad * bracket.light_load_max)}`
+        : `over ${translator.weight(lightLoad * bracket.light_load_min)}`
 
       return <div key={bracket.name} style={{
           marginTop: 10,
@@ -95,7 +94,7 @@ function LoadMeter(encumbrancePercentage) {
   </div>
 }
 
-export default function EncumbranceSection(character) {
+export default function EncumbranceSection(character, translator) {
   const encumbrance = character.get('current_load') / character.get('light_load');
   const bracket = getEncumbranceBracket(
     character.get('current_load'),
@@ -107,13 +106,13 @@ export default function EncumbranceSection(character) {
         {'Encumbrance: '}
         <button className='btn btn-warning btn-sm'
           onClick={() => {
-            Modal.open('Encumbrance', EncumbranceInfo(bracket, character));
+            Modal.open('Encumbrance', EncumbranceInfo(bracket, character, translator));
           }}>{bracket.name}</button>
       </Col>
     </Row>
     {LoadMeter(encumbrance)}
     <Row>
-      <Col>{`Carrying: ${Translation.weight(character.get('current_load'))}`}</Col>
+      <Col>{`Carrying: ${translator.weight(character.get('current_load'))}`}</Col>
     </Row>
   </div>
 }

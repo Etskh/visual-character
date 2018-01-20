@@ -1,11 +1,11 @@
 /* global describe:false, it:false */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import expect from 'expect';
-import fs from 'fs';
-import sinon from 'sinon';
+// import fs from 'fs';
+// import sinon from 'sinon';
 import * as Model from '../../../server/lib/model';
 
-const characterFixture = require('../../fixtures/character.json');
+// const characterFixture = require('../../fixtures/character.json');
 
 describe('Lib:Model', () => {
   it('gets the path to the file in a standard way', () => {
