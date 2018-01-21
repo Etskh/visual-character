@@ -429,7 +429,7 @@ export default class Character {
       Console.error(`Character.takeDamage: value isn't a number ("${value}" instead)`);
     }
     this.fields.current.hitpoints -= value;
-    this.save().then(this.onChange);
+    return this.save();
   }
 
   heal(value) {
@@ -442,7 +442,7 @@ export default class Character {
       this.get('total_hp')
     );
 
-    this.save().then(this.onChange);
+    return this.save();
   }
 
 

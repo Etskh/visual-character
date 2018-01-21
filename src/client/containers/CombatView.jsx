@@ -1,7 +1,7 @@
 
 import { Row, Col, Button, } from '../components/Core';
 import NavigationWindow from '../components/NavigationWindow';
-import HealthBarColumn from '../components/HealthBar';
+import HealthBarColumn from './combat/HealthBar';
 import StatButton from '../components/StatButton';
 import ActionList from '../components/ActionList';
 

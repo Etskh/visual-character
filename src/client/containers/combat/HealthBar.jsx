@@ -1,5 +1,6 @@
-import { Row, Col, } from '../components/Core';
-import Modal from '../components/Modal';
+import { Row, Col, } from '../../components/Core';
+import Modal from '../../components/Modal';
+import Action from '../../lib/Action';
 
 function HealContent() {
   return <Row>
@@ -65,7 +66,9 @@ export default function HealthBarColumn(character) {
             Modal.open('Take Damage', DamageContent(), 'Damage').then( state => {
               const value = state.inputs[0].value;
               if( value ) {
-                character.takeDamage(parseInt(value));
+                character.takeDamage(parseInt(value)).then( character => {
+                  Action.fire('character.change', character);
+                });
               }
             });
           }}>Damage</button>
@@ -76,7 +79,9 @@ export default function HealthBarColumn(character) {
             Modal.open('Heal', HealContent(), 'Heal').then( state => {
               const value = state.inputs[0].value;
               if( value ) {
-                character.heal(parseInt(value));
+                character.heal(parseInt(value)).then( character => {
+                  Action.fire('character.change', character);
+                });
               }
             });
           }}>Heal</button></Col>
