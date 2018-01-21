@@ -56,7 +56,7 @@ export default class Translator {
     return `${rounded} ${names[this.distanceUnit]}`;
   }
 
-  weight(count) {
+  weight(count, roundFunction) {
     const ratios = {
       pound: 1,
       kilogram: 0.4536,
@@ -65,8 +65,12 @@ export default class Translator {
       pound: 'lb',
       kilogram: 'kg',
     };
-    const rounded = round00(ratios[this.weightUnit] * count);
+    const rounded = (roundFunction || round00)(ratios[this.weightUnit] * count);
     return `${rounded} ${names[this.weightUnit]}`;
+  }
+
+  weightRounded(count) {
+    return this.weight(count, Math.round);
   }
 
   // eslint-disable-next-line class-methods-use-this

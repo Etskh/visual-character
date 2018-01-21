@@ -53,22 +53,14 @@ function EncumbranceInfo(currentBracket, character, translator) {
       // If there's a max, say "x to y"
       // If there isn't a max, say "over x"
       const weightRange = bracket.light_load_max ?
-        `${translator.weight(lightLoad * bracket.light_load_min)} - ${translator.weight(lightLoad * bracket.light_load_max)}`
-        : `over ${translator.weight(lightLoad * bracket.light_load_min)}`
+        `${translator.weightRounded(lightLoad * bracket.light_load_min)} - ${translator.weightRounded(lightLoad * bracket.light_load_max)}`
+        : `over ${translator.weightRounded(lightLoad * bracket.light_load_min)}`
 
-      return <div key={bracket.name} style={{
-          marginTop: 10,
-          background: currentBracket.name === bracket.name ? '#8ccbf7' : 'transparent',
-        }}>
-        <Row>
-          <Col align='center'><h6>{bracket.name}</h6></Col>
-        </Row>
-        <Row>
-          <Col>{weightRange}</Col>
-          <Col>{bracket.effect ?
-            EncumbranceBracketData(bracket.effect.data)
-            : 'No effect from this bracket'}</Col>
-        </Row>
+      return <div key={bracket.name} className={`alert alert-${currentBracket.name === bracket.name?'primary':'secondary'}`}>
+        <h4 className="alert-heading">{bracket.name} <small>({weightRange})</small></h4>
+        {bracket.effect ?
+          EncumbranceBracketData(bracket.effect.data)
+          : <p>No effect from this bracket</p>}
       </div>;
     })}
   </div>

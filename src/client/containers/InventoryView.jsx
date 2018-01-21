@@ -81,11 +81,11 @@ function WeaponDetail(translator, item) {
   </div>;
 }
 
-function ItemDetail(item) {
+function ItemDetail(translator, item) {
   const description = item.itemType.description || '[description]';
   return <div>
     <p>{description}</p>
-    { item.category.name === 'weapon' ? WeaponDetail(item) : null }
+    { item.category.name === 'weapon' ? WeaponDetail(translator, item) : null }
   </div>;
 }
 
@@ -106,7 +106,7 @@ function InventoryItem(translator, item, isEven, children) {
         <button
           className='btn btn-outline-primary btn-sm'
           onClick={() => {
-            Modal.open(fullname, ItemDetail(item));
+            Modal.open(fullname, ItemDetail(translator, item));
           }}>
           {fullname}
         </button>

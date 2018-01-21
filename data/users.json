@@ -9,7 +9,7 @@
     "settings": {
       "weight": "kilogram",
       "distance": "square",
-      "tab": "Inventory"
+      "tab": "Options"
     }
   }
 ]
