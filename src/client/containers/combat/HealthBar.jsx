@@ -33,30 +33,11 @@ export default function HealthBarColumn(character) {
   return <Col>
     <Row><h3>Health</h3></Row>
     <Row>
-      <div style={{
-        position: 'relative',
-        color: 'white',
-        textShadow: '#000 1px 1px 3px',
-        background: '#999',
-        width: '100%',
-        textAlign: 'center',
-        height: '2em',
-        margin: 4,
-      }}>
-        <div style={{
-          top: 0,
-          position: 'absolute',
+      <div className='vc-health-bar'>
+        <div className='vc-health-good' style={{
           width: parseInt(100 * (current / total)) + '%',
-          height: '100%',
-          background: '#F66',
         }}>&nbsp;</div>
-        <div style={{
-          top: 0,
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          paddingTop: 3,
-        }}>{current} / {total}</div>
+        <div className='vc-health-text'>{current} / {total}</div>
       </div>
     </Row>
     <Row>
