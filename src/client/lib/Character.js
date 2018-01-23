@@ -164,6 +164,11 @@ export const parseData = (character) => {
         reason: 'level 1',
         target: 'spellcraft',
       */
+      if (!dataCtx[`skill_${choice.target}`]) {
+        // Error checking is important, mmk?
+        Console.error(`skill_${choice.target} doesn't exist. Why would you do this?`);
+        Console.error(Object.keys(dataCtx));
+      }
       dataCtx[`skill_${choice.target}`].addChoice('points', parseInt(choice.decision, 10), choice);
     } else if (choice.type === 'race' && choice.decision) {
       /*

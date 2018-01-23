@@ -1,5 +1,15 @@
 
 const races = [{
+  name: 'human',
+  description: '',
+  stat_description: 'Humans are adaptable',
+  data: {
+    // they are not good, but get a couple choices
+  },
+  choices: [
+    // TODO: they get a choice of stats
+  ]
+}, {
   name: 'goblin',
   description: '',
   stat_description: 'Goblins are sneaky and nimble, but frail and unlikable.',

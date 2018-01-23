@@ -48,6 +48,18 @@ export const CRAFT_SKILLS = [
   'weapons',
   'traps',
 ];
+export const KNOWLEDGE_SKILLS = [
+  'arcana',
+  'dungeoneering',
+  'engineering',
+  'geography',
+  'history',
+  'local',
+  'nature',
+  'nobility',
+  'planes',
+  'religion',
+];
 export const AMMO_TYPES = [
   'arrow',
   'bolt',
@@ -88,6 +100,13 @@ export const CHOICE_REASONS = [
 
 
 export const SKILLS = [{
+  name: 'acrobatics',
+  stat: 'dex',
+  hasCheckPenalty: true,
+}, {
+  name: 'appraise',
+  stat: 'int',
+}, {
   name: 'bluff',
   stat: 'cha',
   actions: [{
@@ -112,18 +131,43 @@ export const SKILLS = [{
   name: 'climb',
   stat: 'str',
   hasCheckPenalty: true,
+},
+  // We generate the craft skills at the end of the list
+{
+  name: 'diplomacy',
+  stat: 'cha',
 }, {
-  name: 'knowledge (arcana)',
-  stat: 'int',
+  name: 'disable device',
+  stat: 'dex',
+  hasCheckPenalty: true,
 }, {
-  name: 'knowledge (dungeoneering)',
-  stat: 'int',
+  name: 'disguise',
+  stat: 'cha',
 }, {
-  name: 'knowledge (geography)',
-  stat: 'int',
+  name: 'escape artist',
+  stat: 'dex',
+  hasCheckPenalty: true,
 }, {
-  name: 'knowledge (nature)',
+  name: 'fly',
+  stat: 'dex',
+  hasCheckPenalty: true,
+}, {
+  name: 'handle animal',
+  stat: 'cha',
+}, {
+  name: 'heal',
+  stat: 'wis',
+}, {
+  name: 'intimidate',
+  stat: 'cha',
+},
+  // We also generate the knowledge skills at the end of the list
+{
+  name: 'linguistics',
   stat: 'int',
+  // TODO: on point: make it so we get to choose a new language to learn if we put
+  // a point into this skill. At least, in the pathfinder ruleset, that's how you
+  // learn languages. (probably make an "onPoint" field)
 }, {
   name: 'perception',
   stat: 'wis',
@@ -133,6 +177,16 @@ export const SKILLS = [{
     type: 'reaction',
     description: 'Perceive the area with your eyes and ears.',
   }],
+}, {
+  name: 'profession',
+  stat: 'wis',
+}, {
+  name: 'ride',
+  stat: 'dex',
+}, {
+  name: 'ride',
+  stat: 'dex',
+  hasCheckPenalty: true,
 }, {
   name: 'sense motive',
   stat: 'wis',
@@ -154,6 +208,10 @@ export const SKILLS = [{
       text: 'They must not be lying to you',
     }],
   }],
+}, {
+  name: 'sleight of hand',
+  stat: 'dex',
+  hasCheckPenalty: true,
 }, {
   name: 'spellcraft',
   stat: 'int',
@@ -189,7 +247,28 @@ export const SKILLS = [{
       text: 'You still move half your speed, but you aren\'t moving as clandestinely as you think you are.',
     }],
   }],
-}];
+}, {
+  name: 'survival',
+  stat: 'wis',
+}, {
+  name: 'swim',
+  stat: 'str',
+  hasCheckPenalty: true,
+}, {
+  // Dumbest skill in pathfinder - like why even?
+  name: 'use magic device',
+  stat: 'int',
+}].concat(CRAFT_SKILLS.map(subSkill =>
+  // subSkill = "carpentry"
+  ({
+    name: `craft (${subSkill})`, // "craft (carpentry)"
+    stat: 'int',
+  }))).concat(KNOWLEDGE_SKILLS.map(subSkill =>
+  // subSkill = "dungeoneering"
+  ({
+    name: `knowledge (${subSkill})`, // "knowledge (dungeoneering)"
+    stat: 'int',
+  })));
 
 
 export const ENCUMBRANCE = [{

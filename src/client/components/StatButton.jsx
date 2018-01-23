@@ -45,7 +45,7 @@ export function StatInfo(stat, context) {
           fontWeight: 'bold',
         }}>
           <td style={{
-            textAlign: 'right',
+            textAlign: 'center',
           }}>total</td>
           <td>{stat.data.getTotal()}</td>
         </tr>

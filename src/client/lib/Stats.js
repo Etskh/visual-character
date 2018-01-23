@@ -34,6 +34,11 @@ const stats = {
     fullname: 'Size',
     alias: 'size',
   },
+  attack_from_size: {
+    name: 'Size',
+    fullname: 'Size',
+    alias: 'size',
+  },
   check_penalty: {
     name: 'CP',
     fullname: 'Check penalty',
@@ -67,6 +72,23 @@ const stats = {
   base_stat: {
     name: 'Base',
     fullname: 'Base',
+  },
+  bab: {
+    name: 'BAB',
+    fullname: 'Base Attack Bonus',
+    description: 'Almost every time you level up in a class, it will increase your base attack bonus. More physical classes like fighters will have a higher base attack bonus than that of a spellcaster of the same level.',
+  },
+  ranged_main_attack: {
+    name: 'Ranged attack',
+    fullname: 'Ranged main-hand attack',
+    description: 'main-hand', // TODO: load in the description for the item because the decsription is 'main-hand'
+  },
+  attack: {
+    name: 'Attack',
+    fullname: 'Attack',
+    // TODO: make "attack" as a bonus no longer exist, and add size to both ranged
+    // and melee attack individually.
+    description: 'Bonuses for attacking, such as size, or if the weapon in your hand is enchanted.',
   }
 };
 
