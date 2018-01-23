@@ -1,5 +1,6 @@
 import { Row, Col, } from '../../components/Core';
 import Modal from '../../components/Modal';
+import BarButton from '../../components/BarButton';
 import Action from '../../lib/Action';
 
 function HealContent() {
@@ -24,22 +25,13 @@ function DamageContent() {
   </Row>;
 }
 
-
-
 export default function HealthBarColumn(character) {
-  const total = character.get('total_hp');
-  const current = character.get('hitpoints');
-
   return <Col>
     <Row><h3>Health</h3></Row>
-    <Row>
-      <div className='vc-health-bar'>
-        <div className='vc-health-good' style={{
-          width: parseInt(100 * (current / total)) + '%',
-        }}>&nbsp;</div>
-        <div className='vc-health-text'>{current} / {total}</div>
-      </div>
-    </Row>
+    <BarButton
+      colour='red'
+      total={character.get('total_hp')}
+      current={character.get('hitpoints')}/>
     <Row>
       <Col align='center'>
         <button className="btn btn-sm btn-danger"

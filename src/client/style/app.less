@@ -28,7 +28,7 @@ h1 {
 }
 
 
-.vc-health-bar {
+.vc-bar-button {
     position: relative;
     color: white;
     text-shadow: #000 1px 1px 3px;
@@ -37,15 +37,25 @@ h1 {
     text-align: center;
     height: 2em;
     margin: 4;
+    cursor: pointer;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 
-    .vc-health-good {
+    .vc-bar-good {
         top: 0;
         position: absolute;
         width: 100%; // value will change based on damage
         height: 100%;
-        background: #F66; // value might change based on damage in the future
+        background: #CCC; // value might change based on damage in the future
+
+        &.red {
+            background: #F66;
+        }
+        &.orange {
+            background: #FC6;
+        }
     }
-    .vc-health-text {
+    .vc-bar-text {
         top: 0;
         position: absolute;
         width: 100%;

@@ -65,8 +65,8 @@ export function Button(props) {
     }, props.style || {})}
     className={[
       'btn',
-      'btn-' + type,
       props.size !== 'large' ? 'btn-sm' : '',
+      'btn-' + type,
       props.disabled ? 'disabled' : '',
     ].join(' ')}
     onClick={(e) => {
