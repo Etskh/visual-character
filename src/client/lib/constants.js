@@ -178,6 +178,7 @@ export const SKILLS = [{
     description: 'Perceive the area with your eyes and ears.',
   }],
 }, {
+  // Profession is supposed to be a bunch of separate skills, but that's stupid and I don't have time to describe why that's super dumb right now, but maybe I should put why that's so dumb in the description. TODO: add a "why this is different from the ruleset justification section that will appear yellow in the skill description area"
   name: 'profession',
   stat: 'wis',
 }, {

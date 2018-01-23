@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import expect from 'expect';
 import sinon from 'sinon';
-import * as Action from '../../common/Action';
+import * as Action from '../../../common/Action';
 
 describe('Common:Action', () => {
   describe(':create', () => {
