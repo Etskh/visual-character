@@ -27,7 +27,7 @@ Digital dice-rollers. Dice rollers are the anti-thesis of table-top gaming. They
 
 ## Authors
 
- (http://github.com/Etskh|Etskh): designer, programmer
+ [Etskh](http://github.com/Etskh): designer, programmer
 
 ## License
 
