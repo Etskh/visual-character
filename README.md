@@ -20,10 +20,12 @@ Digital dice-rollers. Dice rollers are the anti-thesis of table-top gaming. They
 
 ## Features
 
- - Instead of featuring the skills to the players, the app the most likely actions that the skills offer. _eg: If a player puts points into Sleight of Hand, they will be given the "Sneak" action and the "Conceal Weapon" action. (right now: implementing each action is a big amount of effort, so I've only scratched the surface, and have implemented actions typical of a wizard).
+ - Instead of featuring the skills to the players, the app the most likely actions that the skills offer. _eg: If a player puts points into Sleight of Hand, they will be given the "Sneak" action and the "Conceal Weapon" action._ (right now: implementing each action is a big amount of effort, so I've only scratched the surface, and have implemented actions typical of a wizard).
  - Parses d20 nomenclature into units and is able to compute and make sense of the time/distance/target. _eg: The app takes in "10 minutes / level" and is able to determine that based on a level 7 wizard, the spell will last for 1.17 hours, and it can compute that back to rounds if the GM needs._ (right now: Only about 60% of all spells are parsed, some not correctly)
  - Shows advancement options for the character, including skill points, feats, class features, and hitpoint rolls. _eg: When the character levels up, they are told they get 1 feat, or an ability stat increase, a certain amount of skill ranks etc. The player selects "Level Up (3)" and are led through the process._ (right now: feats, and class features need to be added)
  - Infers most likely combat and world options, based on skill points, class selection. _eg: A player whose added several ranks to Stealth will see "Sneak" combat option in the combat screen. If they have the Power Attack feat, they will see the Power Attack option beside their melee attack._ (right now: only skills points of the highest bonuses are shown)
+
+*****
 
 ## Authors
 
