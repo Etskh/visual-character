@@ -2,8 +2,6 @@ import NavigationWindow from '../components/NavigationWindow';
 import { Row, Col, } from '../components/Core';
 import ExperienceBar from './advancement/ExperienceBar';
 import AdvancementSkillView from './advancement/AdvancementSkillView';
-import { getNextLevel } from '../lib/constants';
-
 
 
 export default class AdvancementView extends React.Component {
@@ -17,7 +15,6 @@ export default class AdvancementView extends React.Component {
     const outstandingChoices = character.choices.filter( choice => {
       return !choice.decision || (choice.type === 'skill' && !choice.target);
     });
-    const nextLevel = getNextLevel(character.get('level'));
     const className = character.choices.filter( choice => (
       choice.type === 'class'
     )).reduce( (acc, cur) => {
@@ -38,7 +35,7 @@ export default class AdvancementView extends React.Component {
         <Col><h3>{character.name} the level {character.get('level')} {className}</h3></Col>
       </Row>
       <Row>
-        <Col>{ExperienceBar(character.get('exp'), nextLevel.exp)}</Col>
+        <Col>{ExperienceBar(character)}</Col>
       </Row>
       {
         // If there are no choices

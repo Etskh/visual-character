@@ -1,5 +1,76 @@
 
 const races = [{
+  name: 'dwarf',
+  description: '',
+  stat_description: 'Dwarves are hardy and perceptive, but a bit standoffish.',
+  data: {
+    size: 0, // medium
+    con: 2,
+    wis: 2,
+    cha: -2,
+    skill_appraise: 2, // TODO: make this conditional for stone only... somehow
+  },
+}, {
+  name: 'elf',
+  description: '',
+  stat_description: 'Elves are nimble and intelligent, but frail.',
+  data: {
+    size: 0,
+    dex: 2,
+    con: -2,
+    int: 2,
+    skill_perception: 2,
+  },
+}, {
+  name: 'gnome',
+  description: '',
+  stat_description: 'Gnomes are hardy and charming, but are weaker and less dexterous.',
+  data: {
+    size: -1, // small (-2 str, +2 dex)
+    dex: -2,
+    con: 2,
+    cha: 2,
+    skill_perception: 2,
+  },
+  choices: [
+    // TODO: they get a choice which craft or profession skill
+  ],
+}, {
+  name: 'half-elf',
+  description: '',
+  stat_description: 'Half-elves perceive well and are adaptable.',
+  data: {
+    size: 0, // medium
+    skill_perception: 2,
+  },
+  choices: [
+    // TODO: they get a choice of stats
+    // TODO: they recieve skill focus
+  ],
+}, {
+  name: 'half-orc',
+  description: '',
+  stat_description: 'Half-orcs are just as adaptable as their human kin.',
+  data: {
+    skill_intimidate: 2,
+  },
+  choices: [
+    // TODO: they get a choice of stats
+  ],
+}, {
+  name: 'halfling',
+  description: '',
+  stat_description: 'Halflings are charismatic and have an indomitable spirit.',
+  data: {
+    size: -1, // small (-2 str, +2 dex)
+    cha: 2,
+    skill_acrobatics: 2,
+    skill_climb: 2,
+    fort_save: 1,
+    will_save: 1,
+    ref_save: 1,
+  },
+}, {
   name: 'human',
   description: '',
   stat_description: 'Humans are adaptable',
@@ -8,7 +79,7 @@ const races = [{
   },
   choices: [
     // TODO: they get a choice of stats
-  ]
+  ],
 }, {
   name: 'goblin',
   description: '',
@@ -16,7 +87,7 @@ const races = [{
   data: {
     size: -1,
     str: -2,
-    dex: 4,
+    dex: 2, // goblins get +4 dex in the book, but they don't compute size (we do!)
     cha: -2,
     skill_stealth: 4,
   },

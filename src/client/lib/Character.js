@@ -284,9 +284,8 @@ const download = (id) => {
       id: 'number',
       name: 'string',
       choices: 'array', // downloadedChoiceData
-      fields: 'object', // downloadedFieldData
-      slots: 'ignore', // validated later
-      inventory: 'ignore', // validated later
+      history: 'array', // TODO: Verify history objects
+      inventory: 'ignore',
     });
 
     // Check choices
@@ -304,31 +303,35 @@ const download = (id) => {
       });
     });
 
-    // Check fields
-    const characterFieldRules = {
-      current: {
-        age: 'number',
-        exp: 'number',
-        hitpoints: 'number',
-        nonlethal: 'number',
-      },
-    };
-    Object.keys(characterFieldRules).forEach((fieldType) => {
-      checkDataAgainstRules(character.fields[fieldType], characterFieldRules[fieldType]);
-    });
-
-    return Object.assign(character, {
-      inventory: character.inventory || [],
-    });
+    return Object.assign(character, {});
   });
 };
 
 
 const parseItems = (character) => {
-  const items = [];
-  character.inventory.forEach((item) => {
-    items.push(Items.getItem(item));
-  });
+  // Translate old inventory to new history type
+  /*
+  if (character.inventory) {
+    const lastId = character.history.filter(action =>
+      action.type === 'add_item'
+    ).reduce((acc, cur) => (parseInt(cur, 10) > acc ? parseInt(cur, 10) : acc), 1);
+    const historyItems = character.inventory.map(item => ({
+      type: 'add_item',
+      target: {
+        id: lastId += 1,
+        itemType: item.itemType,
+        count: item.count ? item.count : 1,
+      },
+    }));
+    // To generate the item history, use this output!
+    console.log(JSON.stringify(historyItems, null, 2));
+  }
+  */
+
+  const items = character.history.filter(action => action.type === 'add_item').filter(action =>
+    // Now find out if we later removed the same item.
+    // Returns true if we haven't removed it yet
+    character.history.find(history => history.type === 'remove_item' && action.target.id === history.target.id) == null).map(action => Items.getItem(action.target));
 
   return items.map((item) => {
     // Iterate the last number on the item
@@ -351,6 +354,24 @@ const parseItems = (character) => {
       key: name,
     });
   });
+};
+
+const parseFields = (character) => {
+  const sumByType = (array, field, type) => array.reduce((acc, cur) => {
+    if (cur.type === type) {
+      return acc + parseInt(cur[field], 10);
+    }
+    return acc;
+  }, 0);
+  const sumHistoryByType = sumByType.bind(this, character.history, 'value');
+  // const sumChoiceByType = sumByType.bind(this, character.choices, 'decision');
+
+  return {
+    current: {
+      exp: sumHistoryByType('exp'),
+      hitpoints: sumHistoryByType('heal') - sumHistoryByType('damage'),
+    },
+  };
 };
 
 /*
@@ -388,14 +409,14 @@ const parse = (characterData) => {
     Console.error('Character hasn\'t chosen stats yet');
     character.isInvalid = true;
   }
-  // character.isInvalid = true;
 
   character.data = parseData(character);
   character.items = parseItems(character);
   character.actions = parseActions(character);
+  character.fields = parseFields(character);
   Console.log(character);
 
-  return character;
+  return Promise.resolve(character);
 };
 
 
@@ -433,7 +454,12 @@ export default class Character {
     if (typeof value !== 'number') {
       Console.error(`Character.takeDamage: value isn't a number ("${value}" instead)`);
     }
-    this.fields.current.hitpoints -= value;
+
+    this.history.push({
+      type: 'damage',
+      value,
+    });
+
     return this.save();
   }
 
@@ -441,23 +467,42 @@ export default class Character {
     if (typeof value !== 'number') {
       Console.error(`Character.takeDamage: value isn't a number ("${value}" instead)`);
     }
-    // Set hitpoints to current + value, or at highest, the total_hp
-    this.fields.current.hitpoints = Math.min(
-      value + this.fields.current.hitpoints,
-      this.get('total_hp')
-    );
+
+    this.history.push({
+      type: 'heal',
+      value,
+    });
+
+    return this.save();
+  }
+
+  addExp(value) {
+    this.history.push({
+      type: 'exp',
+      value,
+    });
 
     return this.save();
   }
 
 
-  // TODO: add a reason parameter so we can pick which level the
-  // skillpoints should be deducted from.
-  addSkillPoints(points) {
-    // TODO: make sure we get an object like {
+  addSkillPoints(points, reason) {
+    // make sure we get an object like {
     //  spellcraft: 9,
     //  craft (carpentry): 2,
     // }
+    Object.keys(points).map(skillName =>
+      // Map each object to an array of { name, value } objects
+      ({
+        name: skillName,
+        value: points[skillName],
+      })).forEach((pointData) => {
+      // pointData: { name: 'spellcraft', value: 9 }
+      checkDataAgainstRules(pointData, {
+        name: SKILLS.map(s => s.name), // one of skill name
+        value: 'number', // and the value should be a number
+      });
+    });
     let pointCount = 0;
     const choicesToAdd = Object.keys(points).map((skillName) => {
       pointCount += points[skillName];
@@ -465,6 +510,7 @@ export default class Character {
       return {
         type: 'skill',
         decision: points[skillName],
+        reason,
         target: skillName,
       };
     });
@@ -479,24 +525,21 @@ export default class Character {
     }
 
     choicesToAdd.forEach((choice) => {
-      // TODO: If the choice already exists, increase it by the new value
-      // if it doesn't then push it.
       this.choices.push(choice);
     });
 
-    this.save().then(this.onChange);
+    return this.save();
   }
 
   save() {
     const toSave = {
       id: this.id,
       name: this.name,
-      fields: this.fields,
+      history: this.history,
       choices: this.choices,
-      inventory: this.inventory,
-      slots: this.slots,
+      // inventory: this.inventory,
     };
-    return Fetch.save('character', this.id, toSave).then(() => this);
+    return Fetch.save('character', this.id, toSave).then(characterData => parse(characterData).then(character => new Character(character)));
   }
 }
 

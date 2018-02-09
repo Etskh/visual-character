@@ -178,7 +178,11 @@ export const SKILLS = [{
     description: 'Perceive the area with your eyes and ears.',
   }],
 }, {
-  // Profession is supposed to be a bunch of separate skills, but that's stupid and I don't have time to describe why that's super dumb right now, but maybe I should put why that's so dumb in the description. TODO: add a "why this is different from the ruleset justification section that will appear yellow in the skill description area"
+  // Profession is supposed to be a bunch of separate skills, but that's stupid
+  // and I don't have time to describe why that's super dumb right now, but maybe
+  // I should put why that's so dumb in the description.
+  // TODO: add a "why this is different from the ruleset justification section that
+  // will appear yellow in the skill description area"
   name: 'profession',
   stat: 'wis',
 }, {
@@ -284,7 +288,7 @@ export const ENCUMBRANCE = [{
   effect: {
     name: 'Medium encumbrance',
     data: {
-      max_dex: 3,
+      max_dex: 17,
       check_penalty: -3,
       move_speed_ratio: 0.6,
     },
@@ -296,7 +300,7 @@ export const ENCUMBRANCE = [{
   effect: {
     name: 'Heavy encumbrance',
     data: {
-      max_dex: 1,
+      max_dex: 13,
       check_penalty: -6,
       move_speed_ratio: 0.6,
       run_multiplier: 3,
@@ -309,7 +313,7 @@ export const ENCUMBRANCE = [{
   effect: {
     name: 'Staggered',
     data: {
-      max_dex: 0,
+      max_dex: 11,
       check_penalty: -20,
       move_speed_ratio: 0.1,
       run_multiplier: 0,
@@ -321,7 +325,7 @@ export const ENCUMBRANCE = [{
   effect: {
     name: 'Immobile',
     data: {
-      max_dex: 0,
+      max_dex: 11,
       check_penalty: -20,
       move_speed_ratio: 0,
       run_multiplier: 0,
@@ -343,26 +347,56 @@ export const getEncumbranceBracket = (weight, lightLoad) => {
 
 export const getNextLevel = (currentLevel) => {
   const choices = [];
+  const nextLevel = currentLevel + 1;
+  const exps = [
+    2,
+    5,
+    9,
+    15,
+    23,
+    35,
+    51,
+    75,
+    105,
+    155,
+    220,
+    315,
+    445,
+    635,
+    890,
+    1300,
+    1800,
+    2550,
+    3600,
+  ];
+
+  choices.push({
+    type: 'class',
+    reason: `level ${nextLevel}`,
+    decision: null,
+  });
+
   // if the next level is odd, add a feat
   if ((currentLevel + 1) % 2 === 1) {
     choices.push({
       type: 'feat',
+      reason: `level ${nextLevel}`,
       decision: null,
-      reason: `level ${currentLevel + 1}`,
     });
   }
   // If the next level is divisible by four, add a stat-point
   if ((currentLevel + 1) % 4 === 0) {
     choices.push({
       type: 'stat',
+      reason: `level ${nextLevel}`,
       decision: null,
-      reason: `level ${currentLevel + 1}`,
     });
   }
 
   return {
     level: currentLevel + 1,
-    exp: 2000, // TODO: fix this
+    // TODO: cover over level 19
+    exp: currentLevel < 1 ? 0 : exps[currentLevel - 1] * 1000,
     choices,
   };
 };

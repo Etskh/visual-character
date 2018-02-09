@@ -40,9 +40,7 @@ export default class AdvancementSkillView extends React.Component {
   }
 
   save() {
-    /*console.log(this.state.spentPoints);
-    */
-    this.props.character.addSkillPoints(this.state.spentPoints);
+    this.props.character.addSkillPoints(this.state.spentPoints, this.props.choice.reason);
   }
 
   render() {

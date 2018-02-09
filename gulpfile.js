@@ -7,7 +7,7 @@ const less = require('gulp-less');
 const minifyCSS = require('gulp-csso');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const babel = require("gulp-babel");
+const babel = require('gulp-babel');
 const webpack = require('webpack');
 
 gulp.task('webpack', (callback) => {
@@ -25,7 +25,7 @@ gulp.task('server', () => {
 });
 
 gulp.task('icon', () => {
-  return gulp.src('./src/client/assets/goblin-head.png')
+  return gulp.src('./src/client/assets/goblin-icon.png')
     .pipe(rename('favicon.png'))
     .pipe(gulp.dest('./public'));
 });

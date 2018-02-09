@@ -79,6 +79,7 @@ describe('Lib:Items', () => {
 
   it('getItem returns usable items', () => {
     const item = getItem({
+      id: 1,
       itemType: 'heavy metal shield',
       material: 'mithral',
       data: {
@@ -86,6 +87,7 @@ describe('Lib:Items', () => {
       },
     });
     const itemRules = {
+      id: 'number',
       name: 'string',
       weight: 'number', // in pounds (per item)
       count: 'number',

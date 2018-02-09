@@ -438,6 +438,7 @@ export const materials = [{
 
 export const getItem = (item) => {
   checkDataAgainstRules(item, {
+    id: 'ignore',
     itemType: itemTypes.map(type => type.name),
     material: {
       optional: materials.map(mat => mat.name)
@@ -519,6 +520,7 @@ export const getItem = (item) => {
 
   // Create the item
   const returnedItem = {
+    id: item.id,
     name: itemType.name,
     itemType,
     material,

@@ -2,14 +2,160 @@
   {
     "id": "1",
     "name": "Pig",
-    "fields": {
-      "current": {
-        "age": "10.5",
-        "exp": "500",
-        "hitpoints": "8",
-        "nonlethal": "0"
+    "history": [
+      {
+        "type": "add_item",
+        "target": {
+          "id": "2",
+          "itemType": "spellbook",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "3",
+          "itemType": "heavy crossbow",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "4",
+          "itemType": "bolt",
+          "count": "10"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "5",
+          "itemType": "fire opal gem",
+          "count": "4"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "6",
+          "itemType": "emerald gem",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "7",
+          "itemType": "jasper gem",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "8",
+          "itemType": "gold piece",
+          "count": "3"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "9",
+          "itemType": "silver piece",
+          "count": "9"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "10",
+          "itemType": "copper piece",
+          "count": "10"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "11",
+          "itemType": "golden topaz gem",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "12",
+          "itemType": "jade gem",
+          "count": "2"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "13",
+          "itemType": "moonstone gem",
+          "count": "1"
+        }
+      },
+      {
+        "type": "exp",
+        "value": "100"
+      },
+      {
+        "type": "heal",
+        "value": "11"
+      },
+      {
+        "type": "exp",
+        "value": "100"
+      },
+      {
+        "type": "exp",
+        "value": "100"
+      },
+      {
+        "type": "damage",
+        "value": "3"
+      },
+      {
+        "type": "heal",
+        "value": "2"
+      },
+      {
+        "type": "exp",
+        "value": "5"
+      },
+      {
+        "type": "exp",
+        "value": "10"
+      },
+      {
+        "type": "exp",
+        "value": "5"
+      },
+      {
+        "type": "exp",
+        "value": "13"
+      },
+      {
+        "type": "exp",
+        "value": "333"
+      },
+      {
+        "type": "exp",
+        "value": "111"
+      },
+      {
+        "type": "heal",
+        "value": "1"
+      },
+      {
+        "type": "damage",
+        "value": "5"
       }
-    },
+    ],
     "choices": [
       {
         "type": "race",
@@ -102,55 +248,12 @@
         "decision": "1",
         "reason": "level 1",
         "target": "perception"
-      }
-    ],
-    "inventory": [
-      {
-        "itemType": "spellbook"
       },
       {
-        "itemType": "heavy crossbow",
-        "count": "1"
-      },
-      {
-        "itemType": "bolt",
-        "count": "10"
-      },
-      {
-        "itemType": "fire opal gem",
-        "count": "4"
-      },
-      {
-        "itemType": "emerald gem",
-        "count": "1"
-      },
-      {
-        "itemType": "jasper gem",
-        "count": "1"
-      },
-      {
-        "itemType": "gold piece",
-        "count": "3"
-      },
-      {
-        "itemType": "silver piece",
-        "count": "9"
-      },
-      {
-        "itemType": "copper piece",
-        "count": "10"
-      },
-      {
-        "itemType": "golden topaz gem",
-        "count": "1"
-      },
-      {
-        "itemType": "jade gem",
-        "count": "2"
-      },
-      {
-        "itemType": "moonstone gem",
-        "count": "1"
+        "type": "skill",
+        "decision": "5",
+        "reason": "level 1",
+        "target": "spellcraft"
       }
     ]
   }
