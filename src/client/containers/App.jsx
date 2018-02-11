@@ -8,12 +8,14 @@ import Navigation from '../components/Navigation';
 import DebugFooter from '../components/DebugFooter';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
+import HamburgerMenu from '../components/HamburgerMenu';
 
 import AdvancementView from '../containers/AdvancementView';
 import WorldView from '../containers/WorldView';
 import CombatView from '../containers/CombatView';
 import InventoryView from '../containers/InventoryView';
 import OptionsView from '../containers/OptionsView';
+import NewCharacterView from '../containers/NewCharacterView';
 
 export class App extends React.Component {
   constructor(props) {
@@ -26,7 +28,7 @@ export class App extends React.Component {
       showsWhenInvalid: true,
     }, {
       name: 'World',
-      icon: 'map-o',
+      icon: 'compass',
       component: WorldView,
     }, {
       name: 'Inventory',
@@ -43,9 +45,15 @@ export class App extends React.Component {
       //  name: 'Companions',
       //  icon: 'paw',
     }, {
-        name: 'Options',
-        icon: 'gear',
-        component: OptionsView,
+      name: 'Options',
+      icon: 'gear',
+      component: OptionsView,
+      isVisible: false,
+    }, {
+      name: 'New Character',
+      icon: 'plus',
+      component: NewCharacterView,
+      isVisible: false,
     }];
 
     this.state = {
@@ -128,18 +136,19 @@ export class App extends React.Component {
   }
 
   render() {
-    const windowProps = {
-      character: this.state.character,
-      user: this.state.user,
-    };
     // TODO: render all the different windows at once,
     // and make the tabs just make them visible
     return <div id="page">
       <Navigation
         navs={this.state.navs}/>
-      { this.renderActiveNav(this.state.navs, windowProps)}
+      { this.renderActiveNav(this.state.navs, {
+        character: this.state.character,
+        user: this.state.user,
+      })}
       <DebugFooter />
       <ErrorBoundary>
+        <HamburgerMenu
+          user={this.state.user}/>
         <Modal />
       </ErrorBoundary>
     </div>;

@@ -9,6 +9,9 @@ export default class Navigation extends React.Component {
   }
 
   renderNavButton(nav) {
+    if( nav.isVisible === false ) {
+      return null;
+    }
     return <li key={nav.name} className={`nav-item vc-nav-item`}>
       <a className={`nav-link ${nav.isDisabled?'disabled':''} ${nav.isSelected?'selected':''}`}
         href="#"
