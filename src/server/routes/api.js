@@ -26,9 +26,13 @@ models.forEach((modelName) => {
   // Get route
   router.get(`/${modelName}/:id`, (req, res) => Model.get(modelName, req.params.id).then(obj => res.send(obj)).catch(apiErrorHandler.bind(this, res)));
   // Post route
-  // TODO: add special handling for 'new'
-  router.post(`/${modelName}/:id`, (req, res) => Model.save(modelName, req.params.id, req.body).then(obj => res.send(obj))
-    .catch(apiErrorHandler.bind(this, res)));
+  router.post(`/${modelName}/:id`, (req, res) => {
+    const model = (req.params.id === 'new' ?
+      Model.create(modelName, req.body)
+      : Model.save(modelName, req.params.id, req.body));
+
+    return model.then(obj => res.send(obj)).catch(apiErrorHandler.bind(this, res));
+  });
 });
 
 module.exports = router;

@@ -3,13 +3,14 @@
     "id": "1",
     "name": "James",
     "characters": [
-      "1"
+      "1",
+      "2"
     ],
-    "activeCharacter": "1",
+    "activeCharacter": "2",
     "settings": {
       "weight": "kilogram",
       "distance": "square",
-      "tab": "Combat"
+      "tab": "Advancement"
     }
   }
 ]

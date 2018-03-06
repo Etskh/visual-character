@@ -1,8 +1,8 @@
-import { Row, Col, } from '../../components/Core';
-import BarButton from '../../components/BarButton';
-import Modal from '../../components/Modal';
-import { getNextLevel } from '../../lib/constants';
-import Action from '../../lib/Action';
+import { Row, Col, } from '../components/Core';
+import BarButton from '../components/BarButton';
+import Modal from '../components/Modal';
+import { getNextLevel } from '../lib/constants';
+import Action from '../lib/Action';
 
 
 function ExpContent() {
@@ -31,7 +31,6 @@ export default function ExperienceBar(character) {
           const value = state.inputs[0].value;
           if( value ) {
             character.addExp(value).then( character => {
-              console.log(character);
               Action.fire('character.change', character);
             });
           }

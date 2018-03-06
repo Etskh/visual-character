@@ -42,6 +42,34 @@ export default class HamburgerMenu extends React.Component {
     </div>;
   }
 
+  renderUserSettings(self) {
+    const buttons = [{
+      title: 'Options',
+      page: 'Options',
+    }, {
+      title: 'View Changes',
+      page: 'Changelog',
+    }];
+
+    return buttons.map( button => {
+      return <div key={button.title}
+        style={{
+          marginTop: 2,
+        }}>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => {
+            self.closeMenu(self);
+            Action.fire('ui.selectNavigation', {
+              name: button.page,
+            });
+          }}>
+          {button.title}
+        </button>
+      </div>
+    })
+  }
+
   render() {
     return <div style={{
         top: 0,
@@ -105,15 +133,18 @@ export default class HamburgerMenu extends React.Component {
             padding: '1em',
             background: '#CCC',
           }}>
-          <h3>{'Pig '}
-            <button className="btn btn-secondary btn-sm">
-              <span className="fa fa-lg fa-pencil" aria-hidden="true"></span>
-            </button>
-          </h3>
+          {this.props.character ?
+            <h3>
+              {this.props.character.name}
+              <button className="btn btn-secondary btn-sm">
+                <span className="fa fa-lg fa-pencil" aria-hidden="true"></span>
+              </button>
+            </h3>
+            : 'Loading...'}
           <hr/>
           {this.renderCharacterList(this)}
           <hr/>
-          <button className="btn btn-success btn-sm disabled"
+          <button className="btn btn-success btn-sm"
             onClick={() => {
               this.closeMenu(this);
               Action.fire('ui.selectNavigation', {
@@ -124,18 +155,7 @@ export default class HamburgerMenu extends React.Component {
             {'  New Character'}
           </button>
           <hr/>
-          <div>
-            <button
-              onClick={() => {
-                this.closeMenu(this);
-                Action.fire('ui.selectNavigation', {
-                  name: 'Options',
-                });
-              }}
-              className="btn btn-secondary btn-sm">
-              Options
-            </button>
-          </div>
+          {this.renderUserSettings(this)}
         </div>
     </div>;
   }

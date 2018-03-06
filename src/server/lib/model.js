@@ -62,6 +62,25 @@ export const get = (model, id) => new Promise(resolve => loadAll(model).then((al
   return resolve(character);
 }));
 
+export const create = (model, data) => loadAll(model).then((all) => {
+  const highestId = all.reduce((acc, cur) => {
+    if (parseInt(cur.id, 10) > acc) {
+      return parseInt(cur.id, 10);
+    }
+    return acc;
+  }, 0);
+
+  const character = {
+    id: highestId + 1,
+    ...data,
+  };
+
+  all.push(character);
+
+  return saveAll(model, all).then(() => character);
+});
+
+
 export const save = (model, id, data) => loadAll(model).then((all) => {
   const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
   if (!character) {

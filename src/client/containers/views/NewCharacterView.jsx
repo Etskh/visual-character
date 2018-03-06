@@ -1,7 +1,7 @@
-import { Row, Col, RadioChoices } from '../components/Core';
-import NavigationWindow from '../components/NavigationWindow';
-import User from '../lib/User';
-import Action from '../lib/Action';
+import { Row, Col, RadioChoices } from '../../components/Core';
+import NavigationWindow from '../../components/NavigationWindow';
+import User from '../../lib/User';
+import Action from '../../lib/Action';
 
 export default class NewCharacterView extends React.Component {
   constructor(props) {
@@ -24,7 +24,17 @@ export default class NewCharacterView extends React.Component {
         </Col>
       </Row>
       <Row>
-        <Col align='center'><button className="btn btn-success">Create</button></Col>
+        <Col align='center'>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              const name = $('#newcharactername').val();
+              Action.fire('character.create', {
+                name,
+              });
+            }}>Create
+          </button>
+        </Col>
       </Row>
     </NavigationWindow>;
   }

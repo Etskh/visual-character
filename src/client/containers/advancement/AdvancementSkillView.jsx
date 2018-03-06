@@ -1,4 +1,4 @@
-import AdvancementSection from './Section';
+import AdvancementSection from '../Section';
 import { SKILLS } from '../../lib/constants';
 
 export default class AdvancementSkillView extends React.Component {

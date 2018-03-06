@@ -4,8 +4,10 @@ import {
   CHOICE_TYPES,
   CHOICE_REASONS,
   SKILLS,
+  STARTING_CHOICES,
 } from './constants';
-// import Race from './Race'; TODO: use this component to get race info
+import Race from './Race';
+import Class from './Class';
 import * as Items from './Items';
 import Fetch from './Fetch';
 import Console from './log';
@@ -170,76 +172,73 @@ export const parseData = (character) => {
         Console.error(Object.keys(dataCtx));
       }
       dataCtx[`skill_${choice.target}`].addChoice('points', parseInt(choice.decision, 10), choice);
-    } else if (choice.type === 'race' && choice.decision) {
-      /*
-        type: 'race',
-        decision: 'goblin',
-        reason: 'level 1',
-      */
-      // TODO: load race in based on decision
-      // load race
-      const race = {
-        name: 'goblin',
-        data: {
-          // nimble but unlikable
-          dex: 2,
-          cha: -2,
-          size: -1,
-        },
-      };
+    }
+  });
+
+
+  return new Promise((resolve) => {
+    //
+    // Parse race, maybe pull out into own function
+    //
+    const raceChoice = character.choices.find(c => c.type === 'race' && c.decision);
+    if (!raceChoice) {
+      return resolve(dataCtx);
+    }
+
+    Race.load(raceChoice.decision).then((race) => {
       Object.keys(race.data).forEach((field) => {
-        dataCtx[field].addChoice(choice.decision, race.data[field], choice);
+        dataCtx[field].addChoice(raceChoice.decision, race.data[field], raceChoice);
       });
-    } else {
-      // TODO: how to do feats???
-    }
-  });
 
-  // All classes
-  // TODO: load classes in
-  const classesData = [{
-    id: 1,
-    name: 'wizard',
-    bab_growth: 'slow',
-    fort_save_growth: 'bad',
-    ref_save_growth: 'bad',
-    will_save_growth: 'good',
-    features: [],
-  }];
-  const growthTypes = {
-    slow: lvl => Math.floor(lvl / 2),
-    bad: lvl => Math.floor(lvl / 3),
-    good: lvl => Math.floor(lvl / 2) + 2,
-  };
-
-  const classLevels = {
-    // empty
-  };
-  character.choices.forEach((choice) => {
-    if (choice.type === 'class') {
-      if (!classLevels[choice.decision]) {
-        classLevels[choice.decision] = 1;
-      } else {
-        classLevels[choice.decision] += 1;
-      }
-    }
-  });
-  const saves = [
-    'bab',
-    'fort_save',
-    'ref_save',
-    'will_save',
-  ];
-  saves.forEach((field) => {
-    Object.keys(classLevels).forEach((className) => {
-      const growthMetric = classesData.find(cls => className === cls.name)[`${field}_growth`];
-      const reason = `level ${classLevels[className]} ${className}`;
-      const value = growthTypes[growthMetric](classLevels[className]);
-      dataCtx[field].addValue(reason, value);
+      return resolve(dataCtx);
     });
-  });
+  }).then(dataCtx =>
+    //
+    // Parse class, maybe pull out into own function
+    //
+    Class.all().then((classesData) => {
+      const growthTypes = {
+        // saves
+        bad: lvl => Math.floor(lvl / 3),
+        good: lvl => Math.floor(lvl / 2) + 2,
+        // bab
+        slow: lvl => Math.floor(lvl / 2),
+        average: lvl => Math.floor(lvl / 1.5),
+        fast: lvl => lvl,
+      };
 
-  return dataCtx;
+      const classLevels = {
+        // empty
+      };
+      character.choices.forEach((choice) => {
+        if (choice.type === 'class' && choice.decision !== '') {
+          if (!classLevels[choice.decision]) {
+            classLevels[choice.decision] = 1;
+          } else {
+            classLevels[choice.decision] += 1;
+          }
+        }
+      });
+
+      if (Object.keys(classLevels).length > 0) {
+        const saves = [
+          'bab',
+          'fort_save',
+          'ref_save',
+          'will_save',
+        ];
+        saves.forEach((field) => {
+          Object.keys(classLevels).forEach((className) => {
+            const growthMetric = classesData.find(cls => className === cls.name)[`${field}_growth`];
+            const reason = `level ${classLevels[className]} ${className}`;
+            const value = growthTypes[growthMetric](classLevels[className]);
+            dataCtx[field].addValue(reason, value);
+          });
+        });
+      }
+
+      return dataCtx;
+    }));
 };
 
 
@@ -284,7 +283,7 @@ const download = (id) => {
       id: 'number',
       name: 'string',
       choices: 'array', // downloadedChoiceData
-      history: 'array', // TODO: Verify history objects
+      history: 'ignore', // TODO: Verify history objects
       inventory: 'ignore',
     });
 
@@ -303,7 +302,9 @@ const download = (id) => {
       });
     });
 
-    return Object.assign(character, {});
+    return Object.assign(character, {
+      history: character.history || [],
+    });
   });
 };
 
@@ -374,33 +375,12 @@ const parseFields = (character) => {
   };
 };
 
-/*
-const parseRace = (character) => {
-  // Things race affects:
-  const raceChoice = character.choices.find(choice => choice.type === 'race');
-  if (!raceChoice) {
-    Console.error('Character hasn\'t chosen race yet');
-    return Promise.resolve(character);
-  }
-
-  return Race.load(raceChoice.decision).then((race) => {
-    // Set the character's race
-    character.race = race;
-
-    // Set all the race data
-    Object.keys(character.race.data).forEach((fieldName) => {
-      character.data[fieldName][character.race.name] = character.race.data[fieldName];
-    });
-
-    return character;
-  });
-};
-*/
-
 
 const parse = (characterData) => {
   // Initialize the data fields
-  const character = Object.assign({}, characterData);
+  const character = Object.assign({
+    history: [], // if there is no history
+  }, characterData);
 
   // Add the player's choices for the base stats
   // Check if the player is invalid!
@@ -410,13 +390,15 @@ const parse = (characterData) => {
     character.isInvalid = true;
   }
 
-  character.data = parseData(character);
-  character.items = parseItems(character);
-  character.actions = parseActions(character);
-  character.fields = parseFields(character);
-  Console.log(character);
+  return parseData(character).then((data) => {
+    character.data = data;
 
-  return Promise.resolve(character);
+    character.items = parseItems(character);
+    character.actions = parseActions(character);
+    character.fields = parseFields(character);
+
+    return character;
+  });
 };
 
 
@@ -485,6 +467,19 @@ export default class Character {
     return this.save();
   }
 
+  setBaseScores(scores) {
+    // Strip out all "base_stat" choices (it's the blank one)
+    const choicesWithoutStat = this.choices.filter(c => c.type !== 'base_stat');
+
+    // Add all our base scores
+    this.choices = choicesWithoutStat.concat(Object.keys(scores).map(scoreName => ({
+      type: 'base_stat',
+      decision: scores[scoreName],
+      reason: 'level 1',
+      target: scoreName,
+    })));
+    return this.save();
+  }
 
   addSkillPoints(points, reason) {
     // make sure we get an object like {
@@ -531,16 +526,30 @@ export default class Character {
     return this.save();
   }
 
+  selectRace(race) {
+    const raceChoice = this.choices.find(c => c.type === 'race');
+    raceChoice.decision = race.name;
+    return this.save();
+  }
+
   save() {
     const toSave = {
       id: this.id,
       name: this.name,
       history: this.history,
       choices: this.choices,
-      // inventory: this.inventory,
     };
     return Fetch.save('character', this.id, toSave).then(characterData => parse(characterData).then(character => new Character(character)));
   }
 }
+
+Character.create = (data) => {
+  const characterData = {
+    name: data.name,
+    choices: STARTING_CHOICES,
+    history: [], // nothing happened yet!
+  };
+  return Fetch.save('character', 'new', characterData).then(savedData => parse(savedData).then(character => new Character(character)));
+};
 
 Character.load = id => download(id).then(parse).then(character => new Character(character));

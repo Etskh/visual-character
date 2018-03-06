@@ -1,6 +1,7 @@
 
 import * as Action from '../../common/Action';
 import User from './User';
+import Character from './Character';
 
 // Main application events
 Action.create('init', () => {
@@ -29,5 +30,9 @@ Action.create('user.change', (user) => {
   // TODO change teh translation settings here
   // }
 });
+
+Action.create('character.create', data => Character.create(data).then((character) => {
+  Action.fire('character.change', character);
+}));
 
 export default Action;

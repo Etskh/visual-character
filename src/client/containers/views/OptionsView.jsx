@@ -1,11 +1,11 @@
-import { Row, Col, RadioChoices } from '../components/Core';
-import NavigationWindow from '../components/NavigationWindow';
-import User from '../lib/User';
-import Action from '../lib/Action';
+import { Row, Col, RadioChoices } from '../../components/Core';
+import NavigationWindow from '../../components/NavigationWindow';
+import User from '../../lib/User';
+import Action from '../../lib/Action';
 import {
   WEIGHTS,
   DISTANCES,
-} from '../lib/Translator';
+} from '../../lib/Translator';
 
 export default class OptionsView extends React.Component {
   constructor(props) {

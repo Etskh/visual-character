@@ -1,8 +1,8 @@
-import NavigationWindow from '../components/NavigationWindow';
-import { Row, Col } from '../components/Core';
-import { itemCategories } from '../lib/Items';
-import Modal from '../components/Modal';
-import EncumbranceSection from './inventory/Encumbrance';
+import NavigationWindow from '../../components/NavigationWindow';
+import { Row, Col } from '../../components/Core';
+import { itemCategories } from '../../lib/Items';
+import Modal from '../../components/Modal';
+import EncumbranceSection from '../inventory/Encumbrance';
 
 function getCritInfo(item) {
   const crit = (item.itemType.data.critRange > 1 ?

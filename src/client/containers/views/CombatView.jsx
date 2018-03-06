@@ -1,9 +1,9 @@
 
-import { Row, Col, Button, } from '../components/Core';
-import NavigationWindow from '../components/NavigationWindow';
-import HealthBarColumn from './combat/HealthBar';
-import StatButton from '../components/StatButton';
-import ActionList from '../components/ActionList';
+import { Row, Col, Button, } from '../../components/Core';
+import NavigationWindow from '../../components/NavigationWindow';
+import HealthBarColumn from '../combat/HealthBar';
+import StatButton from '../../components/StatButton';
+import ActionList from '../../components/ActionList';
 
 export default class CombatView extends React.Component {
   constructor(props) {

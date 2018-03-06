@@ -10,12 +10,15 @@ import Loading from '../components/Loading';
 import Modal from '../components/Modal';
 import HamburgerMenu from '../components/HamburgerMenu';
 
-import AdvancementView from '../containers/AdvancementView';
-import WorldView from '../containers/WorldView';
-import CombatView from '../containers/CombatView';
-import InventoryView from '../containers/InventoryView';
-import OptionsView from '../containers/OptionsView';
-import NewCharacterView from '../containers/NewCharacterView';
+import AdvancementView from '../containers/views/AdvancementView';
+import WorldView from '../containers/views/WorldView';
+import CombatView from '../containers/views/CombatView';
+import InventoryView from '../containers/views/InventoryView';
+import OptionsView from '../containers/views/OptionsView';
+import NewCharacterView from '../containers/views/NewCharacterView';
+import ChangelogView from '../containers/views/ChangelogView';
+
+import AdvancementRaceView from '../containers/advancement/AdvancementRaceView';
 
 export class App extends React.Component {
   constructor(props) {
@@ -53,6 +56,16 @@ export class App extends React.Component {
       name: 'New Character',
       icon: 'plus',
       component: NewCharacterView,
+      isVisible: false,
+    }, {
+      name: 'Changelog',
+      icon: 'plus',
+      component: ChangelogView,
+      isVisible: false,
+    }, {
+      name: 'Race Selection',
+      icon: 'plus',
+      component: AdvancementRaceView,
       isVisible: false,
     }];
 
@@ -148,7 +161,8 @@ export class App extends React.Component {
       <DebugFooter />
       <ErrorBoundary>
         <HamburgerMenu
-          user={this.state.user}/>
+          user={this.state.user}
+          character={this.state.character}/>
         <Modal />
       </ErrorBoundary>
     </div>;

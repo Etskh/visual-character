@@ -86,7 +86,7 @@ const races = [{
   stat_description: 'Goblins are sneaky and nimble, but frail and unlikable.',
   data: {
     size: -1,
-    str: -2,
+    // there should be -2 Strength (for a total of -4, but that's dumb)
     dex: 2, // goblins get +4 dex in the book, but they don't compute size (we do!)
     cha: -2,
     skill_stealth: 4,
@@ -95,20 +95,24 @@ const races = [{
 
 
 export default class Race {
-  // empty
-}
+  static load(name) {
+    const race = races.find(r => r.name === name);
+    if (!race) {
+      return Promise.reject(new Error(`No known race with name ${name}`));
+    }
 
-Race.load = (name) => {
-  const race = races.find(r => r.name === name);
-  if (!race) {
-    return Promise.reject(new Error(`No known race with name ${name}`));
+    return Promise.resolve(race);
   }
 
-  return Promise.resolve(race);
-};
+  static all() {
+    return Promise.resolve(races);
+  }
 
-Race.getStats = () => races.map(race => ({
-  name: race.name,
-  fullname: race.name,
-  description: race.stat_description,
-}));
+  static getStats() {
+    return races.map(race => ({
+      name: race.name,
+      fullname: race.name,
+      description: race.stat_description,
+    }));
+  }
+}

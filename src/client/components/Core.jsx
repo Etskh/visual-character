@@ -123,7 +123,9 @@ export function RadioChoices(name, selected, onChange, choices) {
       })}
     </select>
   </div>;
-
+  /*
+  Old way:
+  
   return <div className="btn-group btn-group-toggle" data-toggle="buttons">
     {choices.map(choice => {
       const isActive = choice === selected;
@@ -133,5 +135,5 @@ export function RadioChoices(name, selected, onChange, choices) {
           }}/> {choice}
       </label>
     })}
-  </div>
+  </div>;*/
 }

@@ -256,5 +256,57 @@
         "target": "spellcraft"
       }
     ]
+  },
+  {
+    "id": "2",
+    "name": "Doug",
+    "choices": [
+      {
+        "type": "class",
+        "reason": "level 1",
+        "decision": ""
+      },
+      {
+        "type": "race",
+        "reason": "level 1",
+        "decision": "half-elf"
+      },
+      {
+        "type": "base_stat",
+        "decision": "13",
+        "reason": "level 1",
+        "target": "str"
+      },
+      {
+        "type": "base_stat",
+        "decision": "12",
+        "reason": "level 1",
+        "target": "dex"
+      },
+      {
+        "type": "base_stat",
+        "decision": "13",
+        "reason": "level 1",
+        "target": "con"
+      },
+      {
+        "type": "base_stat",
+        "decision": "8",
+        "reason": "level 1",
+        "target": "int"
+      },
+      {
+        "type": "base_stat",
+        "decision": "17",
+        "reason": "level 1",
+        "target": "wis"
+      },
+      {
+        "type": "base_stat",
+        "decision": "14",
+        "reason": "level 1",
+        "target": "cha"
+      }
+    ]
   }
 ]
