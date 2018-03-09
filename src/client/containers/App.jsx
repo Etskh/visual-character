@@ -3,7 +3,12 @@ import Character from '../lib/Character';
 import User from '../lib/User';
 import Action from '../lib/Action';
 
-import { ErrorBoundary } from '../components/Core';
+import {
+  Row,
+  Col,
+  Button,
+  ErrorBoundary
+} from '../components/Core';
 import Navigation from '../components/Navigation';
 import DebugFooter from '../components/DebugFooter';
 import Loading from '../components/Loading';
@@ -16,6 +21,7 @@ import CombatView from '../containers/views/CombatView';
 import InventoryView from '../containers/views/InventoryView';
 import OptionsView from '../containers/views/OptionsView';
 import NewCharacterView from '../containers/views/NewCharacterView';
+import NewUserView from '../containers/views/NewUserView';
 import ChangelogView from '../containers/views/ChangelogView';
 
 import AdvancementRaceView from '../containers/advancement/AdvancementRaceView';
@@ -58,18 +64,21 @@ export class App extends React.Component {
       component: NewCharacterView,
       isVisible: false,
     }, {
+      name: 'New User',
+      icon: 'plus',
+      component: NewUserView,
+      isVisible: false,
+      bypassCharacterCheck: true,
+    }, {
       name: 'Changelog',
       icon: 'plus',
       component: ChangelogView,
       isVisible: false,
-    }, {
-      name: 'Race Selection',
-      icon: 'plus',
-      component: AdvancementRaceView,
-      isVisible: false,
+      bypassCharacterCheck: true,
     }];
 
     this.state = {
+      error: null,
       user: null,
       character: null,
       navs: navs.map( nav => {
@@ -82,7 +91,9 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    Action.subscribeAll(this, __filename, {
+    Action.subscribeAll(this, 'App', {
+      'error': this.onError,
+      // 'user.logout': this.onLogout,
       'ui.selectNavigation': this.onSelectNavigation,
       'user.change': this.onUserChange,
       'character.change': this.onCharacterChange,
@@ -92,7 +103,13 @@ export class App extends React.Component {
   }
 
   componentWillUnmount() {
-    Action.unsubscribeAll(__filename);
+    Action.unsubscribeAll('App');
+  }
+
+  onError(error) {
+    this.setState({
+      error: JSON.stringify(error),
+    });
   }
 
   onSelectNavigation(selectedNav) {
@@ -114,7 +131,10 @@ export class App extends React.Component {
         // Set the user's last tab open
         navs: prevState.navs.map( nav => {
           return Object.assign(nav, {
-            isSelected: nav.name === user.settings.tab,
+            isSelected: user ?
+              // if there is a user, use their settings
+              // otherwise, let's set it to New User because.. .we dont have one
+              nav.name === user.settings.tab : 'New User' === nav.name,
           });
         }),
       };
@@ -128,7 +148,7 @@ export class App extends React.Component {
         // Disable navs if the character is invalid
         navs: prevState.navs.map( nav => {
           return Object.assign(nav, {
-            isDisabled: character.isInvalid && !nav.showsWhenInvalid,
+            isDisabled: (character && character.isInvalid) && !nav.showsWhenInvalid,
           });
         }),
       };
@@ -136,10 +156,20 @@ export class App extends React.Component {
   }
 
   renderActiveNav(navs, props) {
-    const activeNav = navs.find( nav => nav.isSelected );
-    if( !activeNav || !props.character ) {
+    const activeNav = navs.find( nav => nav.isSelected ) || null;
+    if( !activeNav ) {
+      console.warn('No active nav');
       return <Loading/>;
     }
+    if( !activeNav.bypassCharacterCheck && !this.state.character ) {
+      console.warn('No character check and no character');
+      console.log(activeNav);
+      return <Loading/>;
+    }
+
+    // TODO: if we have a real nav, but we're waiting for the character,
+    // show the loading component
+
     if ( !activeNav.component ) {
       console.warn(`Navigation ${activeNav.name} has no component`);
       return null;
@@ -152,19 +182,35 @@ export class App extends React.Component {
     // TODO: render all the different windows at once,
     // and make the tabs just make them visible
     return <div id="page">
-      <Navigation
-        navs={this.state.navs}/>
-      { this.renderActiveNav(this.state.navs, {
-        character: this.state.character,
-        user: this.state.user,
-      })}
-      <DebugFooter />
       <ErrorBoundary>
-        <HamburgerMenu
-          user={this.state.user}
-          character={this.state.character}/>
+        { !this.state.user ? null :
+          <Navigation
+            navs={this.state.navs}/>
+        }
+        { !this.state.user ? null :
+          <HamburgerMenu
+            user={this.state.user}
+            character={this.state.character}/>
+        }
+        {!this.state.error ? null : <div className='container'>
+          <Row>
+            <Col align='center'>
+                <div className='alert alert-danger' role='alert'>
+                  <p>There was an error</p>
+                  <Button type='info'>Report bug</Button>
+                  <Button type='secondary'>Continue</Button>
+                </div>
+            </Col>
+          </Row>
+        </div>}
+        {/* This renders the active nav programatically */}
+        { this.renderActiveNav(this.state.navs, {
+          character: this.state.character,
+          user: this.state.user,
+        })}
         <Modal />
       </ErrorBoundary>
+      <DebugFooter />
     </div>;
   }
 }

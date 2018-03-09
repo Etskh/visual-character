@@ -35,6 +35,36 @@ export default class Fetch {
       });
     });
   }
+
+  static login(username, password) {
+    if (Fetch.jQuery === null) {
+      Fetch.jQuery = $;
+    }
+    return new Promise((resolve, reject) => {
+      Fetch.jQuery.ajax({
+        url: `/auth/login`,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          username,
+          password,
+        },
+        success: obj => resolve(obj),
+        error: (_, textStatus, errorThrown) => reject({
+          textStatus,
+          httpError: errorThrown,
+        }),
+      });
+    });
+  }
+
+  static getLocal(key) {
+    return Promise.resolve(JSON.parse(window.localStorage.getItem(key)));
+  }
+
+  static setLocal(key, value) {
+    return Promise.resolve(window.localStorage.setItem(key, JSON.stringify(value)));
+  }
 }
 
 // For mocking the tests, let's export jQuery

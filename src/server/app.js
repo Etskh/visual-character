@@ -6,6 +6,7 @@ const hbs = require('express-hbs');
 // Local modules
 const logger = require('./lib/logger');
 const apiRoute = require('./routes/api');
+const authRoute = require('./routes/auth');
 
 // Create the app
 const app = express();
@@ -22,7 +23,7 @@ app.set('views', path.join(__dirname, '../views'));
 const config = {
   name: 'Visual Character',
   description: 'A system agnostic RPG character manager',
-  version: '0.3',
+  version: '0.0.10',
   port: process.env.PORT || 3000,
 };
 
@@ -45,7 +46,9 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/auth', authRoute);
 app.use('/api', apiRoute);
+
 
 // Listen on configured port
 app.listen(config.port, () => {

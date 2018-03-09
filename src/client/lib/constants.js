@@ -188,9 +188,6 @@ export const SKILLS = [{
 }, {
   name: 'ride',
   stat: 'dex',
-}, {
-  name: 'ride',
-  stat: 'dex',
   hasCheckPenalty: true,
 }, {
   name: 'sense motive',

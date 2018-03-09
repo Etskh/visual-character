@@ -1,6 +1,7 @@
 [
   {
     "id": "1",
+    "username": "admin",
     "name": "James",
     "characters": [
       "1",
@@ -10,7 +11,7 @@
     "settings": {
       "weight": "kilogram",
       "distance": "square",
-      "tab": "Advancement"
+      "tab": "Combat"
     }
   }
 ]

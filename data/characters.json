@@ -264,7 +264,7 @@
       {
         "type": "class",
         "reason": "level 1",
-        "decision": ""
+        "decision": "monk"
       },
       {
         "type": "race",
@@ -306,6 +306,43 @@
         "decision": "14",
         "reason": "level 1",
         "target": "cha"
+      },
+      {
+        "type": "hitpoints",
+        "decision": "8",
+        "reason": "level 1 monk"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 monk",
+        "target": "intimidate"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 monk",
+        "target": "diplomacy"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 monk",
+        "target": "bluff"
+      }
+    ],
+    "history": [
+      {
+        "type": "damage",
+        "value": "2"
+      },
+      {
+        "type": "heal",
+        "value": "5"
+      },
+      {
+        "type": "damage",
+        "value": "1"
       }
     ]
   }

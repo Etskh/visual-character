@@ -158,6 +158,16 @@ STATS.forEach((stat) => {
 
 [
   // TODO: Have the list of classes elsewhere
+  'barbarian',
+  'bard',
+  'cleric',
+  'druid',
+  'fighter',
+  'monk',
+  'paladin',
+  'ranger',
+  'rogue',
+  'sorcerer',
   'wizard',
 ].forEach((className) => {
   for (let level = 1; level < 20; level += 1) {

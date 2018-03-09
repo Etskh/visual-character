@@ -138,6 +138,11 @@ export const parseData = (character) => {
   // Choices
   //
   character.choices.forEach((choice) => {
+    // If there is no decision, then reject it
+    if( !choice.decision ) {
+      return;
+    }
+
     if (choice.type === 'base_stat' && choice.target) {
       /* {
         type: 'base_stat',
@@ -276,7 +281,6 @@ const parseActions = () => {
 
 
 const download = (id) => {
-  Console.log(`Downloading character ${id}...`);
   return Fetch.get('character', id).then((character) => {
     // Check over-all object
     checkDataAgainstRules(character, {
@@ -291,7 +295,8 @@ const download = (id) => {
     character.choices.forEach((choice) => {
       checkDataAgainstRules(choice, {
         type: CHOICE_TYPES,
-        reason: CHOICE_REASONS,
+        // TODO: regulate reasons differently
+        reason: 'ignore', // CHOICE_REASONS,
         decision: {
           optional: 'string',
         },
@@ -367,11 +372,12 @@ const parseFields = (character) => {
   const sumHistoryByType = sumByType.bind(this, character.history, 'value');
   // const sumChoiceByType = sumByType.bind(this, character.choices, 'decision');
 
+  // Gaining total hit points will increase the current as well
+  const total_hp = character.data.total_hp.getTotal();
+
   return {
-    current: {
-      exp: sumHistoryByType('exp'),
-      hitpoints: sumHistoryByType('heal') - sumHistoryByType('damage'),
-    },
+    exp: sumHistoryByType('exp'),
+    hitpoints: total_hp + Math.min(sumHistoryByType('heal') - sumHistoryByType('damage'), 0),
   };
 };
 
@@ -408,19 +414,16 @@ export default class Character {
       this[field] = config[field];
     });
 
-    this.onChange = null;
+    if( !this.history ) {
+      this.history = [];
+    }
   }
 
   get(field) {
     if (!this.data[field]) {
       // If the data field doesn't exist
-      if (this.fields.current[field]) {
-        // Return the current value for the field they're asking for
-        // if we have it, for example:
-        //   current: {
-        //     hitpoints: 5
-        //   }
-        return this.fields.current[field];
+      if (this.fields[field]) {
+        return this.fields[field];
       }
 
       // Okay, we don't know what it is
@@ -430,6 +433,25 @@ export default class Character {
 
     // Return the total of the computed field data
     return this.data[field].getTotal();
+  }
+
+
+  replaceChoiceWithChoices( oldChoice, newChoices ) {
+    // Find the choice like oldChoice
+    const choicesWithoutOld = this.choices.filter( c => {
+      return !(c.type === oldChoice.type
+        && c.decision === oldChoice.decision
+        && c.target === oldChoice.target
+        && c.reason === oldChoice.reason);
+    });
+
+    this.choices = choicesWithoutOld.concat(newChoices);
+
+    return this.save();
+  }
+
+  replaceChoice( oldChoice, newChoice ) {
+    return this.replaceChoiceWithChoices(oldChoice, [ newChoice ]);
   }
 
   takeDamage(value) {
@@ -527,8 +549,65 @@ export default class Character {
   }
 
   selectRace(race) {
+    // Selects any race no matter what
     const raceChoice = this.choices.find(c => c.type === 'race');
     raceChoice.decision = race.name;
+    return this.save();
+  }
+
+  selectHitpoints(num) {
+    const hpChoice = this.choices.find(c => (c.type === 'hitpoints' && !c.decision));
+    if( !hpChoice ) {
+      return Promise.reject(`Can't find an empty hitpoints choice`);
+    }
+
+    this.replaceChoice(hpChoice, {
+      type: 'hitpoints',
+      decision: num,
+      reason: hpChoice.reason,
+      target: hpChoice.target,
+    });
+
+    return this.save();
+  }
+
+  selectClass(cls) {
+    // Changes the unchosen decision
+    const classChoice = this.choices.find(c => (c.type === 'class' && !c.decision));
+    classChoice.decision = cls.name;
+
+    // Find the current level of the chosen class
+    const classCount = this.choices.filter(c => c.type === 'class' && c.decision === cls.name ).reduce((acc, c) => acc + 1, 0);
+
+    // Total level of the class
+    // FIXME: this breaks leveling up, as it is the current level of the chosen class,
+    // but not necessarily the first class ever
+    if( classCount === 1) {
+      // This is the first level, so add what a first-level class will get
+      this.choices.push({
+        type: 'hitpoints',
+        decision: cls.hitdice,
+        reason: `level 1 ${cls.name}`,
+      });
+    }
+    else {
+      // If it's the second level-up or higher, they need to choose hitpoints
+      this.choices.push({
+        type: 'hitpoints',
+        decision: null,
+        reason: `level ${classCount} ${cls.name}`,
+        target: cls.hitdice,
+      });
+    }
+
+    // And now for the rest of the skills
+    this.choices.push({
+      type: 'skill',
+      // Leveling up gives the character CLASS_SKILL_POINTS + INT_MOD per level, min 1
+      decision: Math.max(cls.skill_points + this.get('int_mod'), 1),
+      reason: `level ${classCount} ${cls.name}`,
+    });
+
     return this.save();
   }
 
@@ -539,6 +618,7 @@ export default class Character {
       history: this.history,
       choices: this.choices,
     };
+
     return Fetch.save('character', this.id, toSave).then(characterData => parse(characterData).then(character => new Character(character)));
   }
 }
@@ -553,3 +633,6 @@ Character.create = (data) => {
 };
 
 Character.load = id => download(id).then(parse).then(character => new Character(character));
+
+// FIXME: This is hacky, but it's used to reduce overhead (download only the character, but no parsing. Maybe we should include the names in the user to remove this)
+Character.download = download;

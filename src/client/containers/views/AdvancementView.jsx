@@ -8,7 +8,7 @@ import AdvancementSkillView from '../advancement/AdvancementSkillView';
 import AdvancementClassView from '../advancement/AdvancementClassView';
 import AdvancementRaceView from '../advancement/AdvancementRaceView';
 import AdvancementBaseStat from '../advancement/AdvancementBaseStat';
-
+import AdvancementHitpoints from '../advancement/AdvancementHitpoints';
 
 const jqWait = (tag, func, args) => {
   return new Promise( resolve => {
@@ -89,12 +89,14 @@ export default class AdvancementView extends React.Component {
       'skill': 'Skill Selection',
       'class': 'Class Selection',
       'race': 'Race Selection',
+      'hitpoints': 'Roll Hitpoints',
     };
     const sectionViews = {
       'base_stat': AdvancementBaseStat,
       'skill': AdvancementSkillView,
       'class': AdvancementClassView,
       'race': AdvancementRaceView,
+      'hitpoints': AdvancementHitpoints,
     };
 
     if ( !sectionTabs[choice.type] ) {

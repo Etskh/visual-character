@@ -1,4 +1,5 @@
 import NavigationWindow from './NavigationWindow';
+import { Row, Col, } from './Core';
 
 export default class Loading extends React.Component {
   constructor(props) {
@@ -7,12 +8,19 @@ export default class Loading extends React.Component {
 
   render() {
     return <NavigationWindow
-      title='Loading'>
-      <div className="row">
-        <div className="col">
-          <i className="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-        </div>
-      </div>
+      title=' '>
+      <Row spacing={2}>
+        <Col align='center'>
+          <h3>Loading...</h3>
+        </Col>
+      </Row>
+      <Row>
+        <Col align='center'>
+          <img
+            src="/favicon.png"
+            className='fa-spin'/>
+        </Col>
+      </Row>
     </NavigationWindow>;
   }
 }

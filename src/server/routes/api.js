@@ -1,8 +1,8 @@
 // TODO: make this Es20115 syntax
-const express = require('express');
-const bodyParser = require('body-parser');
-const Model = require('../lib/model');
-const Logger = require('../lib/logger');
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as Model from '../lib/model';
+import * as Logger from '../lib/logger';
 
 const router = express.Router();
 router.use(bodyParser.urlencoded({
@@ -17,6 +17,7 @@ const apiErrorHandler = (res, err) => {
   });
 };
 
+// List all the models that we'll save here
 const models = [
   'character',
   'user',
@@ -24,6 +25,7 @@ const models = [
 
 models.forEach((modelName) => {
   // Get route
+  // TODO: add /all as a special id that returns all the models
   router.get(`/${modelName}/:id`, (req, res) => Model.get(modelName, req.params.id).then(obj => res.send(obj)).catch(apiErrorHandler.bind(this, res)));
   // Post route
   router.post(`/${modelName}/:id`, (req, res) => {

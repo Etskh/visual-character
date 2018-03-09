@@ -1,4 +1,9 @@
+import PropTypes from 'prop-types';
 import Action from '../lib/Action';
+import { Row, Col, Button } from './Core';
+
+
+// TODO Handle a null user better
 
 export default class HamburgerMenu extends React.Component {
   constructor(props) {
@@ -6,7 +11,26 @@ export default class HamburgerMenu extends React.Component {
 
     this.state = {
       isOpen: false,
+      inactiveCharacterList: [],
     };
+
+    Action.subscribe('HamburgerMenu', 'user.change', (user) => {
+      if( user ) {
+        this.setInactiveCharacters(this, user);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.setInactiveCharacters(this, this.props.user);
+  }
+
+  setInactiveCharacters(self, user) {
+    user.getInactiveCharacterList().then( characters => {
+      self.setState({
+        inactiveCharacterList: characters,
+      });
+    });
   }
 
   onToggle(self) {
@@ -33,12 +57,23 @@ export default class HamburgerMenu extends React.Component {
 
   renderCharacterList(self) {
     return <div id="vc-character-list">
-      <div>Character List</div>
-      <div>
-        <button className="btn btn-secondary btn-sm disabled">
-          {' Kazrah'}
-        </button>
-      </div>
+      <Row><Col>Character List</Col></Row>
+      {self.state.inactiveCharacterList.map( character => {
+        return <Row key={character.name}>
+          <Col>
+            <Button
+              type='secondary'
+              onClick={() => {
+                this.props.user.setActiveCharacter(character.id).then( user => {
+                  self.closeMenu(self);
+                  Action.fire('user.change', user);
+                });
+              }}>
+              {character.name}
+            </Button>
+          </Col>
+        </Row>
+      })}
     </div>;
   }
 
@@ -56,8 +91,7 @@ export default class HamburgerMenu extends React.Component {
         style={{
           marginTop: 2,
         }}>
-        <button
-          className="btn btn-secondary btn-sm"
+        <Button type='secondary' size='small'
           onClick={() => {
             self.closeMenu(self);
             Action.fire('ui.selectNavigation', {
@@ -65,7 +99,7 @@ export default class HamburgerMenu extends React.Component {
             });
           }}>
           {button.title}
-        </button>
+        </Button>
       </div>
     })
   }
@@ -98,10 +132,11 @@ export default class HamburgerMenu extends React.Component {
           position: 'fixed',
           zIndex: 250,
         }}>
-        <button
-          className="btn btn-outline-primary btn-sm"
+        <Button
+          type='outline-primary'
           style={{
-            border:'none',
+            margin: 0,
+            border: 'none',
             color: '#FFF',
           }}
           onClick={(e) => {
@@ -120,7 +155,7 @@ export default class HamburgerMenu extends React.Component {
               ? <span className="fa fa-3x fa-times" aria-hidden="true"></span>
               : <span className="fa fa-3x fa-ellipsis-v" aria-hidden="true"></span>
             }
-          </button>
+          </Button>
         </div>
         <div id="hamburger-menu"
           style={{
@@ -133,18 +168,17 @@ export default class HamburgerMenu extends React.Component {
             padding: '1em',
             background: '#CCC',
           }}>
-          {this.props.character ?
+          { !this.props.character ? null :
             <h3>
-              {this.props.character.name}
-              <button className="btn btn-secondary btn-sm">
+              {this.props.character.name}{' '}
+              <Button type='secondary'>
                 <span className="fa fa-lg fa-pencil" aria-hidden="true"></span>
-              </button>
-            </h3>
-            : 'Loading...'}
+              </Button>
+            </h3>}
           <hr/>
           {this.renderCharacterList(this)}
           <hr/>
-          <button className="btn btn-success btn-sm"
+          <Button type='success'
             onClick={() => {
               this.closeMenu(this);
               Action.fire('ui.selectNavigation', {
@@ -153,10 +187,15 @@ export default class HamburgerMenu extends React.Component {
             }}>
             <span className="fa fa-plus" aria-hidden="true"></span>
             {'  New Character'}
-          </button>
+          </Button>
           <hr/>
           {this.renderUserSettings(this)}
         </div>
     </div>;
   }
 }
+
+HamburgerMenu.propTypes = {
+  character: PropTypes.object,
+  user: PropTypes.object.isRequired,
+};

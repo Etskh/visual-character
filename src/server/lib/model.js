@@ -48,19 +48,21 @@ export function saveAll(model, data) {
   });
 }
 
-export const get = (model, id) => new Promise(resolve => loadAll(model).then((all) => {
-  const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
+export const getByField = (model, field, value) => new Promise(resolve => loadAll(model).then((all) => {
+  const character = all.find(c => c[field] == value );
   if (!character) {
     Logger.warn({
       action: 'model::get',
       model,
-      id,
-      err: `No ${model} with id ${id}`,
+      field,
+      err: `No ${model} with ${field} ${value}`,
     });
     return resolve(null);
   }
   return resolve(character);
 }));
+
+export const get = (model, id) => getByField(model, 'id', id);
 
 export const create = (model, data) => loadAll(model).then((all) => {
   const highestId = all.reduce((acc, cur) => {
@@ -80,7 +82,6 @@ export const create = (model, data) => loadAll(model).then((all) => {
   return saveAll(model, all).then(() => character);
 });
 
-
 export const save = (model, id, data) => loadAll(model).then((all) => {
   const character = all.find(c => parseInt(c.id, 10) === parseInt(id, 10));
   if (!character) {
@@ -93,7 +94,7 @@ export const save = (model, id, data) => loadAll(model).then((all) => {
     return Promise.reject(new Error(`No ${model} with id ${id}`));
   }
   // Write the new fields into this
-  Object.keys(character).forEach((field) => {
+  Object.keys(data).forEach((field) => {
     character[field] = data[field];
   });
   return saveAll(model, all).then(() => character);

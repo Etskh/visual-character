@@ -26,7 +26,12 @@ export function Icon(props) {
 }
 
 export function Row(props) {
-  return <div style={props.style || {}} className="row">
+  const style = Object.assign(props.style || {}, {
+    marginTop: props.spacing ? `${props.spacing}em` : 0,
+    marginBottom: props.spacing ? `${props.spacing}em` : 0,
+  });
+
+  return <div style={style} className="row">
     {props.children}
   </div>;
 }
@@ -48,6 +53,9 @@ export function Col(props) {
       }
     });
   }
+  
+  classNames.push(props.className || '');
+
   return <div
     className={classNames.join(' ')}
     style={Object.assign(props.style || {}, {
@@ -125,7 +133,7 @@ export function RadioChoices(name, selected, onChange, choices) {
   </div>;
   /*
   Old way:
-  
+
   return <div className="btn-group btn-group-toggle" data-toggle="buttons">
     {choices.map(choice => {
       const isActive = choice === selected;
