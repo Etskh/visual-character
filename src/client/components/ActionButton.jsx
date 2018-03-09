@@ -1,7 +1,11 @@
+import PropTypes from 'prop-types';
 
+// Components
 import { Icon, Row, Col, Button, } from '../components/Core';
 import Modal from '../components/Modal';
 import { StatInfo } from '../components/StatButton';
+
+// Lib
 import Stats from '../lib/Stats';
 
 
@@ -140,3 +144,9 @@ export default function ActionButton(props) {
     </Row>
   </Button>;
 }
+
+
+ActionButton.propTypes = {
+  character: PropTypes.object.isRequired,
+  action: PropTypes.object.isRequired,
+};

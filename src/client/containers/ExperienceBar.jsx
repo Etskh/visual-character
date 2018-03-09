@@ -1,6 +1,10 @@
+// TODO: Move ExperienceBar.jsx elsewhere
+
+// Components
 import { Row, Col, } from '../components/Core';
 import BarButton from '../components/BarButton';
 import Modal from '../components/Modal';
+
 import { getNextLevel } from '../lib/constants';
 import Action from '../lib/Action';
 

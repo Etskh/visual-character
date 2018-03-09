@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import NavigationWindow from './NavigationWindow';
 import { Row, Col, } from './Core';
 
@@ -24,3 +25,8 @@ export default class Loading extends React.Component {
     </NavigationWindow>;
   }
 }
+
+
+Loading.propTypes = {
+  // empty
+};

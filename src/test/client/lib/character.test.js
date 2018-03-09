@@ -17,18 +17,18 @@ describe('Lib:Character', () => {
     expect(data).toBeA('object');
   });
 
-  it('can compute stats', () => {
+  it('can compute stats', (done) => {
     const input = Object.assign({}, characterFixture);
     const outputStats = {
       str: 9,
       str_mod: -1,
     };
-    const data = parseData(input);
-
-    // console.log(Object.keys(data).map(field => `${field}: ${data[field].getTotal()}`));
-
-    Object.keys(outputStats).forEach((field) => {
-      expect(data[field].getTotal()).toBe(outputStats[field]);
+    parseData(input).then( data => {
+      Object.keys(outputStats).forEach((field) => {
+        expect(data[field].getTotal()).toBe(outputStats[field]);
+      });
+      done();
     });
+    // console.log(Object.keys(data).map(field => `${field}: ${data[field].getTotal()}`));
   });
 });
