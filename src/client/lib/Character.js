@@ -19,7 +19,7 @@ const parseRaces = (character, dataCtx) => {
   console.log(character, dataCtx);
   const raceChoice = character.choices.find(c => c.type === 'race' && c.decision);
   if (!raceChoice) {
-    return dataCtx;
+    return Promise.resolve(dataCtx);
   }
 
   return Race.load(raceChoice.decision).then((race) => {
@@ -32,7 +32,7 @@ const parseRaces = (character, dataCtx) => {
 };
 
 const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
-  console.log(character, dataCtx);
+  console.log(character, dataCtx, classesData);
   const growthTypes = {
     // saves
     bad: lvl => Math.floor(lvl / 3),
@@ -47,7 +47,7 @@ const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
     // empty
   };
   character.choices.forEach((choice) => {
-    if (choice.type === 'class' && choice.decision !== '') {
+    if (choice.type === 'class' && choice.decision) {
       if (!classLevels[choice.decision]) {
         classLevels[choice.decision] = 1;
       } else {
@@ -56,6 +56,7 @@ const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
     }
   });
 
+  console.log(classLevels);
   if (Object.keys(classLevels).length > 0) {
     const saves = [
       'bab',
@@ -65,6 +66,7 @@ const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
     ];
     saves.forEach((field) => {
       Object.keys(classLevels).forEach((className) => {
+        console.log(classesData);
         const growthMetric = classesData.find(cls => className === cls.name)[`${field}_growth`];
         const reason = `level ${classLevels[className]} ${className}`;
         const value = growthTypes[growthMetric](classLevels[className]);

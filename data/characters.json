@@ -356,18 +356,101 @@
     ]
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Kazrah",
     "choices": [
       {
         "type": "class",
         "reason": "new character",
-        "decision": ""
+        "decision": "ranger"
       },
       {
         "type": "race",
         "reason": "new character",
-        "decision": ""
+        "decision": "half-orc"
+      },
+      {
+        "type": "base_stat",
+        "decision": "15",
+        "reason": "level 1",
+        "target": "str"
+      },
+      {
+        "type": "base_stat",
+        "decision": "13",
+        "reason": "level 1",
+        "target": "dex"
+      },
+      {
+        "type": "base_stat",
+        "decision": "13",
+        "reason": "level 1",
+        "target": "con"
+      },
+      {
+        "type": "base_stat",
+        "decision": "13",
+        "reason": "level 1",
+        "target": "int"
+      },
+      {
+        "type": "base_stat",
+        "decision": "14",
+        "reason": "level 1",
+        "target": "wis"
+      },
+      {
+        "type": "base_stat",
+        "decision": "8",
+        "reason": "level 1",
+        "target": "cha"
+      },
+      {
+        "type": "hitpoints",
+        "decision": "10",
+        "reason": "level 1 ranger"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "stealth"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "survival"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "handle animal"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "climb"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "intimidate"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "perception"
+      },
+      {
+        "type": "skill",
+        "decision": "1",
+        "reason": "level 1 ranger",
+        "target": "sense motive"
       }
     ],
     "history": []
