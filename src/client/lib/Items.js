@@ -3,7 +3,7 @@ import {
   DAMAGE_TYPES,
   AMMO_TYPES,
 } from './constants';
-import Console from './log';
+import Console from '../../common/Log';
 import { checkDataAgainstRules } from './core';
 
 

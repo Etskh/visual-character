@@ -6,7 +6,7 @@ Spellbook: book
 Advancement
     [ If the character is invalid, this is the only one that shows]
     basic information (name, class, [race], level )
-    [ experience bar ]
+    experience bar
     outstanding choices
 
 World
@@ -39,8 +39,8 @@ Options
     -
 
 Debug Info
-    [ Column1: Character info ]
-    [ Column2: All console logs ]
+    Column1: Character info
+
 
 
 

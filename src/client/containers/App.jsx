@@ -58,11 +58,13 @@ export class App extends React.Component {
       icon: 'gear',
       component: OptionsView,
       isVisible: false,
+      bypassCharacterCheck: true,
     }, {
       name: 'New Character',
       icon: 'plus',
       component: NewCharacterView,
       isVisible: false,
+      bypassCharacterCheck: true,
     }, {
       name: 'New User',
       icon: 'plus',
@@ -197,8 +199,12 @@ export class App extends React.Component {
             <Col align='center'>
                 <div className='alert alert-danger' role='alert'>
                   <p>There was an error</p>
+                  <p>{this.state.error}</p>
                   <Button type='info'>Report bug</Button>
-                  <Button type='secondary'>Continue</Button>
+                  <Button type='secondary' onClick={() => {
+                    // Remove the error
+                    this.setState({ error: null });
+                  }}>Dismiss</Button>
                 </div>
             </Col>
           </Row>

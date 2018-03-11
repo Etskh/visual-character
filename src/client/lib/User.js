@@ -33,15 +33,12 @@ export default class User {
   }
 
   getInactiveCharacterList() {
-    return Promise.all(this.characters.filter( cId => cId != this.activeCharacter).map( id => {
-      return Character.download(id)
-      .then( characterData => {
-        return {
-          id,
-          name: characterData.name
-        };
-      });
-    }));
+    const inactiveIds = this.characters.filter(cId => cId !== this.activeCharacter);
+    return Promise.all(inactiveIds.map(id => Character.download(id)
+      .then(characterData => ({
+        id,
+        name: characterData.name
+      }))));
   }
 
   getActiveCharacter() {

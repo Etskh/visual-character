@@ -23,7 +23,7 @@ describe('Lib:Character', () => {
       str: 9,
       str_mod: -1,
     };
-    parseData(input).then( data => {
+    parseData(input).then((data) => {
       Object.keys(outputStats).forEach((field) => {
         expect(data[field].getTotal()).toBe(outputStats[field]);
       });

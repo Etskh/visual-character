@@ -42,7 +42,7 @@ export default class Fetch {
     }
     return new Promise((resolve, reject) => {
       Fetch.jQuery.ajax({
-        url: `/auth/login`,
+        url: '/auth/login',
         method: 'POST',
         dataType: 'json',
         data: {
@@ -50,10 +50,10 @@ export default class Fetch {
           password,
         },
         success: obj => resolve(obj),
-        error: (_, textStatus, errorThrown) => reject({
+        error: (_, textStatus, errorThrown) => reject(new Error(JSON.stringify({
           textStatus,
           httpError: errorThrown,
-        }),
+        }))),
       });
     });
   }

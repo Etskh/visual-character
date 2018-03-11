@@ -154,6 +154,10 @@
       {
         "type": "damage",
         "value": "5"
+      },
+      {
+        "type": "exp",
+        "value": "20"
       }
     ],
     "choices": [
@@ -310,7 +314,8 @@
       {
         "type": "hitpoints",
         "decision": "8",
-        "reason": "level 1 monk"
+        "reason": "level 1 monk",
+        "target": "8"
       },
       {
         "type": "skill",
@@ -343,7 +348,28 @@
       {
         "type": "damage",
         "value": "1"
+      },
+      {
+        "type": "damage",
+        "value": "7"
       }
     ]
+  },
+  {
+    "id": 3,
+    "name": "Kazrah",
+    "choices": [
+      {
+        "type": "class",
+        "reason": "new character",
+        "decision": ""
+      },
+      {
+        "type": "race",
+        "reason": "new character",
+        "decision": ""
+      }
+    ],
+    "history": []
   }
 ]

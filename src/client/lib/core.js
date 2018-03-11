@@ -1,4 +1,4 @@
-import Console from './log';
+import Console from '../../common/Log';
 
 const reduce = Function.bind.call(Function.call, Array.prototype.reduce);
 const isEnumerable = Function.bind.call(Function.call, Object.prototype.propertyIsEnumerable);

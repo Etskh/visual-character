@@ -92,13 +92,6 @@ export const CHOICE_TYPES = [
   'base_stat',
 ];
 
-export const CHOICE_REASONS = [
-  'level 1',
-  'level 2',
-  'level 3',
-];
-
-
 export const SKILLS = [{
   name: 'acrobatics',
   stat: 'dex',

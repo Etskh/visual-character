@@ -19,15 +19,15 @@ const apiErrorHandler = (res, err) => {
 
 // TODO: implement software rate-limiting
 
-router.post(`/login`, (req, res) => {
-  Model.getByField('user', 'username', req.body.username).then( user => {
-    if( !user ) {
+router.post('/login', (req, res) => {
+  Model.getByField('user', 'username', req.body.username).then((user) => {
+    if (!user) {
       return res.status(401).send({
         error: 'NOT_AUTH',
       });
     }
 
-    res.send(user);
+    return res.send(user);
   }).catch(apiErrorHandler.bind(this, res));
 });
 

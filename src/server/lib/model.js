@@ -48,8 +48,9 @@ export function saveAll(model, data) {
   });
 }
 
+// eslint-disable-next-line max-len
 export const getByField = (model, field, value) => new Promise(resolve => loadAll(model).then((all) => {
-  const character = all.find(c => c[field] == value );
+  const character = all.find(c => c[field].toString() === value.toString());
   if (!character) {
     Logger.warn({
       action: 'model::get',

@@ -5,13 +5,14 @@
     "name": "James",
     "characters": [
       "1",
-      "2"
+      "2",
+      "3"
     ],
     "activeCharacter": "2",
     "settings": {
-      "weight": "kilogram",
+      "weight": "pound",
       "distance": "square",
-      "tab": "Combat"
+      "tab": "Advancement"
     }
   }
 ]
