@@ -51,6 +51,7 @@ describe('Lib:Items', () => {
       cost: 'number',
       category: itemCategories.map(cat => cat.name),
       defaultMaterial: materials.map(mat => mat.name),
+      defaultCount: 'number',
       // Later, verify that it's an action
       // actions: 'ignore',
       data: 'ignore',
