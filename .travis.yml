@@ -10,20 +10,20 @@ after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 before_deploy:
-  - cd ..
-  - tar -zcf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz ${REPO}
+  - npm run clean
+  - tar -zcf latest-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz ./*
 
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     bucket: "visual-character-bucket"
-    file: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
+    file: latest-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     bucket: "visual-character-bucket"
     region: us-west-2
-    key: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
+    # key: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
     application: "visual-character_code-deploy"
     deployment_group: "visual-character"
