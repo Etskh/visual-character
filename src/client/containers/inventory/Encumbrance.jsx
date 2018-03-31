@@ -1,7 +1,7 @@
 // Lib
 import { getEncumbranceBracket, ENCUMBRANCE } from '../../lib/constants';
 // Components
-import { Row, Col } from '../../components/Core';
+import { Row, Col, Button, } from '../../components/Core';
 import Modal from '../../components/Modal';
 
 
@@ -79,6 +79,7 @@ function LoadMeter(encumbrancePercentage) {
     {EncumbranceBar('heavy', encumbrancePercentage)}
     <div style={{
       position: 'absolute',
+      marginLeft: '-0.5em',
       bottom: 0,
       left: parseInt(100 * encumbrancePercentage / 3) + '%',
       color: 'white',
@@ -95,11 +96,12 @@ export default function EncumbranceSection(character, translator) {
   return <div>
     <Row>
       <Col>
-        {'Encumbrance: '}
-        <button className='btn btn-warning btn-sm'
+        <Button type='info'
           onClick={() => {
             Modal.open('Encumbrance', EncumbranceInfo(bracket, character, translator));
-          }}>{bracket.name}</button>
+          }}>
+          {'Encumbrance: '}{bracket.name}
+        </Button>
       </Col>
     </Row>
     {LoadMeter(encumbrance)}

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 
 export function DiceIcon(path, size) {
   const scale = (size || 1) * 16;
@@ -12,18 +13,34 @@ export function Icon(props) {
   const size =  props.size ? (
     props.size > 2 ? `fa-${props.size.toString()}x` : 'fa-lg') : '';
 
-  const colour = props.colour || '#FFF';
-  return <i className={[
-      'fa',
-      size,
-      'fa-' + props.icon,
-    ].join(' ')}
+  const colour = props.colour || 'inherit';
+  return <i className={`fa ${size} fa-${props.icon}`}
     style={{
       color: colour,
     }}
     aria-hidden="true">
   </i>
 }
+Icon.propTypes = {
+  icon: PropTypes.string.isRequired,
+  colour: PropTypes.string,
+  size: PropTypes.number,
+};
+
+export function Image(props) {
+  return <div style={{
+    width: '100%',
+    minHeight: 100,
+    backgroundImage: `url('${props.src}')`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+  }}></div>
+}
+Image.propTypes = {
+  src: PropTypes.string.isRequired,
+  minHeight: PropTypes.number,
+};
+
 
 export function Row(props) {
   const style = Object.assign(props.style || {}, {
@@ -53,7 +70,7 @@ export function Col(props) {
       }
     });
   }
-  
+
   classNames.push(props.className || '');
 
   return <div
@@ -85,6 +102,8 @@ export function Button(props) {
     {props.children}
   </button>;
 }
+
+// TODO: add proptypes to button
 
 export class ErrorBoundary extends React.Component {
   constructor(props) {

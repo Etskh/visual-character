@@ -14,12 +14,11 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     bucket: "visual-character-bucket"
-    skip_cleanup: true
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     bucket: "visual-character-bucket"
     region: us-west-2
     key: latest/app.zip
-    application: "visual-character"
-    deployment_group: "visual-character_deployment-group"
+    application: "visual-character_code-deploy"
+    deployment_group: "visual-character"

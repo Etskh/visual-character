@@ -8,11 +8,11 @@
       "2",
       "3"
     ],
-    "activeCharacter": "1",
+    "activeCharacter": "3",
     "settings": {
       "weight": "pound",
       "distance": "square",
-      "tab": "Combat"
+      "tab": "Inventory"
     }
   }
 ]

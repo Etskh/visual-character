@@ -216,6 +216,7 @@ const GEMSTONES = {
 export const itemTypes = [{
   name: 'fullplate',
   description: 'Created as a stiff breastplate, and interlocking bands of metal complete with epaulets.',
+  //image: '/',
   weight: 50,
   cost: 1200,
   category: 'armour',
@@ -268,6 +269,22 @@ export const itemTypes = [{
     handed: 'one',
   },
 }, {
+  name: 'scimitar',
+  description: 'This curved sword has the deadliness of the rapier, but is used to slice instead of stabbing',
+  weight: 6,
+  cost: 8,
+  category: 'weapon',
+  defaultMaterial: 'steel',
+  data: {
+    complexity: 'martial',
+    dice: '1d6',
+    type: 'sword',
+    damageType: 's',
+    critRange: 3,
+    critMult: 2,
+    handed: 'one',
+  },
+}, {
   name: 'longbow',
   description: 'Larger than a smallbow, cannot be used on horseback',
   weight: 3,
@@ -316,6 +333,7 @@ export const itemTypes = [{
   category: 'ammunition',
   cost: 0.1,
   weight: 0.1,
+  defaultCount: 10,
   defaultMaterial: 'wood',
   data: {
     // empty
@@ -326,6 +344,7 @@ export const itemTypes = [{
   category: 'ammunition',
   cost: 0.05,
   weight: 3 / 20,
+  defaultCount: 20,
   defaultMaterial: 'wood',
   data: {
     // empty
@@ -347,6 +366,7 @@ export const itemTypes = [{
   cost: 1,
   weight: 0.01,
   defaultMaterial: 'gold',
+  defaultCount: 100,
 }, {
   name: 'silver piece',
   description: 'Leaves of several plants wind around in a circular design near the edge',
@@ -355,6 +375,7 @@ export const itemTypes = [{
   weight: 0.01,
   // TODO: make it not gold
   defaultMaterial: 'gold',
+  defaultCount: 100,
 }, {
   name: 'copper piece',
   description: 'The number 1 is embossed on the front, with straight lines reaching almost to the edge',
@@ -363,6 +384,7 @@ export const itemTypes = [{
   weight: 0.01,
   // TODO: make it not gold
   defaultMaterial: 'gold',
+  defaultCount: 100,
 }].concat(Object.keys(GEMSTONES).map(gem => ({
   name: `${gem} gem`,
   description: 'This gemsone is worth a lot. You could try selling it',
@@ -559,7 +581,8 @@ export const getItemsWorth = (cost) => {
   while (costToGo > 0.01) {
     const valuable = wealthItemTypes.reduce(mostValuableReducer(costToGo), null);
     const howMany = parseInt(costToGo / valuable.cost, 10);
-    // console.log(`${howMany} ${valuable.name}s fit into ${costToGo}gp`);
+
+    // Reduce the cost to go, by whatever we bought... and some amount for rounding
     costToGo -= (valuable.cost * howMany) - 0.0001;
     if (howMany > 0.01 && valuable.cost >= 1) {
       items.push({
@@ -593,8 +616,6 @@ export const getRandomItemsWorth = (cost) => {
       }
     });
   });
-
-  // console.log(items);
 
   return items;
 };

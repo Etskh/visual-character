@@ -1,8 +1,14 @@
 import PropTypes from 'prop-types';
-import Action from '../lib/Action';
+
+// Components
+import Modal from './Modal';
 import { Row, Col, Button } from './Core';
 
+// Lib
+import Action from '../lib/Action';
 
+
+// TODO: move this to a container, and split into smaller dumb components
 // TODO Handle a null user better
 
 export default class HamburgerMenu extends React.Component {
@@ -55,6 +61,39 @@ export default class HamburgerMenu extends React.Component {
     return self.onToggle(self);
   }
 
+  renderCharacterName(self) {
+    if( !self.props.character ) {
+      return null;
+    }
+
+    const renderChangeName = () => {
+      return <Row>
+        <Col align='center'>
+          <label>New name</label>
+        </Col>
+        <Col align='center'>
+          <input id="rename-character" type="text" name="rename-character" defaultValue={self.props.character.name}/>
+        </Col>
+      </Row>;
+    }
+
+    return <Button size='large' type='outline-primary' onClick={() => {
+      self.closeMenu(self);
+      Modal.open('Rename', renderChangeName(), 'Rename').then(state => {
+        const value = state.inputs[0].value;
+        if( value ) {
+          self.props.character.rename(value).then( character => {
+            Action.fire('character.change', character);
+          });
+        }
+      });
+    }}>
+      {self.props.character.name}
+      {' '}
+      <span className="fa fa-lg fa-pencil" aria-hidden="true"></span>
+    </Button>;
+  }
+
   renderCharacterList(self) {
     return <div id="vc-character-list">
       <Row><Col>Character List</Col></Row>
@@ -87,10 +126,7 @@ export default class HamburgerMenu extends React.Component {
     }];
 
     return buttons.map( button => {
-      return <div key={button.title}
-        style={{
-          marginTop: 2,
-        }}>
+      return <div key={button.title}>
         <Button type='secondary' size='small'
           onClick={() => {
             self.closeMenu(self);
@@ -100,8 +136,8 @@ export default class HamburgerMenu extends React.Component {
           }}>
           {button.title}
         </Button>
-      </div>
-    })
+      </div>;
+    });
   }
 
   render() {
@@ -168,13 +204,7 @@ export default class HamburgerMenu extends React.Component {
             padding: '1em',
             background: '#CCC',
           }}>
-          { !this.props.character ? null :
-            <h3>
-              {this.props.character.name}{' '}
-              <Button type='secondary'>
-                <span className="fa fa-lg fa-pencil" aria-hidden="true"></span>
-              </Button>
-            </h3>}
+          {this.renderCharacterName(this)}
           <hr/>
           {this.renderCharacterList(this)}
           <hr/>

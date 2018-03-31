@@ -16,7 +16,6 @@ import {
 
 
 const parseRaces = (character, dataCtx) => {
-  console.log(character, dataCtx);
   const raceChoice = character.choices.find(c => c.type === 'race' && c.decision);
   if (!raceChoice) {
     return Promise.resolve(dataCtx);
@@ -32,7 +31,6 @@ const parseRaces = (character, dataCtx) => {
 };
 
 const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
-  console.log(character, dataCtx, classesData);
   const growthTypes = {
     // saves
     bad: lvl => Math.floor(lvl / 3),
@@ -56,7 +54,6 @@ const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
     }
   });
 
-  console.log(classLevels);
   if (Object.keys(classLevels).length > 0) {
     const saves = [
       'bab',
@@ -66,7 +63,6 @@ const parseClasses = (character, dataCtx) => Class.all().then((classesData) => {
     ];
     saves.forEach((field) => {
       Object.keys(classLevels).forEach((className) => {
-        console.log(classesData);
         const growthMetric = classesData.find(cls => className === cls.name)[`${field}_growth`];
         const reason = `level ${classLevels[className]} ${className}`;
         const value = growthTypes[growthMetric](classLevels[className]);
@@ -237,15 +233,13 @@ export const parseData = (character) => {
       if (!dataCtx[`skill_${choice.target}`]) {
         // Error checking is important, mmk?
         Console.error(`skill_${choice.target} doesn't exist. Why would you do this?`);
-        Console.error(Object.keys(dataCtx));
+        // Console.error(Object.keys(dataCtx));
       }
       dataCtx[`skill_${choice.target}`].addChoice('points', parseInt(choice.decision, 10), choice);
     }
   });
 
-  return parseRaces(character, dataCtx).then( raceData => {
-    return parseClasses(character, raceData);
-  });
+  return parseRaces(character, dataCtx).then(raceData => parseClasses(character, raceData));
 };
 
 
@@ -452,6 +446,11 @@ export default class Character {
     return this.replaceChoiceWithChoices(oldChoice, [newChoice]);
   }
 
+  rename(newName) {
+    this.name = newName;
+    return this.save();
+  }
+
   takeDamage(value) {
     if (typeof value !== 'number') {
       Console.error(`Character.takeDamage: value isn't a number ("${value}" instead)`);
@@ -482,6 +481,21 @@ export default class Character {
     this.history.push({
       type: 'exp',
       value,
+    });
+
+    return this.save();
+  }
+
+  addItem(type, count) {
+    const highestItemId = this.history.filter(h => h.type === 'add_item')
+    .reduce((acc, h) => { return h > acc ? h : acc}, 0);
+    this.history.push({
+      type: 'add_item',
+      target: {
+        id: highestItemId + 1,
+        itemType: type.name,
+        count,
+      },
     });
 
     return this.save();

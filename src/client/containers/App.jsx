@@ -99,6 +99,7 @@ export class App extends React.Component {
       'ui.selectNavigation': this.onSelectNavigation,
       'user.change': this.onUserChange,
       'character.change': this.onCharacterChange,
+      'item.add': this.onItemAdd,
     });
 
     Action.fire('init');
@@ -154,6 +155,13 @@ export class App extends React.Component {
           });
         }),
       };
+    });
+  }
+
+  onItemAdd( config ) {
+    // config has type and count
+    this.state.character.addItem(config.type, config.count).then( character => {
+      Action.fire('character.change', character);
     });
   }
 

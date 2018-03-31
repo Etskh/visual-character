@@ -16,7 +16,7 @@ Action.create('init', () => Fetch.getLocal('user').then((userId) => {
   return null;
 }));
 Action.create('error', (error) => {
-  console.log(error);
+  Console.log(error);
 });
 
 
@@ -100,5 +100,8 @@ Action.create('user.change', (user) => {
 Action.create('character.create', data => Character.create(data).then((character) => {
   Action.fire('character.change', character);
 }));
+
+Action.create('item.add');
+
 
 export default Action;

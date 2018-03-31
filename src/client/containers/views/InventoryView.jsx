@@ -1,229 +1,196 @@
+import PropTypes from 'prop-types';
+
+import Action from '../../lib/Action';
+import { itemCategories, itemTypes, } from '../../lib/Items';
+
 import NavigationWindow from '../../components/NavigationWindow';
-import { Row, Col } from '../../components/Core';
-import { itemCategories } from '../../lib/Items';
+import { Row, Col, Button, Image, Icon, } from '../../components/Core';
 import Modal from '../../components/Modal';
 import EncumbranceSection from '../inventory/Encumbrance';
-
-function getCritInfo(item) {
-  const crit = (item.itemType.data.critRange > 1 ?
-    (21 - item.itemType.data.critRange) + '-' : ''
-    ) + '20';
-  return `${crit} x${item.itemType.data.critMult}`
-}
-
-function WeaponDetail(translator, item) {
-  /*
-  data: {
-    complexity: 'simple',
-    dice: '1d10',
-    type: 'crossbow',
-    damageType: 'p',
-    range: 120,
-    ammunition: 'bolt',
-    critRange: 2,
-    critMult: 2,
-    handed: 'two',
-  },
-  */
-  const complexityDescs = {
-    'simple': 'Simple weapons are usually easy to pick up and use',
-    'martial': 'Marial weapons require training to use properly',
-    'exotic': 'Exotic weapons are strange and uncanny, and probably require a certain culture or upbringing to use properly',
-  };
-  const handedDescs = {
-    'light': 'This weapon is best suited as an off-hand weapon, but can be used as a main weapon in a pinch',
-    'one': 'This weapon is best suited as a one-handed weapon',
-    'two': 'This weapon takes two free hands to use',
-  };
-  const damageTypeDescs = {
-    'p': 'Piercing',
-    'b': 'Bludgeoning',
-    's': 'Slashing or slicing',
-  };
-  const critMutlDescs = {
-    '2': 'twice',
-    '3': 'three times',
-    '4': 'four times',
-  };
-  const critNumbers = ((range) => {
-    let numbers = [];
-    while( range > 1 ) {
-      numbers.push(21 - range);
-      range--;
-    }
-    return numbers;
-  })(item.itemType.data.critRange);
-  const criticalNumberDesc = critNumbers.length > 0
-    ? critNumbers.join(', ') + ' or 20'
-    : 'natural 20'
-
-  return <div>
-    <Row>
-      <Col>Hands: {handedDescs[item.itemType.data.handed]}</Col>
-      <Col>Complexity: {item.itemType.data.complexity}<br/> {complexityDescs[item.itemType.data.complexity]}</Col>
-    </Row>
-    <Row>
-      <Col>Damage</Col>
-      <Col>{item.itemType.data.dice}</Col>
-      <Col>{damageTypeDescs[item.itemType.data.damageType]}</Col>
-    </Row>
-    <Row>
-      {/*
-      <Col>Critical chance:</Col>
-      <Col>{getCritInfo(item)}</Col>
-      <Col>On a {criticalNumberDesc} there's a chance to deal {critMutlDescs[item.itemType.data.critMult]} the damage.</Col>
-      */}
-    </Row>
-    {item.itemType.data.range ? <Row>
-      <Col>Range</Col>
-      <Col>{translator.distance(item.itemType.data.range)}</Col>
-    </Row> : null}
-  </div>;
-}
-
-function ItemDetail(translator, item) {
-  const description = item.itemType.description || '[description]';
-  return <div>
-    <p>{description}</p>
-    { item.category.name === 'weapon' ? WeaponDetail(translator, item) : null }
-  </div>;
-}
+import InventoryItems from '../inventory/InventoryItems';
 
 
-// TODO: move this to its own component file
-function InventoryItem(translator, item, isEven, children) {
-  if( !children ) {
-    children = [];
-  }
-  const fullname = `${item.count>1 ? item.count:''} ${translator.get(item.name, item.count)}`;
-
-  return <div key={item.key} style={{
-    background: isEven ? '#CDC' : '#FFF',
-    padding: 5,
-  }}>
-    <Row>
-      <Col>
-        <button
-          className='btn btn-outline-primary btn-sm'
-          onClick={() => {
-            Modal.open(fullname, ItemDetail(translator, item));
-          }}>
-          {fullname}
-        </button>
-      </Col>
-      {children.map( child => {
-        return <Col key={child.toString()}>{child}</Col>;
+function ItemHistory(history) {
+  return <Row>
+    <Col>
+      {history.map( (historyItem, index) => {
+        return <span key={historyItem.name + index}>
+          <Button style={{
+              margin: 0,
+            }}
+            type='secondary'
+            onClick={() => {
+              historyItem.onSelect();
+            }}>
+            {historyItem.name}
+          </Button>
+          <Icon icon='chevron-right'/>
+        </span>;
       })}
-      <Col align='right'>
-        {translator.weight(item.weight * item.count)}
-      </Col>
-    </Row>
-  </div>
+    </Col>
+  </Row>;
 }
 
-function WeaponItem(translator, item, isEven) {
-  return InventoryItem(translator, item, isEven, [
-    item.itemType.data.dice, // 1d10
-    //getCritInfo(item), // 19-20 x2
-  ]);
-}
-
-function WealthItem(translator, item, isEven, ) {
-  return InventoryItem(translator, item, isEven, [
-    `${item.count * item.data.cost.total} gp`,
-  ]);
-}
-
-
-function InventoryItems(items, translator) {
-  // Arrange the items into collapsable sections
-  const sections = [{
-    name: 'Weapons',
-    category: 'weapon',
-    collapsed: false,
-    itemFunction: WeaponItem,
-    extraCol: null,
-  }, {
-    name: 'Wealth',
-    category: 'wealth',
-    collapsed: true,
-    itemFunction: WealthItem,
-    extraCol: 'cost',
-  }];
-
-  sections.forEach( section => {
-    section.items = items.filter(i => i.category.name === section.category);
-  });
-
-  const categoriesLeft = itemCategories.map(c => c.name).filter( c => {
-    // If the category isn't in the sections, then include it!
-    // ['weapon'].indexOf('spellbook') === -1
-    return sections.map( s => s.category).indexOf(c) === -1;
-  });
-  sections.push({
-    name: 'Miscellaneous',
-    collapsed: false,
-    extraCol: null,
-    itemFunction: InventoryItem,
-    // Grab the items that fell into our catch
-    items: items.filter(i => categoriesLeft.indexOf(i.category.name) !== -1),
-  });
-
-  return sections.map( section => {
-    // TODO: this should be its own object
-    let index = 0;
-    const combinedWeight = section.items.reduce( (acc, cur) => {
-      return acc + (cur.count * cur.weight);
-    }, 0);
-    return <div key={section.name}
-      style={{
-        marginTop: 20,
-      }}>
-      <Row>
+function AddItemListModal(history, list, onSelect) {
+  return Modal.open('Add Item', <div>
+    {ItemHistory(history)}
+    {list.map( item => {
+      return <Row key={item.name}>
         <Col>
-          <button className='btn btn-secondary' onClick={()=> {
-            // Toggle contents of this section
-            // Don't bother with state - they'll thank us!
-            $(`#section-${section.name}`).toggle('fast');
-            $(`#toggle-open-${section.name}`).toggle();
-            $(`#toggle-closed-${section.name}`).toggle();
-          }}>
-            <h5 style={{marginBottom: 0}}>
-              <i id={`toggle-closed-${section.name}`}
-                style={{
-                  display: section.collapsed ? 'inline' : 'none',
-                }}
-                className="fa fa-chevron-right"
-                aria-hidden="true"></i>
-              <i id={`toggle-open-${section.name}`}
-                style={{
-                  display: !section.collapsed ? 'inline' : 'none',
-                }}
-                className="fa fa-chevron-down" aria-hidden="true"></i>
-              {section.name}
-            </h5>
-          </button>
+          <Button type='secondary' onClick={() => {
+            onSelect(item);
+          }}>{item.name}</Button>
         </Col>
-        {section.extraCol ? <Col>
-          {`${section.items.reduce((acc,cur) => {
-            return acc + cur.data.cost.total * cur.count;
-          }, 0)} gp`}
-        </Col> : null }
-        <Col align='right'>
-          <em>{translator.weight(combinedWeight)}</em>
+      </Row>;
+    })}
+  </div>);
+}
+
+// TODO: unused
+// {`Buy for ${type.cost * count} gp`}
+function getAddButton(props) {
+  return <Button type='success' size='large' onClick={() => {
+    Action.fire('item.add', {
+      type,
+      count,
+    });
+  }}>
+    <span className="fa fa-lg fa-plus" aria-hidden="true"></span>
+    {'  Add Item'}
+  </Button>;
+}
+
+
+
+class AddItemDetailModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // Set the count to the default if it has one (like arrows, or bolts)
+      count: props.type.defaultCount ? props.type.defaultCount : 1,
+    };
+  }
+
+  render() {
+    return <div>
+      {ItemHistory(this.props.history)}
+      <Row spacing={1}>
+        <Col align='center'>
+          <h3>{this.props.type.name}</h3>
         </Col>
       </Row>
-      <div id={`section-${section.name}`}
-        style={{
-          display: section.collapsed ? 'none' : 'block',
-        }}>
-        {section.items.map(item => {
-          return section.itemFunction(translator, item, (++index % 2 !== 0));
-        })}
-      </div>
+      <Row>
+        <Col>
+          {this.props.type.description}
+        </Col>
+        <Col align='center'>
+          <Image src={this.props.type.image ? this.props.type.image : '/placeholder-300x250.png'}/>
+        </Col>
+      </Row>
+      <Row>
+        {/* Genearlize this control! */}
+        { !this.props.type.defaultCount ? <Col></Col> :
+          <Col align='right'>
+            <div style={{
+              margin: '1em',
+              display: 'inline-block',
+            }}>
+              <input type='text' defaultValue={this.state.count}/>
+            </div>
+            <Button type='primary'
+              disabled={this.state.count===1}
+              style={{
+                margin: 0,
+              }}
+              onClick={() => {
+                this.setState( prevState => {
+                  return {
+                    count: prevState.count - 1,
+                  };
+                });
+              }}>-</Button>
+              <Button type='primary'
+                style={{
+                  margin: 0,
+                }}
+                onClick={() => {
+                  this.setState( prevState => {
+                    return {
+                      count: prevState.count + 1,
+                    };
+                  });
+                }}>+</Button>
+          </Col>
+        }
+      </Row>
     </div>;
-  });
+  }
 
+  static open(history, type, addButton) {
+    return Modal.open('Add Item', <AddItemDetailModal
+      history={history}
+      type={type}/>, addButton.title).then(state => {
+        let count = 1;
+        // If we rendered the input, then get the number
+        // but otherwise, it's probably just 1.
+        if( state.inputs.length > 0 ) {
+          count = parseInt(state.inputs[0].value);
+        }
+        addButton.callback(type, count);
+      });
+  }
+}
+AddItemDetailModal.propTypes = {
+  history: PropTypes.array.isRequired,
+  type: PropTypes.object.isRequired,
+};
+
+
+function ShowItem(history, type, addButton) {
+  return AddItemDetailModal.open(history, type, addButton);
+}
+
+function ShowTypesOfCategory(history, category, addButton) {
+  const types = itemTypes.filter( t => t.category === category.name );
+  const newHistory = history.concat([{
+    name: category.name,
+    onSelect: () => {
+      ShowTypesOfCategory(history, category, addButton);
+    },
+  }]);
+
+  // If we only have one type of the item, then we need to just
+  // show that type
+  if( types.length === 1 ) {
+    return ShowItem(newHistory, types[0], addButton);
+  }
+
+  return AddItemListModal(newHistory, types, (selectedType) => {
+    ShowItem(newHistory, selectedType, addButton);
+  });
+}
+
+function ShowCategories(addTitle, addAction) {
+
+  const addButton = {
+    title: addTitle === 'add' ? <span className='to_brackets'>
+      <span className="fa fa-lg fa-plus" aria-hidden="true"></span>
+      {'  Add Item'}
+    </span> : addTitle,
+    callback: addAction,
+    type: addTitle === 'add' ? 'success' : 'primary',
+  };
+
+  return AddItemListModal([], itemCategories, (selectedCategory) => {
+    const history = [{
+      name: 'All categories',
+      onSelect: () => {
+        ShowCategories(addTitle, addAction);
+      },
+    }];
+    ShowTypesOfCategory(history, selectedCategory, addButton);
+  });
 }
 
 
@@ -237,6 +204,20 @@ export default class InventoryView extends React.Component {
     };
   }
 
+  componentDidMount() {
+    Action.subscribeAll(this, 'InventoryView', {
+      'character.change': (character) => {
+        this.setState({
+          character,
+        });
+      },
+    });
+  }
+
+  componentWillUnmount() {
+    Action.unsubscribeAll('InventoryView');
+  }
+
   render() {
     return <NavigationWindow
       title='Inventory'>
@@ -244,7 +225,26 @@ export default class InventoryView extends React.Component {
         <Col>{EncumbranceSection(this.state.character, this.state.user.translator)}</Col>
       </Row>
       <Row>
-        <Col>{InventoryItems(this.state.character.items, this.state.user.translator)}</Col>
+        <Col align='center'>
+          <Button size='large' type='warning' onClick={() => {
+            ShowCategories('add', (type, count) => {
+              Action.fire('item.add', {
+                type,
+                count,
+              })
+            });
+          }}>
+            <span className="fa fa-lg fa-plus" aria-hidden="true"></span>
+            {'  Add Item'}
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <InventoryItems
+            items={this.state.character.items}
+            translator={this.state.user.translator}/>
+        </Col>
       </Row>
     </NavigationWindow>;
   }

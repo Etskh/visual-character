@@ -8,6 +8,16 @@ const logger = require('./lib/logger');
 const apiRoute = require('./routes/api');
 const authRoute = require('./routes/auth');
 
+// Get the local package
+let pkg = null;
+try {
+  pkg = require('../../package');
+}
+catch(err) {
+  // Ignore the err, and just grab package from one step up
+  pkg = require('../package');
+}
+
 // Create the app
 const app = express();
 
@@ -23,7 +33,7 @@ app.set('views', path.join(__dirname, '../views'));
 const config = {
   name: 'Visual Character',
   description: 'A system agnostic RPG character manager',
-  version: '0.0.10',
+  version: pkg.version,
   port: process.env.PORT || 3000,
 };
 

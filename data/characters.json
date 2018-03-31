@@ -263,7 +263,7 @@
   },
   {
     "id": "2",
-    "name": "Doug",
+    "name": "Gregg the Untouchable",
     "choices": [
       {
         "type": "class",
@@ -352,6 +352,54 @@
       {
         "type": "damage",
         "value": "7"
+      },
+      {
+        "type": "exp",
+        "value": "0"
+      },
+      {
+        "type": "exp",
+        "value": "10"
+      },
+      {
+        "type": "heal",
+        "value": "5"
+      },
+      {
+        "type": "exp",
+        "value": "19"
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "boots",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "gold piece",
+          "count": "100"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "longbow",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "arrow",
+          "count": "20"
+        }
       }
     ]
   },
@@ -453,6 +501,51 @@
         "target": "sense motive"
       }
     ],
-    "history": []
+    "history": [
+      {
+        "type": "exp",
+        "value": "500"
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "chainmail",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "scimitar",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "longbow",
+          "count": "1"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "arrow",
+          "count": "20"
+        }
+      },
+      {
+        "type": "add_item",
+        "target": {
+          "id": "1",
+          "itemType": "boots",
+          "count": "1"
+        }
+      }
+    ]
   }
 ]

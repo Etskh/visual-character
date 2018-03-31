@@ -1,3 +1,5 @@
+import { Button, } from './Core';
+
 
 const modalId = 'base-modal';
 let modalInstance = null;
@@ -10,7 +12,8 @@ export default class Modal extends React.Component {
     this.state = {
       title: '',
       content: null,
-      acceptText: '',
+      acceptButtons: [],
+      //acceptText: '',
       isHidden: true,
     };
 
@@ -51,12 +54,15 @@ export default class Modal extends React.Component {
     // some content in here anywhere
 
     // Push the config as the last history
+    // TODO: make sure config is a possible state
     this.onSetContent(config);
 
     if( this.isHidden()) {
       $(`#${modalId}`).modal();
     }
 
+    // Focus the first <input> element in the modal
+    $(`#${modalId} input`).focus();
   }
 
   onSetContent(config) {
@@ -67,8 +73,16 @@ export default class Modal extends React.Component {
     });
   }
 
-  onAccept(state) {
-    this.state.callback(state);
+  onAccept(button) {
+    $(`#${modalId}`).modal('hide');
+    const modal = document.getElementById(modalId);
+    const state = {
+      inputs: modal.getElementsByTagName('input'),
+    };
+
+    setTimeout(() => {
+      button.callback(state);
+    }, SMALL_DELAY * 3);
   }
 
   onBack() {
@@ -101,25 +115,20 @@ export default class Modal extends React.Component {
             {this.state.content}
           </div>
           <div className="modal-footer">
-            <button type="button"
-              className="btn btn-secondary"
+            <Button type='secondary'
               onClick={() => {
                 this.onBack();
               }}>
               {this.canGoBack() ? 'Back' : 'Close'}
-            </button>
-            {this.state.acceptText ?
-              <button type="button" className="btn btn-primary" onClick={() => {
-                $(`#${modalId}`).modal('hide');
-                const modal = document.getElementById(modalId);
-                const state = {
-                  inputs: modal.getElementsByTagName('input'),
-                };
-                setTimeout(() => {
-                  this.onAccept(state);
-                }, SMALL_DELAY * 3);
-              }}>{this.state.acceptText}</button>
-              : null }
+            </Button>
+            {this.state.acceptButtons.map( button => {
+              return <Button key={button.title}
+                type='primary'
+                size='large'
+                onClick={() => {
+                  this.onAccept(button);
+                }}>{button.title}</Button>
+            })}
           </div>
         </div>
       </div>
@@ -129,12 +138,20 @@ export default class Modal extends React.Component {
 
 Modal.open = (title, content, acceptText) => {
   const promise = new Promise(resolve => {
-    modalInstance.open({
+    const config = {
       title,
-      acceptText,
       content,
-      callback: resolve,
-    });
+      acceptButtons: [],
+    };
+
+    if( acceptText ) {
+      config.acceptButtons = [{
+        title: acceptText,
+        callback: resolve,
+      }];
+    }
+
+    modalInstance.open(config);
   });
 
   return promise;
