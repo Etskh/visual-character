@@ -1,4 +1,4 @@
-import Log from './Log';
+// import Log from './Log';
 
 export const actions = {};
 
@@ -39,7 +39,7 @@ export function unsubscribe(instance, actionName) {
 
 export function fire(actionName, data) {
   // Debug printing
-  Log.log(`Action: ${actionName}`);
+  // Log.log(`Action: ${actionName}`);
 
   const action = get(actionName);
   // Simplest case: data is already good to go, and we dont have a defaultCallback
