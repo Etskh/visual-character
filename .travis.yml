@@ -23,6 +23,7 @@ deploy:
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: "visual-character-bucket"
+    s3_key: "master-${TRAVIS_BUILD_NUMBER}.zip"
     region: us-west-2
     # key: master-${TRAVIS_BUILD_NUMBER}.zip
     # key: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
