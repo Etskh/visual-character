@@ -19,13 +19,17 @@ deploy:
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: "visual-character-bucket"
+    region: us-west-2
     skip_cleanup: true
+    bundle_type: zip
+    key: "master-${TRAVIS_BUILD_NUMBER}.zip"
     zip_file: master-${TRAVIS_BUILD_NUMBER}.zip
   - provider: codedeploy
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: "visual-character-bucket"
     bundle_type: zip
+    zip_file: master-${TRAVIS_BUILD_NUMBER}.zip
     key: "master-${TRAVIS_BUILD_NUMBER}.zip"
     region: us-west-2
     # key: master-${TRAVIS_BUILD_NUMBER}.zip
