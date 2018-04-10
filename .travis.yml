@@ -6,10 +6,6 @@ node_js:
 script:
  - npm run coverage
 
-after_script:
-  - npm install coveralls
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-
 before_deploy:
   - npm run clean
   - zip -r master-${TRAVIS_BUILD_NUMBER}.zip ./*
@@ -29,10 +25,11 @@ deploy:
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: "visual-character-bucket"
     bundle_type: zip
-    zip_file: master-${TRAVIS_BUILD_NUMBER}.zip
-    key: "master-${TRAVIS_BUILD_NUMBER}.zip"
+    s3_key: "master-${TRAVIS_BUILD_NUMBER}.zip"
     region: us-west-2
-    # key: master-${TRAVIS_BUILD_NUMBER}.zip
-    # key: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tgz
     application: "visual-character_code-deploy"
     deployment_group: "visual-character"
+
+after_script:
+  - npm install coveralls
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
