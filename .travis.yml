@@ -11,6 +11,7 @@ after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 before_deploy:
+  - npm run clean
   - zip -r master-${TRAVIS_BUILD_NUMBER}.zip ./*
 
 deploy:
@@ -18,6 +19,7 @@ deploy:
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: "visual-character-bucket"
+    skip_cleanup: true
     zip_file: master-${TRAVIS_BUILD_NUMBER}.zip
   - provider: codedeploy
     access_key_id: "$AWS_ACCESS_KEY"
