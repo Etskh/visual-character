@@ -10,8 +10,8 @@ after_script:
   - npm install coveralls
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
-#before_deploy:
-#  - zip -r master-${TRAVIS_BUILD_NUMBER}.zip ./*
+before_deploy:
+  - zip -r master-${TRAVIS_BUILD_NUMBER}.zip ./*
 
 deploy:
   - provider: s3
