@@ -1,7 +1,3 @@
-
-const path = require('path');
-const fs = require('fs');
-
 const gulp = require('gulp');
 const less = require('gulp-less');
 const minifyCSS = require('gulp-csso');
@@ -10,18 +6,23 @@ const rename = require('gulp-rename');
 const babel = require('gulp-babel');
 const webpack = require('webpack');
 
+const webpackConfig = require('./webpack.config.js');
+
 gulp.task('webpack', (callback) => {
-  webpack(require('./webpack.config.js'), (err, stats) => {
+  webpack(webpackConfig, (err) => {
+    if (err) {
+      throw new Error(err);
+    }
     callback();
   });
 });
 
 gulp.task('server', () => {
-  return gulp.src("src/server/**/*.js")
+  return gulp.src('src/server/**/*.js')
     .pipe(sourcemaps.init())
     .pipe(babel())
-    .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest("dist"));
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('icon', () => {
